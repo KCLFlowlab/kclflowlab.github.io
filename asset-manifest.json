@@ -140,9 +140,75 @@
       "credit": "Author-supplied repository materials; original authors retain rights.",
       "bytes": 1710922,
       "sha256": "dab415bf123954bbb0b63558d2b17fa63098719bf4ed45b7fe6871c34f469fc5"
+    },
+    {
+      "file": "site/assets/wake-field.png",
+      "kind": "qualitative_cfd_visualization",
+      "source": "https://github.com/KCLFlowlab/deforming-vfm/blob/f0ff58ed3408b1a61b36a13f087f49870324200d/03_plotting/data/fields/Afish_St0p40_Lam1p50_Re5000/snapshots_fourphase.npz",
+      "transformation": "Phase-0 calculated-cell snapshot, native-cell triangulation with body and long-edge masks, dark diverging palette at fixed vorticity limits -30/+30, velocity streamlines; no temporal interpolation or force calculation. Rendered by tools/render_flow.py.",
+      "credit": "Xingxin Yang, Matteo Liguori, Vedang Joshi, Juan Li; author-supplied scientific data",
+      "bytes": 831176,
+      "sha256": "c7a715cad5b60f081282013db69b14db6179711fcf539cf757abf9c1722626c1"
+    },
+    {
+      "file": "site/assets/flow-field.json",
+      "kind": "derived_velocity_display_grid",
+      "source": "https://github.com/KCLFlowlab/deforming-vfm/blob/f0ff58ed3408b1a61b36a13f087f49870324200d/03_plotting/data/fields/Afish_St0p40_Lam1p50_Re5000/snapshots_fourphase.npz",
+      "transformation": "Uniform spatial samples of native calculated-cell velocity and vorticity at phase 0. Used only for passive tracers in a frozen field; presentation speed is not physical time.",
+      "credit": "Same Deforming VFM source; no unsteady simulation is implied",
+      "bytes": 204858,
+      "sha256": "42a111cc5c3aa69207951ca289c33dde418448073519dc52652224b160d53e19"
+    },
+    {
+      "file": "site/assets/juan-li.png",
+      "kind": "portrait",
+      "source": "https://www.kcl.ac.uk/newimages/nmes/circle-images-160x160/juan-li-160x160.x8525eec1.png",
+      "profile": "https://www.kcl.ac.uk/people/juan-li",
+      "transformation": "Original image downloaded unchanged.",
+      "credit": "King’s College London, official Juan Li profile",
+      "bytes": 42250,
+      "sha256": "1d690ba6b374673de89e82274de15a39e0365be6e00403aad55ad9905abae34d"
+    },
+    {
+      "file": "site/assets/xingxin-yang.jpg",
+      "kind": "portrait",
+      "source": "https://www.kcl.ac.uk/newimages/person-profile/2022a/picture24.x29d4bbd9.jpg",
+      "profile": "https://www.kcl.ac.uk/people/xingxin-yang",
+      "transformation": "Original image downloaded unchanged; CSS frames the portrait.",
+      "credit": "King’s College London, official Xingxin Yang profile",
+      "bytes": 44902,
+      "sha256": "6cb78513dad33a8da02b81e5550d1b2c9635d4eeabea1323a0acee29ed1a0737"
+    },
+    {
+      "file": "site/assets/vedang-joshi.jpg",
+      "kind": "portrait",
+      "source": "https://www.kcl.ac.uk/newimages/person-profile/2022a/vedang-joshi-profile-picture.x8eab0c56.jpg",
+      "profile": "https://www.kcl.ac.uk/people/vedang-joshi",
+      "transformation": "Original image downloaded unchanged; CSS frames the portrait.",
+      "credit": "King’s College London, official Vedang Joshi profile",
+      "bytes": 32493,
+      "sha256": "289af195c3a91f5e6e4bc8d50e42d8423a66be6b7071942282bcafc1ce141c0e"
+    },
+    {
+      "file": "site/assets/manrope.woff2",
+      "kind": "font",
+      "source": "https://github.com/google/fonts/tree/main/ofl/manrope",
+      "transformation": "Original variable TTF losslessly repackaged as WOFF2 with fontTools; original OFL included.",
+      "credit": "Manrope authors; SIL Open Font License 1.1",
+      "bytes": 53688,
+      "sha256": "fa68f42a853938a883057ac34ef2fefda14bc0f1033c16a16d1e15faa39bb069"
+    },
+    {
+      "file": "site/assets/space-grotesk.woff2",
+      "kind": "font",
+      "source": "https://github.com/google/fonts/tree/main/ofl/spacegrotesk",
+      "transformation": "Original variable TTF losslessly repackaged as WOFF2 with fontTools; original OFL included.",
+      "credit": "SpaceGrotesk authors; SIL Open Font License 1.1",
+      "bytes": 49224,
+      "sha256": "8279b26bf7b3f5d241b0c5bcb999fc3010e8fb9959083e4fdb0478697d8cca0d"
     }
   ],
-  "design_revision": "README-first minimal research showcase",
+  "design_revision": "Immersive flow narrative and verified team profiles",
   "repositories": [
     {
       "name": "deforming-vfm",
@@ -163,6 +229,62 @@
       "name": "RAVFM",
       "url": "https://github.com/KCLFlowlab/RAVFM",
       "commit": "eaad5d5ac1b6b77c9f300fe0b646e9bf4518f80c"
+    }
+  ],
+  "people": [
+    {
+      "name": "Juan Li",
+      "role": "Lecturer in Engineering",
+      "sources": [
+        "https://www.kcl.ac.uk/people/juan-li"
+      ],
+      "portrait_verified": true
+    },
+    {
+      "name": "Xingxin Yang",
+      "role": "PhD researcher",
+      "sources": [
+        "https://www.kcl.ac.uk/people/xingxin-yang"
+      ],
+      "portrait_verified": true
+    },
+    {
+      "name": "Vedang Joshi",
+      "role": "PhD researcher",
+      "sources": [
+        "https://www.kcl.ac.uk/people/vedang-joshi"
+      ],
+      "portrait_verified": true
+    },
+    {
+      "name": "Matteo Liguori",
+      "role": "Engineering researcher",
+      "sources": [
+        "https://kclpure.kcl.ac.uk/portal/en/persons/matteo-liguori/",
+        "https://arxiv.org/abs/2603.13078",
+        "https://arxiv.org/abs/2609.00461"
+      ],
+      "portrait_verified": false,
+      "note": "KCL Pure lists Doctor of Philosophy, Engineering and has no photo; website does not infer a specific current degree status."
+    },
+    {
+      "name": "Yichen Li",
+      "role": "Research contributor",
+      "sources": [
+        "https://github.com/KCLFlowlab/MarsVATO"
+      ],
+      "portrait_verified": false,
+      "note": "Introduction limited to verified manuscript co-authorship. No reliably matched KCL person page found; no degree or employment claim."
+    },
+    {
+      "name": "Zhan Zhang",
+      "role": "Research contributor",
+      "sources": [
+        "https://github.com/KCLFlowlab/MarsVATO",
+        "https://arxiv.org/abs/2603.13078"
+      ],
+      "portrait_verified": false,
+      "note": "Introduction limited to verified manuscript co-authorship. No reliably matched KCL person page found; no degree or employment claim."
     }
   ]
 }

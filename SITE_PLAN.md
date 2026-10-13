@@ -1,50 +1,59 @@
 # KCL FlowLab 网站设计与素材规划
 
-## 当前设计
+## 设计主线
 
-英文课题组主页，围绕用户提出的“科技感、精简、极简”与“优先使用 GitHub 仓库封面素材”。
-使用石墨黑背景、暖白正文和冰蓝强调色；大标题、细线、克制的等宽标签构成界面。
-研究图像保留原始白底、科学配色、色标和完整面板。首页直接展示研究动画。
+新版以“从流动中理解力，再用物理知识预测流动”为叙事线索。真实 CFD 场构成首屏，
+超大标题、铜色衬线斜体与细小数据标签形成尺度对比。正文使用深蓝黑、暖白背景交替，
+研究章节各有构图，避免整页重复封面卡片。字体 Manrope 与 Space Grotesk 本地托管。
 
-页面压缩为三段：
+1. **Uncover the forces of flow.**：全屏流场、被动示踪粒子与进入研究的入口。
+2. **A wake is a story of forces.**：简洁说明研究问题与课题组方向。
+3. **Where does thrust begin?**：Deforming VFM 完整同步动画与推进力问题。
+4. **Physics inside. Possibilities ahead.**：MarsVATO 与 STCO 双项目切换，原始预测动画。
+5. **What keeps a bird aloft?**：RA-VFM 鸟体几何原图与湍流气动力研究。
+6. **Different minds. Shared curiosity.**：负责人介绍与五位成员介绍。
+7. **Ideas, in detail.**：四项论文／预印本入口。
+8. **Let’s make waves.**：研究合作联系与开放代码入口。
 
-1. **Flow. Force. Intelligence.**：一句研究定位，四项工作可切换的大幅主视觉。
-2. **Physics meets prediction.**：四张封面图卡，每项一句话、动画入口、论文与代码链接。
-3. **Understand the flow.**：简短课题组介绍、KCL 工程系归属与研究联系入口。
+## 科学素材与动画
 
-详情弹窗承载完整题目、作者、方法概述、补充图和来源；首页不堆砌长段落与指标。
-四个项目由访客主动切换，不自动轮播。动画支持暂停、拖动和全屏；减少动态效果
-设置会关闭自动播放。离开可视区域或打开详情时暂停，避免后台持续播放。
-
-## 真实展示素材
-
-| 工作 | 仓库封面／README 素材 | 展示方式 |
+| 工作 | 来源素材 | 展示方式 |
 | --- | --- | --- |
-| Deforming VFM | `03_plotting/media/force_mapping.gif`；README 中的 Figure 11 | 默认首屏同步游动与力场动画；图卡展示完整力图，详情补充 Figure 5 |
-| MarsVATO | `paper/figures/vato-model.jpg`；`docs/assets/leadtime.gif`、`incidence.gif` | 架构封面图卡；首屏可切换提前量和攻角两种动画 |
-| STCO | 当前 FRO_Paper README 的 `prescribed_condition_pde.png`、四条件响应 GIF | 条件算子概念图卡；首屏展示 GAOT Base–STCO 对照，详情增加空间对比与性能图 |
-| RA-VFM | 当前 README 没有封面图；使用公开论文 Figure 1 和 Figure 5 等值面原图 | 鸟体几何图卡；主视觉展示几何与三维力贡献原图 |
+| Deforming VFM | phase-0 calculated-cell CFD 快照；README force_mapping.gif；Figures 5、11 | 快照重新渲染为首屏；研究章节展示原始完整时序动画；详情保留科学面板 |
+| MarsVATO | README vato-model；leadtime.gif、incidence.gif | 神经算子章节主动切换提前量和攻角扫描；详情包含架构封面 |
+| STCO | FRO_Paper README prescribed_condition_pde；四条件响应 GIF | 条件响应动画；详情放概念封面、空间对比与性能图 |
+| RA-VFM | 公开论文 Figure 1 和 Figure 5 等值面原图 | 鸟体几何独立章节；详情展示完整原图 |
 
-16 个科学媒体文件已经纳入网站。四段 GIF 转为 H.264 MP4，总体约 3 MB；没有裁掉
-科学面板、色标或标签，也没有对物理结果插值。静态封面只做等比例网页缩放。
-精确来源、Git commit、变换方式和 SHA-256 见 `asset-manifest.json`。
+首屏仅使用单个冻结速度场，粒子用于显示局部流向；不是鱼体真实时序模拟。
+“About this flow”说明 phase 0、Re 5000、St 0.4、λ* 1.5，以及定性色图范围。
+原始 64 相位动画在 Deforming VFM 章节单独呈现。
 
-## 内容准确性
+四段研究 GIF 转为 H.264 MP4，合计约 3 MB；保留帧数、显示时长、面板、色标与标签。
+VATO 是离散预测提前量／攻角扫描；STCO 每帧是独立查询，不写成连续时间演化。
+RA-VFM 没有可核实的 README 动画，采用未修改论文原图，注明 CC BY-NC-ND 4.0。
+所有来源、精确 commit、处理方式与 SHA-256 在 asset-manifest.json 中记录。
 
-- FRO_Paper 是仓库名；当前展示工作的正式名称是 **STCO**。
-- MarsVATO 与 STCO 标注 Manuscript；不推断录用或正式发表状态。
-- MarsVATO 动画是离散提前量／攻角扫描，不标成连续时间演化。
-- STCO 每帧对应独立查询的提前量；不是自回归滚动预测。
-- RA-VFM 当前没有可确认的 README 动画，因此展示论文原图。
-- RA-VFM 图片保持原始文件，注明 CC BY-NC-ND 4.0。
-- 学校、系所和公开研究联系信息来自 KCL 主页；不推断完整团队名单。
+## 团队资料
 
-## 工程与发布
+| 成员 | 可核实资料 | 展示策略 |
+| --- | --- | --- |
+| Juan Li | KCL Lecturer in Engineering；官方照片、流体／气动／涡动力学／风能方向 | 负责人单独横向介绍 |
+| Xingxin Yang | KCL PhD Student；官方照片、机器学习与 CFD 翼型优化 | 头像、研究介绍、KCL 链接 |
+| Vedang Joshi | KCL PhD Student；官方照片、非定常流／涡脱落／集群行为 | 头像、研究介绍、KCL 链接；使用官方拼写 |
+| Matteo Liguori | KCL Pure 工程系记录；VFM 论文作者，无可确认照片 | 姓名字标、论文支持的研究方向、KCL Pure 链接 |
+| Yichen Li | MarsVATO 论文作者；未可靠匹配到 KCL 个人页 | 姓名字标、已核实论文关联，不推断职位 |
+| Zhan Zhang | MarsVATO 与 RA-VFM 作者；未可靠匹配到 KCL 个人页 | 姓名字标、已核实论文关联，不推断职位 |
 
-静态 HTML/CSS/JavaScript；没有服务端、CDN、账号系统或访客追踪。
-部署目录为 `site/`；GitHub Actions 不上传研究源仓库、本地工具依赖或 QA 截图。
-`preview.html` 是包含图片和视频的单文件审阅版，`kclflowlab-website.zip` 是源码包。
+名单来自用户指定，非声称完整课题组名册。没有使用同名外校人员的信息或生成虚构肖像。
+后续取得准确个人主页和照片后可替换姓名字标，扩展个人介绍。
 
-发布目标为 `KCLFlowlab/kclflowlab.github.io`；Pages 使用 GitHub Actions 部署。
-后续向 `main` 推送网站更新后自动发布。精确研究来源与版本已记录在素材清单中。
-网站仓库只包含独立网站源文件，不改变任何研究仓库的可见性。
+## 交互、适配与发布
+
+首页粒子和两处视频在离开视区、切后台或打开详情时暂停；尊重减少动态效果设置。
+动画有暂停、拖动与全屏；项目切换支持方向键、Home、End；弹窗支持 Escape。
+手机使用纵向章节与菜单，保持科学图完整比例。无需 JavaScript 也可阅读成员和论文链接。
+
+静态 HTML/CSS/JavaScript，无服务端、CDN 或追踪。GitHub Actions 只部署 site/ 到
+https://kclflowlab.github.io/ 。main 分支更新自动发布。
+本地 preview.html 嵌入字体、流场、图像与视频，源码包为 kclflowlab-website.zip。
+浏览器 QA 覆盖桌面、320/390/768/1024px 布局、动画、弹窗、无脚本与减少动态效果。

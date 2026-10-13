@@ -1,86 +1,102 @@
 # KCL FlowLab website
 
-GitHub Pages website, revised 13 October 2026. Minimal graphite-and-cyan design,
-with real research media as the main visual. The complete deployable website is in
-`site/`: static HTML, CSS and JavaScript, without a framework, CDN, analytics or backend.
+Public website: **https://kclflowlab.github.io/**. Redesigned 13 October 2026 around
+fluid physics, scientific machine learning and the people behind the work. The
+complete deployable site is in `site/`: static HTML, CSS and JavaScript, with locally
+hosted media and fonts, no framework, analytics, CDN dependency or backend.
 
-## Preview
+## Design and content
 
-Open `preview.html` directly in a browser or a compatible HTML artifact viewer.
-It embeds the images, four videos, styles and scripts for a portable review.
-Regenerate it and the clean source archive with:
+A full-screen CFD field introduces the lab, followed by three distinct research
+chapters: swimming forces, neural-operator predictions and the aerodynamics of flight.
+Deep blue, warm ivory, copper highlights and generous typography establish a quiet
+visual rhythm around the scientific images. The People section introduces Juan Li,
+Xingxin Yang, Vedang Joshi, Matteo Liguori, Yichen Li and Zhan Zhang. A compact paper
+index and contact section close the page.
 
-```bash
-python3 tools/package.py
-```
-
-For local development, run `python3 tools/serve.py` and open
-`http://127.0.0.1:8769/` on the same device. The loopback server supports video byte
-ranges for seeking. Stop it with Ctrl+C when finished.
-
-## Included work
-
-| Project | Featured media | Scientific status |
+| Work | Research media | Status |
 | --- | --- | --- |
 | Deforming VFM | README swimming/force-mapping animation; Figures 5 and 11 | arXiv:2609.00461, preprint |
-| MarsVATO | README architecture cover; lead-time and incidence animations | Manuscript |
+| MarsVATO | README architecture; lead-time and incidence sweeps | Manuscript |
 | STCO | FRO_Paper README overview, four-condition response animation, spatial and performance comparisons | Manuscript |
 | RA-VFM | Unaltered paper geometry and 3D lift-contribution figures | arXiv:2603.13078, preprint |
 
-The hero has four manually selected project tabs; MarsVATO has two animation modes.
-Videos support play/pause, seeking and fullscreen. Only the selected video plays,
-and playback pauses offscreen, in background tabs and while a project dialog is open.
-The operating system's reduced-motion preference disables automatic playback.
-Four compact project summaries lead to detail dialogs, research papers and repositories.
-No publication acceptance or team membership is inferred from a repository.
+The hero is a **qualitative rendering of one archived phase-0 CFD snapshot**, using
+calculated cells and a fixed display range of −30 to +30 for vorticity. Moving particles
+are passive tracers advected through that frozen velocity field, not an unsteady
+simulation. This distinction is explained by “About this flow”. The Deforming VFM
+chapter and detail view retain the complete 64-phase source animation.
 
-The VATO clips show discrete direct-prediction sweeps. STCO frames represent independently
-queried leads. Their captions and seek labels distinguish these from the Deforming VFM
-swimming cycle. Original frame counts, presentation timings, color scales and panels
-are retained. Four MP4 files total 2,957,847 bytes, compared with much larger source GIFs.
+VATO clips are discrete direct-prediction sweeps. STCO frames represent independently
+queried leads. Captions and seek labels preserve these distinctions. The four MP4s
+retain the original GIF frame counts, timing and complete scientific panels, totaling
+2,957,847 bytes. Controls provide pause, seek and fullscreen. Offscreen media,
+background tabs and open dialogs suspend ambient playback; reduced-motion preferences
+disable automatic playback. Research dialogs contain full figures, authors and sources.
 
-## Checks
+Three portraits and profiles come from official KCL pages. Matteo links to KCL Pure.
+Yichen and Zhan's introductions are limited to verified co-authorship because no
+reliably matched institutional profiles were found. Members without sourced portraits
+use typographic initials. The website does not claim this is an exhaustive team list.
+
+## Preview and checks
 
 ```bash
+python3 tools/serve.py
+```
+
+Open `http://127.0.0.1:8769/` on the same device. The loopback server supports MP4 byte
+ranges. Stop it with Ctrl+C when finished. To generate `preview.html` (an offline,
+single-file version with embedded fonts, field data, images and videos) and
+`kclflowlab-website.zip` (a source archive):
+
+```bash
+python3 tools/package.py
 node --check site/app.js
 python3 tools/check_site.py
 ```
 
-Optional Chromium QA, with the preview server running:
+For Chromium interaction QA with the preview server running:
 
 ```bash
 npm ci --prefix tools/browser
 CHROMIUM_PATH=/absolute/path/to/chromium node tools/qa.cjs
 ```
 
-`PREVIEW_URL` defaults to `http://127.0.0.1:8769/`. Screenshots and the browser report
-go to ignored `qa/`. QA covers all media sources, playback/seek, tabs/keyboard, project
-dialogs, image loading, fullscreen, 390px and 320px mobile layouts, reduced motion,
-no-JavaScript fallback, script errors and failing resource requests.
-Safari/iOS hardware and a live GitHub Pages deployment are not yet verified.
+`PREVIEW_URL` defaults to the local URL above. Reports and PNG screenshots go to ignored
+`qa/`. Checks cover field animation, all four video sources, playback/seek, keyboard
+tabs, four study dialogs, figure and portrait loading, fullscreen, mobile menu,
+320–1024px layouts, reduced motion, no-JavaScript fallback and failed resources.
+Real Safari/iOS hardware has not been tested.
 
-## GitHub Pages deployment
+## Deployment
 
-Intended repository: `KCLFlowlab/kclflowlab.github.io`  
-Intended public URL: `https://kclflowlab.github.io/`
-
-Create the dedicated website repository in the KCLFlowlab organization and push this
-directory's source to `main`. Set Settings → Pages → Source to **GitHub Actions**.
-The workflow checks JavaScript and local assets, then uploads only `site/`. Subsequent
-pushes to `main` deploy automatically. Preserve existing website history when integrating
-updates. The research repositories remain separate; their source commits are recorded
-in `asset-manifest.json`.
+Repository: `KCLFlowlab/kclflowlab.github.io`. Pages Source is **GitHub Actions**.
+Pushes to `main` run JavaScript and asset checks, then publish only `site/`. Local QA,
+source data and tools are not deployed. The website repository and research
+repositories remain separate.
 
 ## Editing and provenance
 
-- Homepage sections: `site/index.html`.
-- Media selection, captions and detail text: `site/app.js`.
-- Design and responsive layout: `site/styles.css`.
-- Source URLs, exact commits, transformations and file hashes: `asset-manifest.json`.
-- Chinese design and content plan: `SITE_PLAN.md`.
+- Sections and people: `site/index.html`.
+- Motion, media controls, captions and detail text: `site/app.js`.
+- Responsive design: `site/styles.css`.
+- Exact research commits, transformations, credits and hashes: `asset-manifest.json`.
+- Chinese design rationale: `SITE_PLAN.md`.
 
-RA-VFM Figure 1 and Figure 5 isosurface image are unmodified arXiv:2603.13078v1 assets
-under CC BY-NC-ND 4.0, credited in the site. Other scientific media are author-supplied
-materials from the explicitly requested repositories; the website does not relicense
-them. Institutional/contact information follows Dr Juan Li's public KCL profile.
-Research-repository links remain subject to their original access settings.
+To regenerate the hero, install NumPy, SciPy and Matplotlib in your own development
+environment, then run:
+
+```bash
+python3 tools/render_flow.py --source /path/to/snapshots_fourphase.npz
+```
+
+The archive is from Deforming VFM's `Afish_St0p40_Lam1p50_Re5000` field data, at the
+commit recorded in the manifest. Rendering does not alter that archive. After changing
+assets, refresh manifest hashes and regenerate the portable preview.
+
+RA-VFM figures remain original arXiv:2603.13078v1 image files under CC BY-NC-ND 4.0,
+credited on the site. Other scientific media are author-supplied repository materials;
+the website does not relicense them. Official KCL profile pages are linked beside
+portraits and in Sources & credits. Manrope and Space Grotesk are self-hosted with
+their SIL Open Font License files in `site/assets/`.

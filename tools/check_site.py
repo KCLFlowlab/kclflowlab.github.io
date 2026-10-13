@@ -3,6 +3,9 @@ from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urlparse, unquote
 import re
+import json
+import hashlib
+import math
 
 root = Path(__file__).resolve().parents[1] / 'site'
 
@@ -31,5 +34,16 @@ for ref in page.refs:
         assert parsed.fragment in page.ids, f'Broken anchor: {ref}'
 for ref in re.findall(r"['\"](assets/[^'\"]+)['\"]", (root / 'app.js').read_text()):
     assert (root / ref).is_file(), f'Missing dynamic asset: {ref}'
+for ref in re.findall(r"url\(['\"]?(assets/[^)'\"]+)", (root / 'styles.css').read_text()):
+    assert (root / ref).is_file(), f'Missing stylesheet asset: {ref}'
+manifest = json.loads((root.parent / 'asset-manifest.json').read_text())
+for asset in manifest['assets']:
+    data = (root.parent / asset['file']).read_bytes()
+    assert len(data) == asset['bytes'], f'Changed asset size: {asset["file"]}'
+    assert hashlib.sha256(data).hexdigest() == asset['sha256'], f'Changed asset hash: {asset["file"]}'
+field = json.loads((root / 'assets/flow-field.json').read_text())
+for component in ('u', 'v', 'omega'):
+    assert len(field[component]) == field['nx'] * field['ny']
+    assert all(math.isfinite(value) for value in field[component])
 assert (root / '.nojekyll').exists()
-print(f'Passed: {len(page.ids)} unique IDs; {len(page.refs)} HTML references; dynamic assets present.')
+print(f'Passed: {len(page.ids)} unique IDs; {len(page.refs)} HTML references; CSS/JS assets; {len(manifest["assets"])} verified hashes; finite velocity display grid.')

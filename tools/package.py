@@ -18,9 +18,10 @@ def embed(match):
     return 'data:' + mime + ';base64,' + base64.b64encode(path.read_bytes()).decode('ascii')
 
 # Embed only this package's static asset literals, not external reference URLs.
-pattern = r'assets/[a-zA-Z0-9_.-]+\.(?:png|svg|mp4)'
+pattern = r'(?<![A-Za-z0-9_./-])assets/[a-zA-Z0-9_.-]+\.(?:png|jpg|svg|mp4|woff2|json)'
 html = re.sub(pattern, embed, html)
 js = re.sub(pattern, embed, js)
+css = re.sub(pattern, embed, css)
 html = html.replace('<link rel="stylesheet" href="styles.css">', '<style>\n' + css + '\n</style>')
 # Keep initialization after the parsed document; inline defer scripts execute immediately.
 html = html.replace('<script defer src="app.js"></script>', '')
