@@ -7,18 +7,23 @@ hosted media and fonts, no framework, analytics, CDN dependency or backend.
 
 ## Design and content
 
-A full-screen CFD field introduces the lab, followed by three distinct research
-chapters: swimming forces, neural-operator predictions and the aerodynamics of flight.
+A full-screen CFD field introduces the lab, followed by four research chapters ordered by first arXiv submission:
+RA-VFM (13 March), STCO (20 August), Deforming VFM (31 August) and VATO
+(1 September), all in 2026. This is a public dissemination timeline, not an inferred
+project start date. Matteo Liguori’s RA-VFM study is the first research chapter.
 Deep blue, warm ivory, copper highlights and generous typography establish a quiet
 visual rhythm around the scientific images. The People section introduces Juan Li,
-Xingxin Yang, Vedang Joshi, Matteo Liguori, Yichen Li and Zhan Zhang. A compact paper
-index and contact section close the page.
+Xingxin Yang, Vedang Joshi, Matteo Liguori, Yichen Li and Zhan Zhang. Five selected publications from Juan Li’s KCL Pure record, an expandable four-preprint
+index and a contact section close the page. The KCL list runs from 2022 to 2026 and
+distinguishes published work from the AIAA Journal record marked accepted/in press.
+That institutional record and the RA-VFM preprint have different titles and author
+lists, so they are retained as separate records.
 
 | Work | Research media | Status |
 | --- | --- | --- |
 | Deforming VFM | README swimming/force-mapping animation; Figures 5 and 11 | arXiv:2609.00461, preprint |
-| MarsVATO | README architecture; lead-time and incidence sweeps | Manuscript |
-| STCO | FRO_Paper README overview, four-condition response animation, spatial and performance comparisons | Manuscript |
+| MarsVATO | README architecture; lead-time and incidence sweeps | arXiv:2609.00507, preprint |
+| STCO | FRO_Paper README overview, four-condition response animation, spatial and performance comparisons | arXiv:2608.20477, preprint |
 | RA-VFM | Unaltered paper geometry and 3D lift-contribution figures | arXiv:2603.13078, preprint |
 
 The hero is a **qualitative rendering of one archived phase-0 CFD snapshot**, using
@@ -64,8 +69,7 @@ CHROMIUM_PATH=/absolute/path/to/chromium node tools/qa.cjs
 ```
 
 `PREVIEW_URL` defaults to the local URL above. Reports and PNG screenshots go to ignored
-`qa/`. Checks cover field animation, all four video sources, playback/seek, keyboard
-tabs, four study dialogs, figure and portrait loading, fullscreen, mobile menu,
+`qa/`. Checks cover field animation, all four video sources, playback/seek, independent STCO and VATO players, four study dialogs, figure and portrait loading, fullscreen, chronological chapter order, five KCL records and four arXiv links, mobile menu,
 320–1024px layouts, reduced motion, no-JavaScript fallback and failed resources.
 Real Safari/iOS hardware has not been tested.
 
@@ -81,7 +85,7 @@ repositories remain separate.
 - Sections and people: `site/index.html`.
 - Motion, media controls, captions and detail text: `site/app.js`.
 - Responsive design: `site/styles.css`.
-- Exact research commits, transformations, credits and hashes: `asset-manifest.json`.
+- Research chronology, publication metadata, source URLs, exact media commits and hashes: `asset-manifest.json`.
 - Chinese design rationale: `SITE_PLAN.md`.
 
 To regenerate the hero, install NumPy, SciPy and Matplotlib in your own development

@@ -286,5 +286,93 @@
       "portrait_verified": false,
       "note": "Introduction limited to verified manuscript co-authorship. No reliably matched KCL person page found; no degree or employment claim."
     }
-  ]
+  ],
+  "research_outputs": {
+    "checked_on": "2026-10-13",
+    "person_profile": "https://www.kcl.ac.uk/people/juan-li",
+    "research_profile": "https://kclpure.kcl.ac.uk/portal/en/persons/juan.li/",
+    "identity_note": "The official Juan Li people page links to this KCL Pure record, which uses Julia Li. Citations retain Li, J.",
+    "selection_note": "Five selected KCL records; not a claim of an exhaustive publication list. The 2026 AIAA Journal record and RA-VFM preprint remain distinct records: titles and author lists differ.",
+    "items": [
+      {
+        "year": 2022,
+        "type": "Journal article",
+        "status": "Published",
+        "title": "Flow completion network: Inferring the fluid dynamics from incomplete flow information using graph neural networks",
+        "authors": "He, X. · Wang, Y. · Li, J.",
+        "venue": "Physics of Fluids 34(8), 087114",
+        "source": "https://kclpure.kcl.ac.uk/portal/en/publications/flow-completion-network-inferring-the-fluid-dynamics-from-incompl/",
+        "doi": "10.1063/5.0097688"
+      },
+      {
+        "year": 2023,
+        "type": "Conference paper",
+        "status": "Published",
+        "title": "A Comparison of Separated Flow Models in the Aeroelasticity of Slender Wings",
+        "authors": "Wang, Y. · Li, J.",
+        "venue": "AIAA SCITECH 2023 Forum",
+        "source": "https://kclpure.kcl.ac.uk/portal/en/publications/a-comparison-of-separated-flow-models-in-the-aeroelasticity-of-sl/"
+      },
+      {
+        "year": 2024,
+        "type": "Review article",
+        "status": "Published",
+        "title": "Vortex Shedding and Induced Forces in Unsteady Flow",
+        "authors": "Graham, M. · Li, J.",
+        "venue": "The Aeronautical Journal",
+        "source": "https://kclpure.kcl.ac.uk/portal/en/publications/vortex-shedding-and-induced-forces-in-unsteady-flow/"
+      },
+      {
+        "year": 2024,
+        "type": "Conference paper",
+        "status": "Published",
+        "title": "Optimization of the PEMFC zig-zag channel design using CFD simulation",
+        "authors": "Li, S. · Wilberforce, T. · Li, J.",
+        "venue": "MSSM 2024 · 10th International Conference on Material Science & Smart Materials",
+        "source": "https://kclpure.kcl.ac.uk/portal/en/publications/optimization-of-the-pemfc-zig-zag-channel-design-using-cfd-simula/"
+      },
+      {
+        "year": 2026,
+        "type": "Journal article",
+        "status": "Accepted/In press",
+        "title": "Evaluating Unsteady Forces in Turbulence-Modeled Flows from Vorticity and Reynolds Stress",
+        "authors": "Liguori, M. · Ciriello, F. · Li, J.",
+        "venue": "AIAA Journal",
+        "source": "https://kclpure.kcl.ac.uk/portal/en/publications/evaluating-unsteady-forces-in-turbulence-modeled-flows-from-vorti/"
+      }
+    ]
+  },
+  "featured_chronology": {
+    "basis": "First arXiv submission, ascending; not an inferred project start or acceptance date.",
+    "items": [
+      {
+        "project": "ravfm",
+        "date": "2026-03-13",
+        "title": "The Reynolds-Averaged Vortex Force Map Method",
+        "authors": "Liguori, M. · Zhang, Z. · Ciriello, F. · Li, J.",
+        "source": "https://arxiv.org/abs/2603.13078"
+      },
+      {
+        "project": "stco",
+        "date": "2026-08-20",
+        "title": "STCO: Conditional Neural Operators for Time-Dependent PDEs",
+        "authors": "Yang, X. · Zhang, Z. · Li, J.",
+        "source": "https://arxiv.org/abs/2608.20477"
+      },
+      {
+        "project": "deforming",
+        "date": "2026-08-31",
+        "title": "Deforming Vortex Force Mapping for Undulating Swimmers",
+        "authors": "Yang, X. · Liguori, M. · Joshi, V. · Li, J.",
+        "source": "https://arxiv.org/abs/2609.00461"
+      },
+      {
+        "project": "vato",
+        "date": "2026-09-01",
+        "title": "VATO: A Vortex-Force-Aware Transformer Operator for Unsteady Separated Aerofoil Flows",
+        "authors": "Yang, X. · Zhang, Z. · Li, Y. · Li, J.",
+        "source": "https://arxiv.org/abs/2609.00507"
+      }
+    ]
+  }
 }

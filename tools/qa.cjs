@@ -37,6 +37,28 @@ const executablePath = process.env.CHROMIUM_PATH || chromium.executablePath();
     await page.keyboard.press('Escape');
     await page.screenshot({ path: path.join(root, 'qa/redesign-home-desktop.png') });
     checks.push('Hero: real-field tracers animate and pause, frozen-field explanation, self-hosted fonts load');
+    assert.deepEqual(await page.locator('[data-study]').evaluateAll(sections => sections.map(s => s.dataset.study)), ['ravfm','stco','deforming','vato']);
+    assert.deepEqual(await page.locator('[data-study]').evaluateAll(sections => sections.map(s => s.dataset.date)), ['2026-03-13','2026-08-20','2026-08-31','2026-09-01']);
+    await page.locator('a[href="#research"]').first().click();
+    assert.equal(await page.locator('#research').getAttribute('data-study'), 'ravfm');
+    await page.locator('#research').screenshot({path:path.join(root,'qa/research-first.png')});
+    checks.push('Research starts with Matteo’s RA-VFM; four chapters follow first arXiv submission dates');
+
+    await page.locator('#stco-video').scrollIntoViewIfNeeded();
+    await page.waitForFunction(() => !document.querySelector('#stco-video').paused && document.querySelector('#stco-video').currentTime > .1);
+    assert.ok(Math.abs(await page.locator('#stco-video').evaluate(v => v.duration) - 4.8) < .05);
+    await page.locator('#stco-play').click();
+    await page.locator('#stco-position').fill('500');
+    await page.waitForFunction(() => Math.abs(document.querySelector('#stco-video').currentTime - 2.4) < .05);
+    assert.equal(await page.locator('#stco-video').evaluate(v => v.paused), true);
+    await page.locator('#stco-play').click();
+    await page.waitForFunction(() => !document.querySelector('#stco-video').paused);
+    await page.locator('#stco-expand').click();
+    await page.waitForFunction(() => document.fullscreenElement?.id === 'stco-screen' || document.querySelector('#stco-screen').classList.contains('expanded'));
+    await page.locator('#stco-expand').click();
+    await page.waitForFunction(() => !document.fullscreenElement && !document.querySelector('#stco-screen').classList.contains('expanded'));
+    await page.locator('#stco-play').click();
+    checks.push('Independent STCO player decodes, plays, pauses, seeks and enters/exits fullscreen');
 
     await page.locator('#swimming-video').scrollIntoViewIfNeeded();
     await page.waitForFunction(() => !document.querySelector('#swimming-video').paused && document.querySelector('#swimming-video').currentTime > .1);
@@ -50,36 +72,20 @@ const executablePath = process.env.CHROMIUM_PATH || chromium.executablePath();
     await page.locator('#video-play').click();
     checks.push('Swimming cycle decodes and plays; user pause/play and offscreen pause work');
 
-    for (const [id, duration, caption] of [['vato',6,/Direct predictions/], ['stco',4.8,/independently queried/]]) {
-      await page.locator(`#tab-${id}`).click();
-      await page.waitForFunction(expected => Math.abs(document.querySelector('#research-video').duration - expected) < .05 && document.querySelector('#research-video').readyState >= 2, duration);
-      assert.equal(await page.locator('#research-video').evaluate(v => v.paused), true);
-      assert.match(await page.locator('#media-caption').innerText(), caption);
-      await page.locator('#media-position').fill('500');
-      await page.waitForFunction(() => Math.abs(document.querySelector('#research-video').currentTime / document.querySelector('#research-video').duration - .5) < .02);
-      await page.locator('#video-play').click();
-      await page.waitForFunction(() => !document.querySelector('#research-video').paused);
-      await page.locator('#video-play').click();
-      await page.locator('#operator-details').click();
-      assert.match(await page.locator('#dialog-title').innerText(), id === 'vato' ? /VATO/ : /STCO/);
-      await page.keyboard.press('Escape');
-    }
-    await page.locator('#tab-vato').click();
+    assert.ok(Math.abs(await page.locator('#research-video').evaluate(v => v.duration) - 6) < .05);
     await page.locator('#sweep-select').selectOption('incidence');
     await page.waitForFunction(() => Math.abs(document.querySelector('#research-video').duration - 8.4) < .05);
+    assert.equal(await page.locator('#research-video').evaluate(v => v.paused), true);
     await page.locator('#media-position').fill('550');
     await page.waitForFunction(() => Math.abs(document.querySelector('#research-video').currentTime / document.querySelector('#research-video').duration - .55) < .02);
     assert.match(await page.locator('#position-label').innerText(), /9°/);
     await page.locator('#video-play').click();
     await page.waitForFunction(() => !document.querySelector('#research-video').paused);
     await page.locator('#video-play').click();
-    await page.locator('#tab-vato').focus(); await page.keyboard.press('ArrowRight');
-    assert.equal(await page.locator('#tab-stco').getAttribute('aria-selected'), 'true');
-    await page.keyboard.press('Home');
-    assert.equal(await page.locator('#tab-vato').getAttribute('aria-selected'), 'true');
-    await page.keyboard.press('End');
-    assert.equal(await page.locator('#tab-stco').getAttribute('aria-selected'), 'true');
-    checks.push('All four videos decode/play; operator switches preserve pause; seeking, incidence labels, keyboard tabs and dynamic study button work');
+    await page.locator('#sweep-select').selectOption('leadtime');
+    await page.waitForFunction(() => Math.abs(document.querySelector('#research-video').duration - 6) < .05);
+    assert.equal(await page.locator('#research-video').evaluate(v => v.paused), true);
+    checks.push('VATO lead-time/incidence media decode; sweep changes preserve user pause, labels and seeking work');
 
     await page.locator('#media-expand').click();
     await page.waitForFunction(() => !!document.fullscreenElement || document.querySelector('#research-screen').classList.contains('expanded'));
@@ -87,7 +93,6 @@ const executablePath = process.env.CHROMIUM_PATH || chromium.executablePath();
     await page.waitForFunction(() => !document.fullscreenElement && !document.querySelector('#research-screen').classList.contains('expanded'));
     checks.push('Fullscreen opens and closes');
     for (const id of ['deforming', 'vato', 'stco', 'ravfm']) {
-      if (id === 'vato' || id === 'stco') await page.locator(`#tab-${id}`).click();
       await page.locator(`[data-project="${id}"]`).first().click();
       assert.equal(await page.locator('dialog').evaluate(d => d.open), true);
       for (const summary of await page.locator('dialog summary').all()) await summary.click();
@@ -114,6 +119,20 @@ const executablePath = process.env.CHROMIUM_PATH || chromium.executablePath();
     for (const img of await page.locator('#people img').all()) { await img.scrollIntoViewIfNeeded(); await img.evaluate(i => i.decode()); }
     assert.equal(await page.locator('#people a[href^="https:"][href*="kcl.ac.uk"]').count(), 4);
     checks.push('Six requested people, three official portraits and four institutional profile links');
+    await page.locator('#publications').scrollIntoViewIfNeeded();
+    assert.equal(await page.locator('#kcl-outputs>a').count(), 5);
+    assert.equal(await page.locator('#kcl-outputs>a[href^="https://kclpure.kcl.ac.uk/portal/en/publications/"]').count(), 5);
+    assert.deepEqual(await page.locator('#kcl-outputs .pub-type').evaluateAll(nodes => nodes.map(n => n.firstChild.textContent)), ['2022','2023','2024','2024','2026']);
+    assert.match(await page.locator('#kcl-outputs').innerText(), /Accepted \/ in press/);
+    for (const row of await page.locator('#kcl-outputs>a').all()) await row.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(800);
+    await page.locator('#publications').screenshot({path:path.join(root,'qa/research-outputs.png')});
+    await page.locator('.preprint-archive summary').click();
+    assert.equal(await page.locator('#preprint-outputs>a').count(), 4);
+    assert.equal(await page.locator('#preprint-outputs').isVisible(), true);
+    for (const id of ['2603.13078','2608.20477','2609.00461','2609.00507']) assert.equal(await page.locator(`#preprint-outputs a[href="https://arxiv.org/abs/${id}"]`).count(), 1);
+    await page.locator('.preprint-archive summary').click();
+    checks.push('Five sourced KCL outputs in year order, distinct in-press status, expandable four-preprint archive with correct arXiv links');
     await revealAll(page);
     await page.screenshot({ path: path.join(root, 'qa/redesign-full-desktop.png'), fullPage: true });
 
@@ -127,11 +146,15 @@ const executablePath = process.env.CHROMIUM_PATH || chromium.executablePath();
     assert.equal(await mobile.locator('.menu-toggle').getAttribute('aria-expanded'), 'false');
     for (const width of [390,320,768,1024]) {
       await mobile.setViewportSize({width,height:844});
-      for (const id of ['vato','stco']) {
-        await mobile.locator(`#tab-${id}`).click();
-        assert.equal(await mobile.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `Overflow at ${width}px`);
-        assert.equal(await mobile.locator('#research-video').evaluate(v => v.paused), true);
+      for (const id of ['research','stco','deforming','vato','publications']) {
+        await mobile.locator(`#${id}`).scrollIntoViewIfNeeded();
+        assert.equal(await mobile.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `Overflow at ${width}px: ${id}`);
       }
+      assert.equal(await mobile.locator('#research-video').evaluate(v => v.paused), true);
+      assert.equal(await mobile.locator('#stco-video').evaluate(v => v.paused), true);
+      await mobile.locator('.preprint-archive summary').click();
+      assert.equal(await mobile.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+      await mobile.locator('.preprint-archive summary').click();
     }
     await mobile.setViewportSize({width:390,height:844});
     await revealAll(mobile);
@@ -143,8 +166,9 @@ const executablePath = process.env.CHROMIUM_PATH || chromium.executablePath();
     assert.equal(await plain.locator('h1').isVisible(), true);
     assert.equal(await plain.locator('#research-video').evaluate(v => v.controls), true);
     assert.equal(await plain.locator('.principal, .person').count(), 6);
-    assert.equal(await plain.locator('.publication-list>a').count(), 4);
-    checks.push('Without JavaScript: team, research summaries, four paper links and native operator video remain available');
+    assert.equal(await plain.locator('#stco-video').evaluate(v => v.controls), true);
+    assert.equal(await plain.locator('.publication-list>a').count(), 9);
+    checks.push('Without JavaScript: team, research summaries, nine output links and native videos remain available');
     assert.deepEqual(errors, []); assert.deepEqual(failed, []);
     checks.push('No browser script errors or failing same-origin resources');
     const report = {status:'passed',url,checks,errors,failed};

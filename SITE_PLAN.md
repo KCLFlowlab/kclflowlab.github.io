@@ -8,20 +8,30 @@
 
 1. **Uncover the forces of flow.**：全屏流场、被动示踪粒子与进入研究的入口。
 2. **A wake is a story of forces.**：简洁说明研究问题与课题组方向。
-3. **Where does thrust begin?**：Deforming VFM 完整同步动画与推进力问题。
-4. **Physics inside. Possibilities ahead.**：MarsVATO 与 STCO 双项目切换，原始预测动画。
-5. **What keeps a bird aloft?**：RA-VFM 鸟体几何原图与湍流气动力研究。
-6. **Different minds. Shared curiosity.**：负责人介绍与五位成员介绍。
-7. **Ideas, in detail.**：四项论文／预印本入口。
-8. **Let’s make waves.**：研究合作联系与开放代码入口。
+3. **What keeps a bird aloft?**：Matteo 的 RA-VFM（2026-03-13）。
+4. **One flow. Different futures.**：STCO 独立章节与四条件动画（2026-08-20）。
+5. **Where does thrust begin?**：Deforming VFM 同步游动与力场动画（2026-08-31）。
+6. **Physics inside. Possibilities ahead.**：VATO 提前量／攻角扫描（2026-09-01）。
+7. **Different minds. Shared curiosity.**：负责人介绍与五位成员介绍。
+8. **Research outputs.**：五条 KCL 发表记录与可展开的四篇预印本列表。
+9. **Let’s make waves.**：研究合作联系与开放代码入口。
+
+研究章节按 arXiv 首次提交日期从早到晚排列，不把提交时间当成项目启动时间。
+STCO 和 VATO 已核实公开 arXiv 页面，统一标注 Preprint。
+
+成果列表依据 Juan Li 官方 KCL 主页链接到的 KCL Pure（页面显示 Julia Li）记录。
+精选 2022 年 Flow completion network、2023 年分离流模型比较、2024 年涡脱落综述、
+2024 年 PEMFC 流道优化，以及 2026 年 Matteo 的 AIAA Journal 待刊文章。
+每项显示题目、作者、年份、期刊／会议和 KCL 链接；待刊状态单独标出，不声称完整目录。
+AIAA 记录与 RA-VFM 预印本的题名和作者不同，作为独立记录保留，不直接认定为同一版本。
 
 ## 科学素材与动画
 
 | 工作 | 来源素材 | 展示方式 |
 | --- | --- | --- |
 | Deforming VFM | phase-0 calculated-cell CFD 快照；README force_mapping.gif；Figures 5、11 | 快照重新渲染为首屏；研究章节展示原始完整时序动画；详情保留科学面板 |
-| MarsVATO | README vato-model；leadtime.gif、incidence.gif | 神经算子章节主动切换提前量和攻角扫描；详情包含架构封面 |
-| STCO | FRO_Paper README prescribed_condition_pde；四条件响应 GIF | 条件响应动画；详情放概念封面、空间对比与性能图 |
+| MarsVATO | README vato-model；leadtime.gif、incidence.gif | VATO 章节主动切换提前量和攻角扫描；详情包含架构封面 |
+| STCO | FRO_Paper README prescribed_condition_pde；四条件响应 GIF | STCO 独立章节的条件响应动画；详情放概念封面、空间对比与性能图 |
 | RA-VFM | 公开论文 Figure 1 和 Figure 5 等值面原图 | 鸟体几何独立章节；详情展示完整原图 |
 
 首屏仅使用单个冻结速度场，粒子用于显示局部流向；不是鱼体真实时序模拟。
@@ -49,8 +59,8 @@ RA-VFM 没有可核实的 README 动画，采用未修改论文原图，注明 C
 
 ## 交互、适配与发布
 
-首页粒子和两处视频在离开视区、切后台或打开详情时暂停；尊重减少动态效果设置。
-动画有暂停、拖动与全屏；项目切换支持方向键、Home、End；弹窗支持 Escape。
+首页粒子和三处视频在离开视区、切后台或打开详情时暂停；尊重减少动态效果设置。
+动画有暂停、拖动与全屏；STCO 和 VATO 各有播放、拖动与全屏控制；弹窗支持 Escape。
 手机使用纵向章节与菜单，保持科学图完整比例。无需 JavaScript 也可阅读成员和论文链接。
 
 静态 HTML/CSS/JavaScript，无服务端、CDN 或追踪。GitHub Actions 只部署 site/ 到

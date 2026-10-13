@@ -19,141 +19,114 @@ if ('IntersectionObserver' in window && !reducedMotion.matches) {
   $$('.manifesto h2, .chapter-copy, .intelligence-heading, .people-heading, .principal, .person, .publication-list>a').forEach(e => { e.classList.add('reveal'); observer.observe(e); });
 }
 
-const video = $('#research-video');
-const swim = $('#swimming-video');
-const screen = $('#research-screen');
-const slider = $('#media-position');
-video.controls = false;
-let active = 'vato';
-let desiredPlay = !reducedMotion.matches;
-let swimPlay = !reducedMotion.matches;
-let videoVisible = false, swimVisible = false, heroVisible = true;
+let heroVisible = true;
 let heroPaused = reducedMotion.matches;
-let sourceGeneration = 0;
 let resumeTracers = () => {};
-const operatorData = {
-  vato: {
-    src: 'assets/vato-leadtime.mp4', poster: 'assets/vato-leadtime-poster.png', frames: 30,
-    title: 'Teach a model<br>what creates force.', label: 'VORTEX-FORCE-AWARE OPERATORS',
-    description: 'VATO uses vortex-force physics to guide transformer operators predicting separated aerofoil flows and aerodynamic loads.',
-    screen: 'Target ↔ VATO-A',
-    caption: 'Direct predictions at 1–30 ms leads. A discrete lead-time sweep, not a continuous rollout.',
-    source: 'https://github.com/KCLFlowlab/MarsVATO#readme'
-  },
-  incidence: {
-    src: 'assets/vato-incidence.mp4', poster: 'assets/vato-incidence-poster.png', frames: 6,
-    caption: 'Six incidence conditions: 3°, 5°, 6°, 9°, 11° and 12°, all at a fixed 20 ms lead. A discrete condition sweep.'
-  },
-  stco: {
-    src: 'assets/stco-response.mp4', poster: 'assets/stco-response-poster.png', frames: 40,
-    title: 'One flow.<br>Different futures.', label: 'PRESCRIBED-CONDITION OPERATORS',
-    description: 'STCO supplies neural operators with the motion, inflow and forcing prescribed for a future query. A common condition interface, evaluated across twelve matched backbones.',
-    screen: 'GAOT Base ↔ STCO',
-    caption: 'Yaw, vortical encounter, transverse gust and convecting gust. Every frame identifies an independently queried lead.',
-    source: 'https://github.com/YoungxxStar/FRO_Paper#readme'
-  }
-};
-function currentMedia() { return active === 'vato' && $('#sweep-select').value === 'incidence' ? operatorData.incidence : operatorData[active]; }
+const players = [];
 function updateButtons() {
-  $('.play-symbol').textContent = video.paused ? '▶' : 'Ⅱ';
-  $('#play-text').textContent = video.paused ? 'Play' : 'Pause';
-  $('#video-play').setAttribute('aria-label', video.paused ? 'Play animation' : 'Pause animation');
-  $('.film-pause').textContent = swim.paused ? 'Play ↗' : 'Pause Ⅱ';
-  $('.film-pause').setAttribute('aria-label', swim.paused ? 'Play swimming animation' : 'Pause swimming animation');
+  players.forEach(player => player.updateButton());
   $('#motion-toggle').innerHTML = heroPaused ? '<span aria-hidden="true">▶</span> Play motion' : '<span aria-hidden="true">Ⅱ</span> Pause motion';
   $('#motion-toggle').setAttribute('aria-pressed', String(heroPaused));
   $('#motion-toggle').setAttribute('aria-label', heroPaused ? 'Play flow tracers' : 'Pause flow tracers');
 }
-function syncMotion() {
-  const available = !document.hidden && !dialog.open;
-  if (available && desiredPlay && videoVisible) {
-    const generation = sourceGeneration;
-    video.play().catch(error => { if (error.name === 'NotAllowedError' && generation === sourceGeneration) desiredPlay = false; updateButtons(); });
-  } else video.pause();
-  if (available && swimPlay && swimVisible) {
-    swim.play().catch(error => { if (error.name === 'NotAllowedError') swimPlay = false; updateButtons(); });
-  } else swim.pause();
-  resumeTracers(); updateButtons();
-}
-function updatePosition() {
-  const ratio = Number.isFinite(video.duration) && video.duration > 0 ? video.currentTime / video.duration : 0;
-  const m = currentMedia(), frame = Math.min(m.frames, Math.floor(ratio * m.frames) + 1);
-  slider.value = Math.round(ratio * 1000);
-  let text = active === 'stco' ? frame + ' / 40' : frame + ' / 30 ms';
-  if (m === operatorData.incidence) text = [3,5,6,9,11,12][frame - 1] + '° / 20 ms';
-  $('#position-label').value = text; slider.setAttribute('aria-valuetext', text);
-}
-function showOperator(name) {
-  active = name; sourceGeneration++; video.pause();
-  const p = operatorData[name], m = currentMedia();
-  $$('[data-operator]').forEach(tab => {
-    const selected = tab.dataset.operator === name;
-    tab.setAttribute('aria-selected', String(selected)); tab.tabIndex = selected ? 0 : -1;
+function updatePosition() { players.forEach(player => player.updatePosition()); }
+function syncMotion() { players.forEach(player => player.sync()); resumeTracers(); updateButtons(); }
+function expandedState() {
+  const expanded = document.fullscreenElement || $('.operator-screen.expanded');
+  players.forEach(player => {
+    if (!player.expand) return;
+    const open = expanded === player.screen;
+    player.expand.textContent = open ? '×' : '⤢';
+    player.expand.setAttribute('aria-label', (open ? 'Close enlarged ' : 'Enlarge ') + player.name + ' visualization');
   });
-  $('#operator-panel').setAttribute('aria-labelledby', 'tab-' + name);
-  $('#operator-title').innerHTML = p.title;
-  $('#operator-label').textContent = p.label;
-  $('#operator-description').textContent = p.description;
-  $('#operator-details').dataset.project = name;
-  $('#screen-title').textContent = p.screen;
-  $('#media-caption').textContent = m.caption;
-  $('#media-source').href = p.source;
-  $('#sweep-label').hidden = name !== 'vato';
-  video.poster = m.poster; video.src = m.src;
-  video.setAttribute('aria-label', p.screen + '. ' + m.caption);
-  video.load(); updatePosition(); syncMotion();
+  document.body.classList.toggle('dialog-open', !!expanded || dialog.open);
+  syncMotion();
 }
-$$('[data-operator]').forEach((tab, i, tabs) => {
-  tab.addEventListener('click', () => showOperator(tab.dataset.operator));
-  tab.addEventListener('keydown', e => {
-    const index = e.key === 'Home' ? 0 : e.key === 'End' ? tabs.length - 1 : e.key === 'ArrowRight' ? (i+1)%tabs.length : e.key === 'ArrowLeft' ? (i+tabs.length-1)%tabs.length : null;
-    if (index !== null) { e.preventDefault(); tabs[index].focus(); showOperator(tabs[index].dataset.operator); }
+function createPlayer({video, screen, play, slider, output, expand, name, position}) {
+  const player = {video, screen, expand, name, desired: !reducedMotion.matches, visible: false, generation: 0};
+  video.controls = false;
+  player.updateButton = () => {
+    const symbol = $('.play-symbol', play), label = $('.play-text, #play-text', play);
+    if (symbol && label) { symbol.textContent = video.paused ? '▶' : 'Ⅱ'; label.textContent = video.paused ? 'Play' : 'Pause'; }
+    else play.textContent = video.paused ? 'Play ↗' : 'Pause Ⅱ';
+    play.setAttribute('aria-label', (video.paused ? 'Play ' : 'Pause ') + name + ' animation');
+  };
+  player.updatePosition = () => {
+    if (!slider) return;
+    const ratio = Number.isFinite(video.duration) && video.duration > 0 ? video.currentTime / video.duration : 0;
+    slider.value = Math.round(ratio * 1000);
+    output.value = position(ratio); slider.setAttribute('aria-valuetext', output.value);
+  };
+  player.sync = () => {
+    const enlarged = document.fullscreenElement || $('.operator-screen.expanded');
+    const available = !document.hidden && !dialog.open && (!enlarged || enlarged === screen);
+    if (available && player.desired && player.visible) {
+      const generation = player.generation;
+      video.play().catch(error => {
+        if (error.name === 'NotAllowedError' && generation === player.generation) player.desired = false;
+        player.updateButton();
+      });
+    } else video.pause();
+  };
+  player.setMedia = media => {
+    player.generation++; video.pause(); video.poster = media.poster; video.src = media.src;
+    video.setAttribute('aria-label', name + '. ' + media.caption);
+    video.load(); player.updatePosition(); player.sync();
+  };
+  play.addEventListener('click', () => { player.desired = video.paused; syncMotion(); });
+  slider?.addEventListener('input', () => {
+    player.desired = false; video.pause();
+    if (Number.isFinite(video.duration)) video.currentTime = Number(slider.value) / 1000 * Math.max(0, video.duration - .001);
+    player.updatePosition();
   });
+  ['play','pause','ended'].forEach(event => video.addEventListener(event, player.updateButton));
+  ['timeupdate','loadedmetadata','seeked'].forEach(event => video.addEventListener(event, player.updatePosition));
+  if (expand) expand.addEventListener('click', async () => {
+    if (document.fullscreenElement) await document.exitFullscreen();
+    else if (screen.classList.contains('expanded')) screen.classList.remove('expanded');
+    else {
+      try { if (!screen.requestFullscreen) throw new Error('Fullscreen unavailable'); await screen.requestFullscreen(); }
+      catch { screen.classList.add('expanded'); }
+    }
+    expandedState();
+  });
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(entries => { player.visible = entries[0].isIntersecting; player.sync(); }, {threshold: .12});
+    observer.observe(video);
+  } else player.visible = true;
+  players.push(player);
+  return player;
+}
+const vatoMedia = {
+  leadtime: {src:'assets/vato-leadtime.mp4',poster:'assets/vato-leadtime-poster.png',frames:30,caption:'Direct predictions at 1–30 ms leads. A discrete lead-time sweep, not a continuous rollout.'},
+  incidence: {src:'assets/vato-incidence.mp4',poster:'assets/vato-incidence-poster.png',frames:6,caption:'Six incidence conditions: 3°, 5°, 6°, 9°, 11° and 12°, all at a fixed 20 ms lead. A discrete condition sweep.'}
+};
+const vatoPlayer = createPlayer({
+  video:$('#research-video'),screen:$('#research-screen'),play:$('#video-play'),slider:$('#media-position'),output:$('#position-label'),expand:$('#media-expand'),name:'VATO',
+  position:ratio => {
+    const incidence = $('#sweep-select').value === 'incidence', frames = incidence ? 6 : 30;
+    const frame = Math.min(frames - 1, Math.floor(ratio * frames));
+    return incidence ? [3,5,6,9,11,12][frame] + '° / 20 ms' : (frame + 1) + ' / 30 ms';
+  }
 });
-$('#sweep-select').addEventListener('change', () => showOperator('vato'));
-$('#video-play').addEventListener('click', () => { desiredPlay = video.paused; syncMotion(); });
-$('.film-pause').addEventListener('click', () => { swimPlay = swim.paused; syncMotion(); });
+createPlayer({video:$('#stco-video'),screen:$('#stco-screen'),play:$('#stco-play'),slider:$('#stco-position'),output:$('#stco-position-label'),expand:$('#stco-expand'),name:'STCO',position:ratio => (Math.min(39, Math.floor(ratio * 40)) + 1) + ' / 40'});
+createPlayer({video:$('#swimming-video'),screen:$('.force-film'),play:$('.film-pause'),name:'swimming'});
+$('#sweep-select').addEventListener('change', () => {
+  const media = vatoMedia[$('#sweep-select').value];
+  $('#media-caption').textContent = media.caption; vatoPlayer.setMedia(media);
+});
 $('#motion-toggle').addEventListener('click', () => { heroPaused = !heroPaused; syncMotion(); });
-slider.addEventListener('input', () => {
-  desiredPlay = false; video.pause();
-  if (Number.isFinite(video.duration)) video.currentTime = Number(slider.value) / 1000 * Math.max(0, video.duration - .001);
-  updatePosition();
-});
-['play','pause','ended'].forEach(name => { video.addEventListener(name, updateButtons); swim.addEventListener(name, updateButtons); });
-['timeupdate','loadedmetadata','seeked'].forEach(name => video.addEventListener(name, updatePosition));
 if ('IntersectionObserver' in window) {
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.target === screen) videoVisible = e.isIntersecting;
-      if (e.target === swim) swimVisible = e.isIntersecting;
-      if (e.target === $('.hero')) heroVisible = e.isIntersecting;
-    }); syncMotion();
-  }, {threshold: .12});
-  observer.observe(screen); observer.observe(swim); observer.observe($('.hero'));
+  const observer = new IntersectionObserver(entries => { heroVisible = entries[0].isIntersecting; syncMotion(); }, {threshold: .12});
+  observer.observe($('.hero'));
 }
 document.addEventListener('visibilitychange', syncMotion);
 reducedMotion.addEventListener('change', () => {
-  if (reducedMotion.matches) { desiredPlay = false; swimPlay = false; heroPaused = true; syncMotion(); }
-});
-
-function expandedState() {
-  const expanded = !!document.fullscreenElement || screen.classList.contains('expanded');
-  $('#media-expand').textContent = expanded ? '×' : '⤢';
-  $('#media-expand').setAttribute('aria-label', expanded ? 'Close enlarged visualization' : 'Enlarge research visualization');
-  document.body.classList.toggle('dialog-open', expanded || dialog.open);
-}
-$('#media-expand').addEventListener('click', async () => {
-  if (document.fullscreenElement) await document.exitFullscreen();
-  else if (screen.classList.contains('expanded')) screen.classList.remove('expanded');
-  else {
-    try { if (!screen.requestFullscreen) throw new Error('Fullscreen unavailable'); await screen.requestFullscreen(); }
-    catch { screen.classList.add('expanded'); }
-  }
-  expandedState();
+  if (reducedMotion.matches) { players.forEach(player => player.desired = false); heroPaused = true; syncMotion(); }
 });
 document.addEventListener('fullscreenchange', expandedState);
 document.addEventListener('keydown', event => {
-  if (event.key === 'Escape') { closeMenu(); screen.classList.remove('expanded'); expandedState(); }
+  if (event.key === 'Escape') { closeMenu(); $$('.operator-screen.expanded').forEach(screen => screen.classList.remove('expanded')); expandedState(); }
 });
 
 // Passive tracers: bilinear sampling of a frozen, author-supplied CFD velocity field.
@@ -219,17 +192,17 @@ const projects = {
     figures: figure('assets/force-map.png', 'Reference-configuration force maps for two swimming modes', 'Paper Figure 11 · Original color scales and annotations retained.') + '<details><summary>View phase-resolved fields</summary>' + figure('assets/flow-regimes.png', 'Phase-resolved vorticity and force-contribution fields', 'Paper Figure 5 · Four phase snapshots.') + '</details>'
   },
   vato: {
-    label: 'MARSVATO / MANUSCRIPT', title: 'VATO: A Vortex-Force-Aware Transformer Operator for Unsteady Separated Aerofoil Flows',
+    label: 'MARSVATO / PREPRINT · 2026', title: 'VATO: A Vortex-Force-Aware Transformer Operator for Unsteady Separated Aerofoil Flows',
     authors: 'Xingxin Yang · Zhan Zhang · Yichen Li · Juan Li',
     text: 'VATO links flow prediction to the local structures that generate aerodynamic forces. VATO-S adds training-time supervision of the VFM force-contribution field. VATO-A also uses force contribution and sensitivity to guide residual cross-attention. The benchmark spans 54 trajectories across nine double-edged plate aerofoil geometries.',
-    links: external('https://github.com/KCLFlowlab/MarsVATO/blob/main/paper/main.pdf', 'Read manuscript') + external('https://github.com/KCLFlowlab/MarsVATO', 'Code & animations'),
+    links: external('https://arxiv.org/abs/2609.00507', 'Read preprint') + external('https://github.com/KCLFlowlab/MarsVATO', 'Code & animations'),
     figures: figure('assets/vato-model.png', 'VATO architecture, training and vortex-aware residual cross-attention', 'Repository README cover · VATO model architecture. The homepage animations show discrete prediction-lead and incidence sweeps.')
   },
   stco: {
-    label: 'STCO / MANUSCRIPT', title: 'STCO: Conditional Neural Operators for Time-Dependent PDEs',
-    authors: '',
+    label: 'STCO / PREPRINT · 2026', title: 'STCO: Conditional Neural Operators for Time-Dependent PDEs',
+    authors: 'Xingxin Yang · Zhan Zhang · Juan Li',
     text: 'A future flow depends on what is prescribed as well as what has been observed. The Spatiotemporal Conditional Operator supplies target-time motion, inflow and forcing fields to different neural-operator backbones. Flow-Aware Graph Leaf sampling and Dual-Site Feature-wise Linear Modulation form a common condition interface, evaluated across twelve matched backbones.',
-    links: external('https://github.com/YoungxxStar/FRO_Paper/blob/main/STCO_Paper/AAAI2027/STCO_AAAI2027_submission_7p/main.pdf', 'Read manuscript') + external('https://github.com/YoungxxStar/FRO_Paper', 'Project & animations'),
+    links: external('https://arxiv.org/abs/2608.20477', 'Read preprint') + external('https://github.com/YoungxxStar/FRO_Paper', 'Project & animations'),
     figures: figure('assets/stco-conditions.png', 'Prescribed-condition operator learning: observations, conditions and future responses', 'Repository README cover · Observed history and prescribed physical conditions define the future response.') + '<details><summary>View prediction comparisons and performance</summary>' + figure('assets/stco-spatial.png', 'STCO resolved velocity and pressure comparisons under prescribed physical conditions', 'Spatial comparisons from the current manuscript.') + figure('assets/stco-performance.png', 'STCO cross-backbone accuracy, condition dependence and inference cost', 'Accuracy, lead-time dependence, condition sensitivity and inference cost.') + '</details>'
   },
   ravfm: {
@@ -278,6 +251,7 @@ $('#credits-open').addEventListener('click',()=>openDialog(
   '<li><strong>STCO.</strong> Current manuscript and README in FRO_Paper. The response animation uses independently queried leads. '+external('https://github.com/YoungxxStar/FRO_Paper','Research source')+'</li>'+
   '<li><strong>RA-VFM.</strong> Liguori, Zhang, Ciriello & Li. Unaltered Figure 1 and the Figure 5 isosurface image from arXiv:2603.13078v1. '+external('https://creativecommons.org/licenses/by-nc-nd/4.0/','CC BY-NC-ND 4.0')+' · '+external('https://arxiv.org/abs/2603.13078','Paper')+'</li>'+
   '<li><strong>People.</strong> Portraits and profile information for '+external('https://www.kcl.ac.uk/people/juan-li','Juan Li')+', '+external('https://www.kcl.ac.uk/people/xingxin-yang','Xingxin Yang')+' and '+external('https://www.kcl.ac.uk/people/vedang-joshi','Vedang Joshi')+' come from their official King’s College London pages. Matteo’s institutional link is the '+external('https://kclpure.kcl.ac.uk/portal/en/persons/matteo-liguori/','King’s Research Portal')+'. Other research descriptions follow the named publications. Letterforms denote members without a sourced portrait.</li>'+
+  '<li><strong>Research outputs.</strong> Titles, authors, venues and publication status follow the linked '+external('https://kclpure.kcl.ac.uk/portal/en/persons/juan.li/','King’s Research Portal')+' records. Featured studies follow first arXiv submission dates. The AIAA Journal in-press record and RA-VFM preprint are listed as separate records.</li>'+
   '<li><strong>Typography.</strong> Manrope and Space Grotesk, self-hosted under the SIL Open Font License. '+external('https://github.com/google/fonts','Font source')+'</li></ul>'
 ));
 updateButtons();updatePosition();syncMotion();
