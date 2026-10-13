@@ -1,0 +1,168 @@
+{
+  "date": "2026-10-13",
+  "assets": [
+    {
+      "file": "site/assets/deforming-force-mapping.mp4",
+      "source": "../deforming-vfm/03_plotting/media/force_mapping.gif",
+      "transformation": "Transcoded GIF to H.264 MP4 with ffmpeg; original 1800x780 frame layout; CRF 21; no audio.",
+      "credit": "Xingxin Yang, Matteo Liguori, Vedang Joshi, Juan Li; supplied author project material",
+      "bytes": 1043057,
+      "sha256": "5cadceb18420c6cb856b28465d88f58a0a0832961a2aa49aa6703712dd5a35eb"
+    },
+    {
+      "file": "site/assets/deforming-poster.png",
+      "source": "../deforming-vfm/03_plotting/media/force_mapping.gif",
+      "transformation": "First frame exported to PNG; 1800x780.",
+      "credit": "Xingxin Yang, Matteo Liguori, Vedang Joshi, Juan Li; supplied author project material",
+      "bytes": 201559,
+      "sha256": "9e85147ddda46d399befc812788359ce9fb3aaf5b4aea2fc2b96971b4327ddd1"
+    },
+    {
+      "file": "site/assets/force-map.png",
+      "source": "../deforming-vfm/03_plotting/Fig11/figure.png",
+      "transformation": "Proportionally resized to 1600x867; color scales and complete figure retained.",
+      "credit": "Xingxin Yang, Matteo Liguori, Vedang Joshi, Juan Li; supplied author project material",
+      "bytes": 458899,
+      "sha256": "060b50b906b46d94a8a74f5694f0472673a90e356b085b49204953b97c800098"
+    },
+    {
+      "file": "site/assets/flow-regimes.png",
+      "source": "../deforming-vfm/03_plotting/Fig05/figure.png",
+      "transformation": "Proportionally resized to 1400x1120; color scales and complete figure retained.",
+      "credit": "Xingxin Yang, Matteo Liguori, Vedang Joshi, Juan Li; supplied author project material",
+      "bytes": 755463,
+      "sha256": "b9df68852fbf58af009b2636b317ec09e0a147709b231be3a76a56a0056b6431"
+    },
+    {
+      "file": "site/assets/ravfm-bird.png",
+      "source": "https://arxiv.org/html/2603.13078v1/Figs/Results/fig_bird3d_2x2.png",
+      "transformation": "Unaltered PNG from the Figure 5 isosurface image.",
+      "credit": "Matteo Liguori, Zhan Zhang, Francesco Ciriello, Juan Li; CC BY-NC-ND 4.0",
+      "bytes": 1118848,
+      "sha256": "20b2d48862d47a6d5081c165812acd15b263e663b24f76c116797a66907dbaf4"
+    },
+    {
+      "file": "site/assets/ravfm-geometry.png",
+      "source": "https://arxiv.org/html/2603.13078v1/Geometry.png",
+      "transformation": "Unaltered PNG from Figure 1.",
+      "credit": "Matteo Liguori, Zhan Zhang, Francesco Ciriello, Juan Li; CC BY-NC-ND 4.0",
+      "bytes": 439337,
+      "sha256": "05915400bc56c7eac50186bfb98b5197660715e3a548c4112bfa6ca1579f965b"
+    },
+    {
+      "file": "site/assets/vato-leadtime.mp4",
+      "source": "https://github.com/KCLFlowlab/MarsVATO/blob/4b6e1832ea5df8f22b37630bf5b3ddae6c4f769a/docs/assets/leadtime.gif",
+      "source_sha256": "55c1de22519d5d50d3c5c4367bec472087bdb4f29f7888c52551a2143b53c200",
+      "transformation": "GIF to H.264 MP4; CRF 19; original dimensions, complete frames and frame timing retained; yuv420p; no audio.",
+      "semantics": "30 independent prediction leads, 1–30 ms; 200 ms per frame; no temporal interpolation.",
+      "credit": "Author-supplied repository materials; original authors retain rights.",
+      "bytes": 367482,
+      "sha256": "fae05a8e9c30a3b0a0eae389e2698fe3a7e713bb8868c337558ea96e142bd2ab"
+    },
+    {
+      "file": "site/assets/vato-leadtime-poster.png",
+      "source": "https://github.com/KCLFlowlab/MarsVATO/blob/4b6e1832ea5df8f22b37630bf5b3ddae6c4f769a/docs/assets/leadtime.gif",
+      "source_sha256": "55c1de22519d5d50d3c5c4367bec472087bdb4f29f7888c52551a2143b53c200",
+      "transformation": "First GIF frame exported as RGB PNG at original dimensions.",
+      "semantics": "30 independent prediction leads, 1–30 ms; 200 ms per frame; no temporal interpolation.",
+      "credit": "Author-supplied repository materials; original authors retain rights.",
+      "bytes": 119954,
+      "sha256": "61ca8ed8e7f3fc3edc67ae3ce9efa2d5260deac13dc76f2260974362e26d16c1"
+    },
+    {
+      "file": "site/assets/vato-incidence.mp4",
+      "source": "https://github.com/KCLFlowlab/MarsVATO/blob/4b6e1832ea5df8f22b37630bf5b3ddae6c4f769a/docs/assets/incidence.gif",
+      "source_sha256": "47d871b53f8057c84ec4934459bbc06bf592f9cb5c4cbabd1204046aa35b0ea9",
+      "transformation": "GIF to H.264 MP4; CRF 19; original dimensions, complete frames and frame timing retained; yuv420p; no audio.",
+      "semantics": "6 incidence conditions: 3, 5, 6, 9, 11, 12 degrees at a fixed 20 ms prediction lead; 1400 ms per frame.",
+      "credit": "Author-supplied repository materials; original authors retain rights.",
+      "bytes": 154337,
+      "sha256": "c51eccee385cbae79ba6a540d68c6372ce3ff29b5c3a904bb6c69bedd477584f"
+    },
+    {
+      "file": "site/assets/vato-incidence-poster.png",
+      "source": "https://github.com/KCLFlowlab/MarsVATO/blob/4b6e1832ea5df8f22b37630bf5b3ddae6c4f769a/docs/assets/incidence.gif",
+      "source_sha256": "47d871b53f8057c84ec4934459bbc06bf592f9cb5c4cbabd1204046aa35b0ea9",
+      "transformation": "First GIF frame exported as RGB PNG at original dimensions.",
+      "semantics": "6 incidence conditions: 3, 5, 6, 9, 11, 12 degrees at a fixed 20 ms prediction lead; 1400 ms per frame.",
+      "credit": "Author-supplied repository materials; original authors retain rights.",
+      "bytes": 62329,
+      "sha256": "fbf327ae8dad989f28fea1bd6ff4ee77d2a2e430670968cfc491c0b776b83fec"
+    },
+    {
+      "file": "site/assets/stco-response.mp4",
+      "source": "https://github.com/YoungxxStar/FRO_Paper/blob/f0a39856a22fa1354976f8a23299b6fecc7ccc3d/STCO_Paper/AAAI2027/assets/gaot_four_conditions_v_response.gif",
+      "source_sha256": "7fd644b9c281a9c3c34a2a9dd2f72eab8f0f2739501836f663fff54d1719be7f",
+      "transformation": "GIF to H.264 MP4; CRF 19; original dimensions, complete frames and frame timing retained; yuv420p; no audio.",
+      "semantics": "40 independently queried leads for four prescribed conditions; 120 ms per frame; not an autoregressive rollout.",
+      "credit": "Author-supplied repository materials; original authors retain rights.",
+      "bytes": 1392971,
+      "sha256": "565d16c6d9457badff8ad3e8bd336d7b52ed5bda7b8aca0b0167a87724d80ed1"
+    },
+    {
+      "file": "site/assets/stco-response-poster.png",
+      "source": "https://github.com/YoungxxStar/FRO_Paper/blob/f0a39856a22fa1354976f8a23299b6fecc7ccc3d/STCO_Paper/AAAI2027/assets/gaot_four_conditions_v_response.gif",
+      "source_sha256": "7fd644b9c281a9c3c34a2a9dd2f72eab8f0f2739501836f663fff54d1719be7f",
+      "transformation": "First GIF frame exported as RGB PNG at original dimensions.",
+      "semantics": "40 independently queried leads for four prescribed conditions; 120 ms per frame; not an autoregressive rollout.",
+      "credit": "Author-supplied repository materials; original authors retain rights.",
+      "bytes": 715327,
+      "sha256": "ab366ea212b13cc9b3bb687203aa4a63f6b9a51a73b5097e9edd3daab489c946"
+    },
+    {
+      "file": "site/assets/vato-model.png",
+      "source": "https://github.com/KCLFlowlab/MarsVATO/blob/4b6e1832ea5df8f22b37630bf5b3ddae6c4f769a/paper/figures/vato-model.jpg",
+      "transformation": "Proportional Lanczos resize to a maximum of 1800x1400; complete layout, scientific color scales and labels retained; PNG export.",
+      "credit": "Author-supplied repository materials; original authors retain rights.",
+      "bytes": 763395,
+      "sha256": "7e86c6d24dadd9992c4eb75199a3d4794c04b3602dc02db5bb5553cac31ea4c8"
+    },
+    {
+      "file": "site/assets/stco-conditions.png",
+      "source": "https://github.com/YoungxxStar/FRO_Paper/blob/f0a39856a22fa1354976f8a23299b6fecc7ccc3d/STCO_Paper/AAAI2027/STCO_AAAI2027_submission_7p/figures/submission/prescribed_condition_pde.png",
+      "transformation": "Proportional Lanczos resize to a maximum of 1800x1400; complete layout, scientific color scales and labels retained; PNG export.",
+      "credit": "Author-supplied repository materials; original authors retain rights.",
+      "bytes": 489774,
+      "sha256": "5e8ad043d9554e3f622e65a72a9e52adc5f67a14a4400d229107b52dba7a4d9c"
+    },
+    {
+      "file": "site/assets/stco-performance.png",
+      "source": "https://github.com/YoungxxStar/FRO_Paper/blob/f0a39856a22fa1354976f8a23299b6fecc7ccc3d/STCO_Paper/AAAI2027/STCO_AAAI2027_submission_7p/figures/submission/stco_performance_triptych.png",
+      "transformation": "Proportional Lanczos resize to a maximum of 1800x1400; complete layout, scientific color scales and labels retained; PNG export.",
+      "credit": "Author-supplied repository materials; original authors retain rights.",
+      "bytes": 329072,
+      "sha256": "d5a0adb4bcf2afb5583e0c27597104aa59f75d91775c9f047056c6408adb836c"
+    },
+    {
+      "file": "site/assets/stco-spatial.png",
+      "source": "https://github.com/YoungxxStar/FRO_Paper/blob/f0a39856a22fa1354976f8a23299b6fecc7ccc3d/STCO_Paper/AAAI2027/STCO_AAAI2027_submission_7p/figures/submission/stco_spatial_comparison.png",
+      "transformation": "Proportional Lanczos resize to a maximum of 1800x1400; complete layout, scientific color scales and labels retained; PNG export.",
+      "credit": "Author-supplied repository materials; original authors retain rights.",
+      "bytes": 1710922,
+      "sha256": "dab415bf123954bbb0b63558d2b17fa63098719bf4ed45b7fe6871c34f469fc5"
+    }
+  ],
+  "design_revision": "README-first minimal research showcase",
+  "repositories": [
+    {
+      "name": "deforming-vfm",
+      "url": "https://github.com/KCLFlowlab/deforming-vfm",
+      "commit": "f0ff58ed3408b1a61b36a13f087f49870324200d"
+    },
+    {
+      "name": "MarsVATO",
+      "url": "https://github.com/KCLFlowlab/MarsVATO",
+      "commit": "4b6e1832ea5df8f22b37630bf5b3ddae6c4f769a"
+    },
+    {
+      "name": "FRO_Paper",
+      "url": "https://github.com/YoungxxStar/FRO_Paper",
+      "commit": "f0a39856a22fa1354976f8a23299b6fecc7ccc3d"
+    },
+    {
+      "name": "RAVFM",
+      "url": "https://github.com/KCLFlowlab/RAVFM",
+      "commit": "eaad5d5ac1b6b77c9f300fe0b646e9bf4518f80c"
+    }
+  ]
+}
