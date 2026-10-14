@@ -154,7 +154,7 @@
       "file": "site/assets/flow-field.json",
       "kind": "derived_velocity_display_grid",
       "source": "https://github.com/KCLFlowlab/deforming-vfm/blob/f0ff58ed3408b1a61b36a13f087f49870324200d/03_plotting/data/fields/Afish_St0p40_Lam1p50_Re5000/snapshots_fourphase.npz",
-      "transformation": "Uniform spatial samples of native calculated-cell velocity and vorticity at phase 0. Archived display grid from the earlier passive-tracer homepage; not used to generate the current navigation sculpture.",
+      "transformation": "Uniform spatial samples of native calculated-cell velocity and vorticity at phase 0. Archived display grid from the earlier passive-tracer homepage; not used to generate the interactive swimming illustration.",
       "credit": "Same Deforming VFM source; no unsteady simulation is implied",
       "bytes": 204858,
       "sha256": "42a111cc5c3aa69207951ca289c33dde418448073519dc52652224b160d53e19"
@@ -398,8 +398,8 @@
     ]
   },
   "homepage_visual": {
-    "kind": "generative_navigation_artwork",
-    "implementation": "Parametric 3D ribbon sculpture rendered in site/app.js with Canvas 2D perspective projection. Colours identify research directions. Geometry and motion are not CFD or measured data.",
+    "kind": "interactive_swimming_illustration",
+    "implementation": "Procedural shaded 3D fish mesh with prescribed body undulation, fins and a forked tail, rendered in site/app.js using Canvas 2D perspective projection. Direct mouse/touch/keyboard manipulation changes its path and local wake. A bounded softened point-vortex/particle model adds alternating shedding, downstream advection, decaying circulation and local entrainment. The geometry and wake are illustrative, not CFD, measured data or validated scientific predictions. No new raster or external model assets.",
     "scientific_media": "Original study figures and animations are unchanged. Archived phase-0 CFD image remains in About the visual and as a canvas fallback."
   }
 }

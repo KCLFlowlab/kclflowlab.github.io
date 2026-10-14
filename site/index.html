@@ -25,7 +25,7 @@
   </header>
   <main id="research" class="observatory" tabindex="-1" aria-labelledby="landscape-title">
     <img class="visual-fallback" src="assets/wake-field.png" alt="" aria-hidden="true">
-    <canvas id="flow-canvas" tabindex="0" role="img" aria-label="Interactive generative flow sculpture. Drag or use arrow keys to rotate; plus and minus to zoom; zero to reset." aria-describedby="canvas-help"></canvas>
+    <canvas id="flow-canvas" tabindex="0" role="img" aria-label="Interactive 3D fish and wake. Drag the fish to disturb the flow; drag empty water to rotate. Shift plus arrow keys move the fish; arrow keys rotate; plus and minus zoom; zero resets." aria-describedby="canvas-help"></canvas>
     <div class="landscape-vignette" aria-hidden="true"></div>
     <div class="landscape-intro">
       <p class="intro-affiliation">RESEARCH AT KING’S COLLEGE LONDON</p>
@@ -33,15 +33,15 @@
       <div class="intro-detail"><p class="landscape-statement">We connect fluid physics and scientific AI to understand natural motion and inform engineering design.</p>
       <a class="vision-entry" href="#vision"><span>Our approach</span><span class="intro-arrow" aria-hidden="true">↗</span></a></div>
     </div>
-    <div class="landscape-caption"><span class="signal"></span> AN OPEN RESEARCH LANDSCAPE<span>Explore a direction. Follow a question.</span></div>
+    <div class="landscape-caption"><span class="signal"></span> AN OPEN RESEARCH LANDSCAPE<span>Move the swimmer. Shape the wake.</span></div>
     <nav class="domain-portals" aria-label="Explore research directions">
       <a id="domain-bio" class="domain-portal portal-bio" href="#domain-bio" data-domain="bio"><i class="portal-orbit" aria-hidden="true"></i><span class="portal-index">01 / NATURE</span><strong><span class="portal-full">Bio-inspired<br>motion &amp; design</span><span class="portal-short">Bio-inspired<br>motion</span></strong><span class="portal-topics">Flight · Swimming · Collective motion</span><span class="portal-enter">Enter direction <b aria-hidden="true">↗</b></span></a>
       <a id="domain-physics" class="domain-portal portal-physics" href="#domain-physics" data-domain="physics"><i class="portal-orbit" aria-hidden="true"></i><span class="portal-index">02 / PHYSICS</span><strong><span class="portal-full">Complex flows<br>&amp; interactions</span><span class="portal-short">Complex<br>flows</span></strong><span class="portal-topics">Vortices · Turbulence · Aeroelasticity</span><span class="portal-enter">Enter direction <b aria-hidden="true">↗</b></span></a>
       <a id="domain-ai" class="domain-portal portal-ai" href="#domain-ai" data-domain="ai"><i class="portal-orbit" aria-hidden="true"></i><span class="portal-index">03 / INTELLIGENCE</span><strong><span class="portal-full">Scientific AI<br>&amp; computation</span><span class="portal-short">Scientific<br>AI</span></strong><span class="portal-topics">Learning · Prediction · Design</span><span class="portal-enter">Enter direction <b aria-hidden="true">↗</b></span></a>
     </nav>
     <aside id="direction-panel" class="direction-panel" aria-labelledby="direction-title" hidden></aside>
-    <div class="orbit-tools" role="group" aria-label="Sculpture controls"><button id="zoom-out" aria-label="Zoom out">−</button><output id="zoom-level" aria-live="off">1.0×</output><button id="zoom-in" aria-label="Zoom in">+</button><span></span><button id="reset-view" aria-label="Reset sculpture view">↺</button><button id="motion-toggle" aria-pressed="false">Pause</button></div>
-    <p id="canvas-help" class="orbit-hint"><span class="desktop-hint">Drag to orbit · Scroll to zoom</span><span class="touch-hint">Drag to orbit · Pinch to zoom</span></p>
+    <div class="orbit-tools" role="group" aria-label="Swimmer scene controls"><button id="zoom-out" aria-label="Zoom out">−</button><output id="zoom-level" aria-live="off">1.0×</output><button id="zoom-in" aria-label="Zoom in">+</button><span></span><button id="reset-view" aria-label="Reset swimmer and view">↺</button><button id="motion-toggle" aria-pressed="false">Pause</button></div>
+    <p id="canvas-help" class="orbit-hint"><span class="desktop-hint">Drag fish · Drag water to orbit · Scroll to zoom</span><span class="touch-hint">Move fish · Drag water · Pinch to zoom</span></p>
     <footer class="landscape-footer">
       <div class="archive-preview"><span class="archive-label">FROM THE RESEARCH ARCHIVE</span><a id="archive-link" href="#publications"><span id="archive-year">2022</span><span id="archive-title">Flow completion with graph neural networks</span><span aria-hidden="true">↗</span></a><button id="archive-next" aria-label="Next publication from the archive">→</button></div>
       <a class="library-entry" href="#library"><span>Explore the research</span><span aria-hidden="true">↗</span></a>

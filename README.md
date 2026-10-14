@@ -10,12 +10,18 @@ with no framework, analytics, CDN dependency or backend.
 The concise two-line heading “Bio-inspired engineering.” introduces the **research
 landscape**. A single paragraph connects fluid physics and scientific AI with natural
 motion and engineering design. The compact typographic hierarchy leaves room for the
-sculpture, with a small institutional label and an “Our approach” link to the vision.
-A generative three-dimensional ribbon sculpture provides the spatial setting, with
-three entrances: bio-inspired motion and design, complex flows and interactions,
-and scientific AI and computation. Visitors drag to orbit, scroll or pinch to zoom,
-or use the equivalent keyboard/button controls. Selecting a direction moves the
-view and highlights its colour. Motion can be paused and respects reduced motion.
+swimmer, with a small institutional label and an “Our approach” link to the vision.
+A shaded three-dimensional fish swims through open water with a flexible body, paired
+fins and an oscillating forked tail. Alternating shed vortices bend short particle
+trails into a fading wake. Hover highlights the fish; dragging it changes its position,
+heading and tailbeat, sheds additional vortices and entrains nearby particles. After
+release, the wake continues to evolve and the fish gradually returns towards its home.
+
+Three entrances lead to bio-inspired motion and design, complex flows and interactions,
+and scientific AI and computation. On phones they sit below the swimmer. Dragging open
+water orbits the camera; wheel/pinch and buttons zoom. Arrow keys orbit, Shift + arrows
+move the fish, and 0 resets. Selecting a direction reframes the scene. Pause and reduced
+motion freeze both the swimmer and the wake, while direct manipulation remains possible.
 
 A direction opens an in-scene panel, rather than another modal. Nine topic branches
 connect biological motion, flow physics, predictive learning and design to the actual
@@ -47,9 +53,18 @@ Space Grotesk and Manrope are self-hosted.
 
 ## Science and provenance
 
-The interactive homepage sculpture is **generative navigation artwork**, not CFD,
-a measured field, a research result or a physical connection between studies. Its
-colours distinguish research directions. “About the visual” explains this distinction.
+The homepage is an **interactive swimming illustration**, not CFD, a measured field
+or a research result. The fish is a procedural, shaded 3D mesh projected with Canvas 2D.
+Prescribed lateral body waves drive the tail. The wake uses softened point-vortex
+induction in local swimming planes, decaying circulation, downstream advection and
+near-body entrainment. It has no pressure solve, no validated boundary conditions and
+no quantitative scientific meaning. Cyan/violet distinguish alternating shed vortices;
+they are illustrative colours, not a measured colour scale. “About the visual” explains
+this model alongside the separately attributed scientific material.
+
+The integration uses bounded steps and velocities, at most 30 vortices and 390 particles
+(240 on phones), with short bounded histories. Rendering targets 30 fps, avoids external
+3D libraries and respects pause, reduced motion and page visibility.
 The archived CFD snapshot remains there and as a static fallback; it uses calculated
 cells, phase 0 of `Afish_St0p40_Lam1p50_Re5000`, and a qualitative vorticity display
 range of −30 to +30. The original velocity display grid remains archived with the site.
@@ -60,7 +75,7 @@ and incidence sweeps; STCO frames are independently queried leads. Captions and 
 labels preserve these meanings. The four MP4s retain original frame counts, timing,
 labels and complete scientific panels, totaling 2,957,847 bytes. Controls provide
 pause, seek and fullscreen. Closing or switching studies, selecting figures or hiding
-the page stops hidden media. The sculpture pauses behind dialogs and in background tabs.
+the page stops hidden media. The swimmer and wake pause behind dialogs and in background tabs.
 
 The five selected KCL records and four-preprint bibliography retain exact titles,
 authors, sources and publication status. The AIAA Journal in-press record and RA-VFM
@@ -93,10 +108,12 @@ For Chromium interaction QA, with the server running:
 ```bash
 npm ci --prefix tools/browser
 CHROMIUM_PATH=/absolute/path/to/chromium node tools/qa.cjs
+CHROMIUM_PATH=/absolute/path/to/chromium node tools/qa-swimmer.cjs
 ```
 
 `PREVIEW_URL` defaults to the local server. Reports and PNGs go to ignored `qa/`.
-Checks cover rotation, zoom, touch pinch, keyboard controls, motion preferences,
+Checks cover fish hit testing, mouse/touch dragging, wake persistence, bounded buffers,
+render rate, rotation, zoom, touch pinch, keyboard controls, motion preferences,
 direction/topic navigation, closing and restoring focus, browser Back, the research
 index and archive, all research videos and figures, team order, source credits,
 320–1440px layouts and the JavaScript-free fallback. Real Safari/iOS hardware has not
@@ -110,11 +127,11 @@ offline preview are not deployed. This website repository is separate from the r
 repositories.
 
 - Page structure, portals, templates and bibliography: `site/index.html`.
-- Generative renderer, direction/topic associations, routing and media: `site/app.js`.
+- Fish/wake renderer, direction/topic associations, routing and media: `site/app.js`.
 - Typography, responsive layout and transitions: `site/styles.css`.
 - Provenance and exact research records: `asset-manifest.json`.
 - Chinese design rationale: `SITE_PLAN.md`.
 
 `tools/render_flow.py` can regenerate the archived scientific field with NumPy, SciPy
 and Matplotlib from the source recorded in the manifest. It does not generate the
-homepage sculpture or modify the source archive. Refresh hashes after changing assets.
+interactive swimmer or modify the source archive. Refresh hashes after changing assets.

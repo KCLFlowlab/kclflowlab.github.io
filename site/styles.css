@@ -59,7 +59,7 @@ html,body{background:var(--bg)}body.js-ready{height:100dvh;overflow:hidden}
 .observatory{position:relative;height:100dvh;min-height:650px;overflow:hidden;isolation:isolate;background:radial-gradient(ellipse at 63% 49%,#10272670,transparent 54%),#050b10;--direction-color:var(--bio)}
 .observatory[data-direction=physics]{--direction-color:var(--physics)}.observatory[data-direction=ai]{--direction-color:var(--ai)}
 .visual-fallback{position:absolute;inset:8% 0 0;width:100%;height:84%;object-fit:cover;opacity:.35;z-index:-1;transition:opacity 1s}.canvas-ready .visual-fallback{opacity:0}
-#flow-canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:grab;outline-offset:-4px}#flow-canvas.dragging{cursor:grabbing}
+#flow-canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:grab;outline-offset:-4px}#flow-canvas.fish-hover{cursor:grab}#flow-canvas.dragging{cursor:grabbing}
 .landscape-vignette{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,#050b10bc 0%,#050b1066 24%,transparent 52%),linear-gradient(0deg,#050b10 1%,transparent 23%,transparent 85%,#050b10 100%)}
 .landscape-caption{position:absolute;right:4%;top:14%;font:8px/1.7 var(--mono);letter-spacing:.1em;color:#b4cec4;pointer-events:none}.landscape-caption>span:last-child{display:block;padding-left:16px;font:11px/1.8 Manrope,sans-serif;letter-spacing:0;color:#849f94;margin-top:6px}
 .domain-portals{position:absolute;inset:0;pointer-events:none}.domain-portal{position:absolute;pointer-events:auto;text-align:left;padding:13px 0 12px 28px;min-width:205px;color:var(--bio);transition:opacity .45s,transform .5s;outline-offset:8px;filter:drop-shadow(0 2px 8px #050b10)}.portal-bio{left:54%;top:23%;--portal-color:var(--bio)}.portal-physics{left:77%;top:48%;--portal-color:var(--physics);color:var(--physics)}.portal-ai{left:57%;top:72%;--portal-color:var(--ai);color:var(--ai)}
@@ -127,3 +127,17 @@ body:not(.js-ready) .domain-portals,body:not(.js-ready) .orbit-tools,body:not(.j
 @media(max-width:700px) and (max-height:710px){.landscape-intro{top:111px}.intro-affiliation{margin-bottom:12px}.landscape-intro h1{font-size:35px;margin-bottom:12px}.landscape-statement{font-size:9px;line-height:1.7}.vision-entry{margin-top:9px}.intro-arrow{width:20px;height:20px;font-size:12px}}
 @media(max-width:360px){.landscape-intro{left:18px;width:calc(100% - 36px)}.intro-detail{max-width:280px;padding-left:12px}.landscape-statement{max-width:260px}.intro-affiliation{font-size:5.5px;letter-spacing:.06em}}
 @media(max-height:650px) and (min-width:701px){.landscape-intro{top:21%}.landscape-intro h1{font-size:47px;margin-bottom:20px}.intro-affiliation{margin-bottom:20px}.landscape-statement{font-size:12px;line-height:1.8}.vision-entry{margin-top:16px}}
+
+/* On small screens, keep the water open and collect research entrances below it. */
+@media(max-width:700px){
+ body:not(.has-direction) .domain-portals{position:absolute;inset:auto 20px 174px;display:flex;gap:12px}
+ body:not(.has-direction) .domain-portal{position:relative;inset:auto;flex:1;width:auto;min-width:0;padding:10px 0 0 10px;border-top:1px solid #80b7a53b}
+ body:not(.has-direction) .portal-orbit{left:0;top:14px;width:4px;height:4px;box-shadow:0 0 10px var(--portal-color)}
+ body:not(.has-direction) .portal-orbit::before,body:not(.has-direction) .portal-orbit::after{display:none}
+ body:not(.has-direction) .portal-index{font-size:5.5px;margin-bottom:8px;letter-spacing:.025em}
+ body:not(.has-direction) .domain-portal strong{font-size:15px;line-height:1.25;letter-spacing:-.035em}
+ body:not(.has-direction) .portal-enter{font-size:6.5px;margin-top:12px;gap:8px}
+}
+@media(max-width:700px) and (max-height:800px){body:not(.has-direction) .domain-portals{bottom:158px}}
+@media(max-width:700px) and (max-height:710px){body:not(.has-direction) .domain-portals{bottom:148px}.landscape-caption{top:300px}}
+@media(max-width:360px){body:not(.has-direction) .domain-portals{left:18px;right:18px;gap:9px}body:not(.has-direction) .domain-portal strong{font-size:13px}body:not(.has-direction) .portal-index{font-size:5px}body:not(.has-direction) .portal-enter{font-size:6px}}
