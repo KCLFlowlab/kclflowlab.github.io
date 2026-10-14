@@ -7,6 +7,9 @@ hosted media and fonts, no framework, analytics, CDN dependency or backend.
 
 ## Design and content
 
+The header, footer and browser icon use the original KCLFlowlab GitHub organization
+avatar, downloaded unchanged on 14 October 2026 and recorded in the asset manifest.
+
 A full-screen CFD field introduces the lab, followed by four research chapters ordered by first arXiv submission:
 RA-VFM (13 March), STCO (20 August), Deforming VFM (31 August) and VATO
 (1 September), all in 2026. This is a public dissemination timeline, not an inferred

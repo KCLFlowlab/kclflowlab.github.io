@@ -206,6 +206,17 @@
       "credit": "SpaceGrotesk authors; SIL Open Font License 1.1",
       "bytes": 49224,
       "sha256": "8279b26bf7b3f5d241b0c5bcb999fc3010e8fb9959083e4fdb0478697d8cca0d"
+    },
+    {
+      "file": "site/assets/kclflowlab-logo.png",
+      "kind": "organization_logo",
+      "source": "https://avatars.githubusercontent.com/u/270611461?v=4",
+      "profile": "https://github.com/KCLFlowlab",
+      "checked_on": "2026-10-14",
+      "transformation": "Original GitHub organization avatar downloaded unchanged; proportionally displayed as site logo and favicon.",
+      "credit": "KCLFlowlab, official GitHub organization avatar",
+      "bytes": 19798,
+      "sha256": "a95dc89ca68dc8f640bfb88d37a9fab2da854a8d5f56f4c1f1e80a5a0b82312e"
     }
   ],
   "design_revision": "Immersive flow narrative and verified team profiles",
