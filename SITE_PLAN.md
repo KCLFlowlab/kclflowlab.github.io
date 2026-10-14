@@ -2,24 +2,22 @@
 
 ## 设计主线
 
-新版以“从流动中理解力，再用物理知识预测流动”为叙事线索。真实 CFD 场构成首屏，
-几何无衬线标题、青色强调与清晰的数据标签形成层次。正文使用深蓝黑、暖白背景交替，
-研究章节各有构图。标题统一使用 Space Grotesk，正文使用 Manrope，字体均本地托管。
-桌面正文 15–18px，手机正文 15–16px；姓名、论文标题、作者与来源分别建立稳定层级。
-页首、页脚和浏览器图标使用 GitHub 黑白头像原图，不做换色；机构标识仅保留在联系方式旁。
+首页是一整个可探索的流场，主题 **Follow the vortex.**。真实 CFD 尾迹与被动示踪粒子构成场景，
+四项研究以带原始封面缩略图的节点分布其中，悬停或键盘聚焦会强调导航连线。
+这些连线仅用于页面导航，不表示研究之间的物理关系或测量位置。
 
-1. **See the flow. Find the force.**：全屏流场、被动示踪粒子与进入研究的入口。
-2. **A wing lifts. A body propels. What makes it possible?**：简洁说明研究问题与课题组方向。
-3. **What keeps a bird aloft?**：Matteo 的 RA-VFM（2026-03-13）。
-4. **One flow. Different futures.**：STCO 独立章节与四条件动画（2026-08-20）。
-5. **Where does thrust begin?**：Deforming VFM 同步游动与力场动画（2026-08-31）。
-6. **Learn the flow. Keep the physics.**：VATO 提前量／攻角扫描（2026-09-01）。
-7. **Different minds. Shared curiosity.**：负责人介绍与五位成员介绍。
-8. **Research outputs.**：五条 KCL 发表记录与可展开的四篇预印本列表。
-9. **Let’s make waves.**：研究合作联系与开放代码入口。
+- 浏览状态：全屏流场与四个研究节点；可筛选 Fluid forces / AI models，也可切换背景图层、暂停粒子。
+- 展开状态：点击节点打开工作窗口，显示问题、作者、介绍、论文／代码与动画或完整论文图。
+- 同一窗口可直接切换研究；支持深链接、浏览器返回、Esc 关闭与焦点返回。
+- 团队、研究产出和联系信息通过导航打开独立面板；常规首页不再依靠纵向滚动浏览。
+- 手机用紧凑的节点排列，打开研究先显示媒体。极矮横屏允许必要滚动，避免控件不可达。
 
-研究章节按 arXiv 首次提交日期从早到晚排列，不把提交时间当成项目启动时间。
-STCO 和 VATO 已核实公开 arXiv 页面，统一标注 Preprint。
+四个研究节点和工作切换标签按 arXiv 首次提交日期排列：
+RA-VFM（2026-03-13，Matteo 的工作最先）、STCO（2026-08-20）、
+Deforming VFM（2026-08-31）、MarsVATO（2026-09-01）。统一标注预印本，日期不当作项目启动时间。
+
+标题使用 Space Grotesk，正文使用 Manrope，均本地托管。黑蓝场景、青色流动与少量铜色涡量强调构成统一色彩。
+页首和浏览器图标使用 GitHub 黑白头像原图；KCL 机构标识保留在联系面板。
 
 成果列表依据 Juan Li 官方 KCL 主页链接到的 KCL Pure（页面显示 Julia Li）记录。
 精选 2022 年 Flow completion network、2023 年分离流模型比较、2024 年涡脱落综述、
@@ -32,13 +30,13 @@ AIAA 记录与 RA-VFM 预印本的题名和作者不同，作为独立记录保�
 | 工作 | 来源素材 | 展示方式 |
 | --- | --- | --- |
 | Deforming VFM | phase-0 calculated-cell CFD 快照；README force_mapping.gif；Figures 5、11 | 快照重新渲染为首屏；研究章节展示原始完整时序动画；详情保留科学面板 |
-| MarsVATO | README vato-model；leadtime.gif、incidence.gif | VATO 章节主动切换提前量和攻角扫描；详情包含架构封面 |
-| STCO | FRO_Paper README prescribed_condition_pde；四条件响应 GIF | STCO 独立章节的条件响应动画；详情放概念封面、空间对比与性能图 |
-| RA-VFM | 公开论文 Figure 1 和 Figure 5 等值面原图 | 鸟体几何独立章节；详情展示完整原图 |
+| MarsVATO | README vato-model；leadtime.gif、incidence.gif | VATO 工作窗口主动切换提前量和攻角扫描；详情包含架构封面 |
+| STCO | FRO_Paper README prescribed_condition_pde；四条件响应 GIF | STCO 研究窗口的条件响应动画；详情放概念封面、空间对比与性能图 |
+| RA-VFM | 公开论文 Figure 1 和 Figure 5 等值面原图 | 鸟体几何研究窗口；详情展示完整原图 |
 
 首屏仅使用单个冻结速度场，粒子用于显示局部流向；不是鱼体真实时序模拟。
-“About this flow”说明 phase 0、Re 5000、St 0.4、λ* 1.5，以及定性色图范围。
-原始 64 相位动画在 Deforming VFM 章节单独呈现。
+“About this field”说明 phase 0、Re 5000、St 0.4、λ* 1.5，以及定性色图范围。
+原始 64 相位动画在 Deforming VFM 工作窗口单独呈现。
 
 四段研究 GIF 转为 H.264 MP4，合计约 3 MB；保留帧数、显示时长、面板、色标与标签。
 VATO 是离散预测提前量／攻角扫描；STCO 每帧是独立查询，不写成连续时间演化。

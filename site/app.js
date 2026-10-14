@@ -1,133 +1,43 @@
-/* KCL FlowLab: local research media, verified people, no tracking. */
+/* KCL FlowLab research field: real research, locally hosted media, no tracking. */
 'use strict';
 const $ = (s, root = document) => root.querySelector(s);
 const $$ = (s, root = document) => [...root.querySelectorAll(s)];
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const dialog = $('#project-dialog');
+let heroPaused = reducedMotion.matches, heroVisible = true, resumeTracers = () => {};
 document.body.classList.add('js-ready');
-const menu = $('.menu-toggle');
-function closeMenu() { menu.setAttribute('aria-expanded', 'false'); $('#navigation').classList.remove('open'); }
-menu.addEventListener('click', () => {
-  const open = menu.getAttribute('aria-expanded') !== 'true';
-  menu.setAttribute('aria-expanded', String(open)); $('#navigation').classList.toggle('open', open);
-});
-$$('#navigation a').forEach(a => a.addEventListener('click', closeMenu));
-if ('IntersectionObserver' in window && !reducedMotion.matches) {
-  const observer = new IntersectionObserver(entries => entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
-  }), {threshold: .08});
-  $$('.manifesto h2, .chapter-copy, .intelligence-heading, .people-heading, .principal, .person, .publication-list>a').forEach(e => { e.classList.add('reveal'); observer.observe(e); });
-}
-
-let heroVisible = true;
-let heroPaused = reducedMotion.matches;
-let resumeTracers = () => {};
-const players = [];
-function updateButtons() {
-  players.forEach(player => player.updateButton());
-  $('#motion-toggle').innerHTML = heroPaused ? '<span aria-hidden="true">▶</span> Play motion' : '<span aria-hidden="true">Ⅱ</span> Pause motion';
-  $('#motion-toggle').setAttribute('aria-pressed', String(heroPaused));
-  $('#motion-toggle').setAttribute('aria-label', heroPaused ? 'Play flow tracers' : 'Pause flow tracers');
-}
-function updatePosition() { players.forEach(player => player.updatePosition()); }
-function syncMotion() { players.forEach(player => player.sync()); resumeTracers(); updateButtons(); }
-function expandedState() {
-  const expanded = document.fullscreenElement || $('.operator-screen.expanded');
-  players.forEach(player => {
-    if (!player.expand) return;
-    const open = expanded === player.screen;
-    player.expand.textContent = open ? '×' : '⤢';
-    player.expand.setAttribute('aria-label', (open ? 'Close enlarged ' : 'Enlarge ') + player.name + ' visualization');
-  });
-  document.body.classList.toggle('dialog-open', !!expanded || dialog.open);
-  syncMotion();
-}
-function createPlayer({video, screen, play, slider, output, expand, name, position}) {
-  const player = {video, screen, expand, name, desired: !reducedMotion.matches, visible: false, generation: 0};
-  video.controls = false;
-  player.updateButton = () => {
-    const symbol = $('.play-symbol', play), label = $('.play-text, #play-text', play);
-    if (symbol && label) { symbol.textContent = video.paused ? '▶' : 'Ⅱ'; label.textContent = video.paused ? 'Play' : 'Pause'; }
-    else play.textContent = video.paused ? 'Play ↗' : 'Pause Ⅱ';
-    play.setAttribute('aria-label', (video.paused ? 'Play ' : 'Pause ') + name + ' animation');
-  };
-  player.updatePosition = () => {
-    if (!slider) return;
-    const ratio = Number.isFinite(video.duration) && video.duration > 0 ? video.currentTime / video.duration : 0;
-    slider.value = Math.round(ratio * 1000);
-    output.value = position(ratio); slider.setAttribute('aria-valuetext', output.value);
-  };
-  player.sync = () => {
-    const enlarged = document.fullscreenElement || $('.operator-screen.expanded');
-    const available = !document.hidden && !dialog.open && (!enlarged || enlarged === screen);
-    if (available && player.desired && player.visible) {
-      const generation = player.generation;
-      video.play().catch(error => {
-        if (error.name === 'NotAllowedError' && generation === player.generation) player.desired = false;
-        player.updateButton();
-      });
-    } else video.pause();
-  };
-  player.setMedia = media => {
-    player.generation++; video.pause(); video.poster = media.poster; video.src = media.src;
-    video.setAttribute('aria-label', name + '. ' + media.caption);
-    video.load(); player.updatePosition(); player.sync();
-  };
-  play.addEventListener('click', () => { player.desired = video.paused; syncMotion(); });
-  slider?.addEventListener('input', () => {
-    player.desired = false; video.pause();
-    if (Number.isFinite(video.duration)) video.currentTime = Number(slider.value) / 1000 * Math.max(0, video.duration - .001);
-    player.updatePosition();
-  });
-  ['play','pause','ended'].forEach(event => video.addEventListener(event, player.updateButton));
-  ['timeupdate','loadedmetadata','seeked'].forEach(event => video.addEventListener(event, player.updatePosition));
-  if (expand) expand.addEventListener('click', async () => {
-    if (document.fullscreenElement) await document.exitFullscreen();
-    else if (screen.classList.contains('expanded')) screen.classList.remove('expanded');
-    else {
-      try { if (!screen.requestFullscreen) throw new Error('Fullscreen unavailable'); await screen.requestFullscreen(); }
-      catch { screen.classList.add('expanded'); }
-    }
-    expandedState();
-  });
-  if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver(entries => { player.visible = entries[0].isIntersecting; player.sync(); }, {threshold: .12});
-    observer.observe(video);
-  } else player.visible = true;
-  players.push(player);
-  return player;
-}
-const vatoMedia = {
-  leadtime: {src:'assets/vato-leadtime.mp4',poster:'assets/vato-leadtime-poster.png',frames:30,caption:'Direct predictions at 1–30 ms leads. A discrete lead-time sweep, not a continuous rollout.'},
-  incidence: {src:'assets/vato-incidence.mp4',poster:'assets/vato-incidence-poster.png',frames:6,caption:'Six incidence conditions: 3°, 5°, 6°, 9°, 11° and 12°, all at a fixed 20 ms lead. A discrete condition sweep.'}
-};
-const vatoPlayer = createPlayer({
-  video:$('#research-video'),screen:$('#research-screen'),play:$('#video-play'),slider:$('#media-position'),output:$('#position-label'),expand:$('#media-expand'),name:'VATO',
-  position:ratio => {
-    const incidence = $('#sweep-select').value === 'incidence', frames = incidence ? 6 : 30;
-    const frame = Math.min(frames - 1, Math.floor(ratio * frames));
-    return incidence ? [3,5,6,9,11,12][frame] + '° / 20 ms' : (frame + 1) + ' / 30 ms';
+const external = (url, label) => `<a href="${url}" target="_blank" rel="noopener noreferrer">${label} ↗</a>`;
+const figure = (src, alt, caption) => `<figure><img src="${src}" alt="${alt}" loading="lazy"><figcaption>${caption}</figcaption></figure>`;
+const projects = {
+  deforming: {
+    label: 'DEFORMING VFM / PREPRINT · 2026', title: 'Deforming Vortex Force Mapping for Undulating Swimmers',
+    authors: 'Xingxin Yang · Matteo Liguori · Vedang Joshi · Juan Li',
+    text: 'A deforming swimmer produces force through both body motion and the surrounding flow. Deforming VFM separates reactive added-mass loading from signed vortex-pressure contributions and maps them onto a reference configuration. Eighty prescribed two-dimensional swimming cases compare anguilliform and carangiform kinematics at Re = 5,000.',
+    links: external('https://arxiv.org/abs/2609.00461', 'Read preprint') + external('https://github.com/KCLFlowlab/deforming-vfm', 'Code & animations'),
+    figures: figure('assets/force-map.png', 'Reference-configuration force maps for two swimming modes', 'Paper Figure 11 · Original color scales and annotations retained.') + '<details><summary>View phase-resolved fields</summary>' + figure('assets/flow-regimes.png', 'Phase-resolved vorticity and force-contribution fields', 'Paper Figure 5 · Four phase snapshots.') + '</details>'
+  },
+  vato: {
+    label: 'MARSVATO / PREPRINT · 2026', title: 'VATO: A Vortex-Force-Aware Transformer Operator for Unsteady Separated Aerofoil Flows',
+    authors: 'Xingxin Yang · Zhan Zhang · Yichen Li · Juan Li',
+    text: 'VATO links flow prediction to the local structures that generate aerodynamic forces. VATO-S adds training-time supervision of the VFM force-contribution field. VATO-A also uses force contribution and sensitivity to guide residual cross-attention. The benchmark spans 54 trajectories across nine double-edged plate aerofoil geometries.',
+    links: external('https://arxiv.org/abs/2609.00507', 'Read preprint') + external('https://github.com/KCLFlowlab/MarsVATO', 'Code & animations'),
+    figures: figure('assets/vato-model.png', 'VATO architecture, training and vortex-aware residual cross-attention', 'Repository README cover · VATO model architecture. The homepage animations show discrete prediction-lead and incidence sweeps.')
+  },
+  stco: {
+    label: 'STCO / PREPRINT · 2026', title: 'STCO: Conditional Neural Operators for Time-Dependent PDEs',
+    authors: 'Xingxin Yang · Zhan Zhang · Juan Li',
+    text: 'A future flow depends on what is prescribed as well as what has been observed. The Spatiotemporal Conditional Operator supplies target-time motion, inflow and forcing fields to different neural-operator backbones. Flow-Aware Graph Leaf sampling and Dual-Site Feature-wise Linear Modulation form a common condition interface, evaluated across twelve matched backbones.',
+    links: external('https://arxiv.org/abs/2608.20477', 'Read preprint') + external('https://github.com/YoungxxStar/FRO_Paper', 'Project & animations'),
+    figures: figure('assets/stco-conditions.png', 'Prescribed-condition operator learning: observations, conditions and future responses', 'Repository README cover · Observed history and prescribed physical conditions define the future response.') + '<details><summary>View prediction comparisons and performance</summary>' + figure('assets/stco-spatial.png', 'STCO resolved velocity and pressure comparisons under prescribed physical conditions', 'Spatial comparisons from the current manuscript.') + figure('assets/stco-performance.png', 'STCO cross-backbone accuracy, condition dependence and inference cost', 'Accuracy, lead-time dependence, condition sensitivity and inference cost.') + '</details>'
+  },
+  ravfm: {
+    label: 'RA-VFM / PREPRINT · 2026', title: 'The Reynolds-Averaged Vortex Force Map Method',
+    authors: 'Matteo Liguori · Zhan Zhang · Francesco Ciriello · Juan Li',
+    text: 'RA-VFM extends vortex-force mapping to Reynolds-averaged flows. Its decomposition distinguishes vortex-pressure and Reynolds-stress contributions to mean aerodynamic forces. A gliding goshawk and a matched aerofoil show where lift and drag originate in turbulent flow.',
+    links: external('https://arxiv.org/abs/2603.13078', 'Read preprint') + external('https://github.com/KCLFlowlab/RAVFM', 'Code'),
+    figures: figure('assets/ravfm-geometry.png', 'Gliding goshawk geometry and force definitions', 'Paper Figure 1 · Liguori, Zhang, Ciriello & Li · CC BY-NC-ND 4.0; unaltered image.') + '<details><summary>View lift-contribution map</summary>' + figure('assets/ravfm-bird.png', 'Vortex-pressure and Reynolds-stress lift-contribution isosurfaces', 'Paper Figure 5 isosurface image · CC BY-NC-ND 4.0; unaltered image.') + '</details>'
   }
-});
-createPlayer({video:$('#stco-video'),screen:$('#stco-screen'),play:$('#stco-play'),slider:$('#stco-position'),output:$('#stco-position-label'),expand:$('#stco-expand'),name:'STCO',position:ratio => (Math.min(39, Math.floor(ratio * 40)) + 1) + ' / 40'});
-createPlayer({video:$('#swimming-video'),screen:$('.force-film'),play:$('.film-pause'),name:'swimming'});
-$('#sweep-select').addEventListener('change', () => {
-  const media = vatoMedia[$('#sweep-select').value];
-  $('#media-caption').textContent = media.caption; vatoPlayer.setMedia(media);
-});
-$('#motion-toggle').addEventListener('click', () => { heroPaused = !heroPaused; syncMotion(); });
-if ('IntersectionObserver' in window) {
-  const observer = new IntersectionObserver(entries => { heroVisible = entries[0].isIntersecting; syncMotion(); }, {threshold: .12});
-  observer.observe($('.hero'));
-}
-document.addEventListener('visibilitychange', syncMotion);
-reducedMotion.addEventListener('change', () => {
-  if (reducedMotion.matches) { players.forEach(player => player.desired = false); heroPaused = true; syncMotion(); }
-});
-document.addEventListener('fullscreenchange', expandedState);
-document.addEventListener('keydown', event => {
-  if (event.key === 'Escape') { closeMenu(); $$('.operator-screen.expanded').forEach(screen => screen.classList.remove('expanded')); expandedState(); }
-});
+};
 
 // Passive tracers: bilinear sampling of a frozen, author-supplied CFD velocity field.
 (async () => {
@@ -142,7 +52,7 @@ document.addEventListener('keydown', event => {
   const [x0,x1,y0,y1] = field.imageBounds, [gx0,gx1,gy0,gy1] = field.bounds;
   let width = 1, height = 1, raf = 0, previous = 0, seed = 73;
   const random = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
-  const particles = Array.from({length: 440}, () => ({}));
+  const particles = Array.from({length: innerWidth < 760 ? 550 : 1200}, () => ({}));
   const reset = p => { p.x = x0 + random()*(x1-x0); p.y = y0 + random()*(y1-y0); p.life = 50 + random()*180; };
   particles.forEach(reset);
   function resize() {
@@ -181,65 +91,6 @@ document.addEventListener('keydown', event => {
   resize();resumeTracers();
 })();
 
-const external = (url, label) => `<a href="${url}" target="_blank" rel="noopener noreferrer">${label} ↗</a>`;
-const figure = (src, alt, caption) => `<figure><img src="${src}" alt="${alt}" loading="lazy"><figcaption>${caption}</figcaption></figure>`;
-const projects = {
-  deforming: {
-    label: 'DEFORMING VFM / PREPRINT · 2026', title: 'Deforming Vortex Force Mapping for Undulating Swimmers',
-    authors: 'Xingxin Yang · Matteo Liguori · Vedang Joshi · Juan Li',
-    text: 'A deforming swimmer produces force through both body motion and the surrounding flow. Deforming VFM separates reactive added-mass loading from signed vortex-pressure contributions and maps them onto a reference configuration. Eighty prescribed two-dimensional swimming cases compare anguilliform and carangiform kinematics at Re = 5,000.',
-    links: external('https://arxiv.org/abs/2609.00461', 'Read preprint') + external('https://github.com/KCLFlowlab/deforming-vfm', 'Code & animations'),
-    figures: figure('assets/force-map.png', 'Reference-configuration force maps for two swimming modes', 'Paper Figure 11 · Original color scales and annotations retained.') + '<details><summary>View phase-resolved fields</summary>' + figure('assets/flow-regimes.png', 'Phase-resolved vorticity and force-contribution fields', 'Paper Figure 5 · Four phase snapshots.') + '</details>'
-  },
-  vato: {
-    label: 'MARSVATO / PREPRINT · 2026', title: 'VATO: A Vortex-Force-Aware Transformer Operator for Unsteady Separated Aerofoil Flows',
-    authors: 'Xingxin Yang · Zhan Zhang · Yichen Li · Juan Li',
-    text: 'VATO links flow prediction to the local structures that generate aerodynamic forces. VATO-S adds training-time supervision of the VFM force-contribution field. VATO-A also uses force contribution and sensitivity to guide residual cross-attention. The benchmark spans 54 trajectories across nine double-edged plate aerofoil geometries.',
-    links: external('https://arxiv.org/abs/2609.00507', 'Read preprint') + external('https://github.com/KCLFlowlab/MarsVATO', 'Code & animations'),
-    figures: figure('assets/vato-model.png', 'VATO architecture, training and vortex-aware residual cross-attention', 'Repository README cover · VATO model architecture. The homepage animations show discrete prediction-lead and incidence sweeps.')
-  },
-  stco: {
-    label: 'STCO / PREPRINT · 2026', title: 'STCO: Conditional Neural Operators for Time-Dependent PDEs',
-    authors: 'Xingxin Yang · Zhan Zhang · Juan Li',
-    text: 'A future flow depends on what is prescribed as well as what has been observed. The Spatiotemporal Conditional Operator supplies target-time motion, inflow and forcing fields to different neural-operator backbones. Flow-Aware Graph Leaf sampling and Dual-Site Feature-wise Linear Modulation form a common condition interface, evaluated across twelve matched backbones.',
-    links: external('https://arxiv.org/abs/2608.20477', 'Read preprint') + external('https://github.com/YoungxxStar/FRO_Paper', 'Project & animations'),
-    figures: figure('assets/stco-conditions.png', 'Prescribed-condition operator learning: observations, conditions and future responses', 'Repository README cover · Observed history and prescribed physical conditions define the future response.') + '<details><summary>View prediction comparisons and performance</summary>' + figure('assets/stco-spatial.png', 'STCO resolved velocity and pressure comparisons under prescribed physical conditions', 'Spatial comparisons from the current manuscript.') + figure('assets/stco-performance.png', 'STCO cross-backbone accuracy, condition dependence and inference cost', 'Accuracy, lead-time dependence, condition sensitivity and inference cost.') + '</details>'
-  },
-  ravfm: {
-    label: 'RA-VFM / PREPRINT · 2026', title: 'The Reynolds-Averaged Vortex Force Map Method',
-    authors: 'Matteo Liguori · Zhan Zhang · Francesco Ciriello · Juan Li',
-    text: 'RA-VFM extends vortex-force mapping to Reynolds-averaged flows. Its decomposition distinguishes vortex-pressure and Reynolds-stress contributions to mean aerodynamic forces. A gliding goshawk and a matched aerofoil show where lift and drag originate in turbulent flow.',
-    links: external('https://arxiv.org/abs/2603.13078', 'Read preprint') + external('https://github.com/KCLFlowlab/RAVFM', 'Code'),
-    figures: figure('assets/ravfm-geometry.png', 'Gliding goshawk geometry and force definitions', 'Paper Figure 1 · Liguori, Zhang, Ciriello & Li · CC BY-NC-ND 4.0; unaltered image.') + figure('assets/ravfm-bird.png', 'Vortex-pressure and Reynolds-stress lift-contribution isosurfaces', 'Paper Figure 5 isosurface image · CC BY-NC-ND 4.0; unaltered image.')
-  }
-};
-
-
-let dialogTrigger;
-const studyMovies = {
-  deforming: {src:'assets/deforming-force-mapping.mp4',poster:'assets/deforming-poster.png',caption:'64 original phases of the swimming cycle. Motion, force histories, vorticity and force maps are synchronized.'},
-  vato: {src:'assets/vato-leadtime.mp4',poster:'assets/vato-leadtime-poster.png',caption:'Target and VATO-A at 1–30 ms direct prediction leads. Discrete lead-time sweep.'},
-  stco: {src:'assets/stco-response.mp4',poster:'assets/stco-response-poster.png',caption:'Four prescribed conditions. Each frame shows an independently queried lead, not an autoregressive rollout.'}
-};
-function openDialog(html) {
-  dialogTrigger=document.activeElement;
-  $('#dialog-content').innerHTML=html;
-  dialog.showModal();dialog.scrollTop=0;
-  document.body.classList.add('dialog-open');syncMotion();
-}
-$$('[data-project]').forEach(button=>button.addEventListener('click',()=>{
-  const key=button.dataset.project,p=projects[key],m=studyMovies[key];
-  const film=m?'<figure><video controls muted loop playsinline preload="metadata" poster="'+m.poster+'" aria-label="'+m.caption+'"><source src="'+m.src+'" type="video/mp4"></video><figcaption>'+m.caption+'</figcaption></figure>':'';
-  openDialog('<p class="eyebrow">'+p.label+'</p><h2 id="dialog-title">'+p.title+'</h2>'+(p.authors?'<p class="authors">'+p.authors+'</p>':'')+'<p>'+p.text+'</p><div class="detail-links">'+p.links+'</div>'+film+p.figures);
-}));
-$('.dialog-close').addEventListener('click',()=>dialog.close());
-dialog.addEventListener('click',event=>{
-  if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();}
-});
-dialog.addEventListener('close',()=>{
-  $$('video',dialog).forEach(v=>v.pause());
-  expandedState();dialogTrigger?.focus({preventScroll:true});syncMotion();
-});
 $('#field-info').addEventListener('click',()=>openDialog(
   '<p class="eyebrow">INSIDE THE VISUALIZATION</p><h2 id="dialog-title">A real field.<br>A closer look.</h2><p>The homepage uses a calculated-cell CFD snapshot from the Deforming VFM study: anguilliform swimming, St = 0.4, λ* = 1.5, Re = 5,000, at phase 0.00 T. The field is rendered with a dark diverging palette; cyan and copper distinguish opposite signs of vorticity.</p>'+figure('assets/wake-field.png','Archived CFD vorticity, body boundary and velocity streamlines at phase zero','Qualitative field view. Fixed displayed vorticity range: −30 to +30; values outside that range saturate.')+
   '<div class="flow-note"><p>The moving particles are passive tracers in this frozen velocity field. They show local flow direction; they are not a time-resolved simulation of the swimmer. The complete 64-phase research animation is available in the Deforming VFM study.</p></div><div class="detail-links">'+external('https://github.com/KCLFlowlab/deforming-vfm','Source data & method')+'</div>'
@@ -255,4 +106,141 @@ $('#credits-open').addEventListener('click',()=>openDialog(
   '<li><strong>Lab identity.</strong> The site logo and browser icon use the '+external('https://github.com/KCLFlowlab','KCLFlowlab GitHub organization avatar')+' in its original black-and-white form, without recoloring. The institutional logo beside the contact details is the original SVG from the '+external('https://www.kcl.ac.uk/','official KCL website')+'.</li>'+
   '<li><strong>Typography.</strong> Manrope and Space Grotesk, self-hosted under the SIL Open Font License. '+external('https://github.com/google/fonts','Font source')+'</li></ul>'
 ));
-updateButtons();updatePosition();syncMotion();
+
+const studyOrder = ['ravfm','stco','deforming','vato'];
+const studyMeta = {
+  ravfm: {name:'RA-VFM',date:'13 MAR 2026',category:'FORCES OF FLIGHT',question:'What keeps a bird aloft?'},
+  stco: {name:'STCO',date:'20 AUG 2026',category:'CONDITIONAL INTELLIGENCE',question:'One flow. Different futures.'},
+  deforming: {name:'Deforming VFM',date:'31 AUG 2026',category:'FORCES OF MOTION',question:'Where does thrust begin?'},
+  vato: {name:'MarsVATO',date:'01 SEP 2026',category:'FORCE-AWARE INTELLIGENCE',question:'Teach AI what creates force.'}
+};
+const movies = {
+  deforming:{src:'assets/deforming-force-mapping.mp4',poster:'assets/deforming-poster.png',frames:64,caption:'64 original phases of a swimming cycle. Body motion, forces and flow fields are synchronized.'},
+  stco:{src:'assets/stco-response.mp4',poster:'assets/stco-response-poster.png',frames:40,caption:'Four prescribed conditions. Each frame is an independently queried prediction lead, not an autoregressive rollout.'},
+  vato:{src:'assets/vato-leadtime.mp4',poster:'assets/vato-leadtime-poster.png',frames:30,caption:'Target and VATO-A at 1–30 ms direct prediction leads. A discrete lead-time sweep, not a continuous rollout.'},
+  incidence:{src:'assets/vato-incidence.mp4',poster:'assets/vato-incidence-poster.png',frames:6,caption:'Six incidence conditions: 3°, 5°, 6°, 9°, 11° and 12°, each at a fixed 20 ms prediction lead.'}
+};
+let currentStudy = null, dialogTrigger = null, mediaCleanup = () => {};
+function syncMotion() {
+  $('#motion-toggle').textContent = heroPaused ? 'Play motion' : 'Pause motion';
+  $('#motion-toggle').setAttribute('aria-pressed', String(heroPaused));
+  $('#motion-toggle').setAttribute('aria-label', heroPaused ? 'Play flow tracers' : 'Pause flow tracers');
+  resumeTracers();
+}
+function stopMedia() {
+  $$('video', dialog).forEach(video => video.pause());
+  mediaCleanup(); mediaCleanup = () => {};
+  if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+}
+function openDialog(html, kind = 'info') {
+  stopMedia();
+  if (!dialog.open) dialogTrigger = document.activeElement;
+  dialog.dataset.kind = kind;
+  $('#workspace-label').textContent = kind === 'study' ? 'RESEARCH' : kind.toUpperCase();
+  $('#dialog-content').innerHTML = html;
+  if (!dialog.open) dialog.showModal();
+  $('#dialog-content').scrollTop = 0;
+  $('#dialog-title')?.setAttribute('tabindex','-1');
+  $('#dialog-title')?.focus({preventScroll:true});
+  syncMotion();
+}
+function closeWorkspace() {
+  if (location.hash !== '#research' && location.hash !== '') history.pushState(null,'','#research');
+  route();
+}
+function projectTabs(active) {
+  return '<nav class="study-switcher" aria-label="Switch research study">'+studyOrder.map((key,i)=>'<a href="#study-'+key+'" '+(key===active?'aria-current="page"':'')+'><span>0'+(i+1)+'</span>'+studyMeta[key].name+'</a>').join('')+'</nav>';
+}
+function renderStudy(key) {
+  currentStudy = key;
+  const p=projects[key], meta=studyMeta[key], animated=!!movies[key];
+  openDialog(projectTabs(key)+'<div class="study-layout"><section class="study-copy"><p class="eyebrow">'+meta.category+'</p><h2 id="dialog-title">'+meta.question+'</h2><p class="study-description">'+p.text+'</p><p class="study-authors">'+p.authors+'</p><div class="detail-links">'+p.links+'</div><details class="paper-record"><summary>Paper details</summary><p>'+p.title+'</p><p>First preprint · '+meta.date+'</p></details></section><section class="study-visual" aria-label="Research media"><div class="gallery-tabs" role="group" aria-label="Research media view">'+(animated?'<button data-view="animation" aria-pressed="true">Animation</button>':'')+'<button data-view="figures" aria-pressed="'+(!animated)+'">Paper figures</button><span class="gallery-kind">'+meta.name+' / 2026</span></div><div id="study-gallery"></div></section></div>', 'study');
+  $$('.gallery-tabs button').forEach(button=>button.addEventListener('click',()=>renderGallery(button.dataset.view)));
+  renderGallery(animated?'animation':'figures');
+}
+function renderGallery(view) {
+  stopMedia();
+  $$('.gallery-tabs button').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.view===view)));
+  const gallery=$('#study-gallery'), key=currentStudy;
+  if (view==='figures') {
+    gallery.innerHTML='<div class="figure-gallery">'+projects[key].figures+'</div>';
+    return;
+  }
+  gallery.innerHTML='<div class="research-screen" id="research-screen"><div class="screen-bar"><span>'+studyMeta[key].name+' / RESEARCH MEDIA</span><div>'+(key==='vato'?'<label><span class="sr-only">Choose VATO sweep</span><select id="sweep-select"><option value="vato">Lead-time sweep</option><option value="incidence">Incidence sweep</option></select></label>':'')+'<button id="media-expand" aria-label="Enlarge research visualization">⤢</button></div></div><video id="research-video" muted loop playsinline preload="metadata"></video><div class="playback"><button id="video-play" aria-label="Play research animation">Play</button><label class="sr-only" for="media-position">Animation position</label><input id="media-position" type="range" min="0" max="1000" value="0"><output id="position-label" for="media-position"></output></div></div><p class="media-caption" id="media-caption"></p><p class="media-hint">Original research media · Full scientific panels retained</p>';
+  const video=$('#research-video'), slider=$('#media-position'), output=$('#position-label'), play=$('#video-play'), screen=$('#research-screen');
+  let selected=key, desired=!reducedMotion.matches, generation=0;
+  const updatePlay=()=>{play.textContent=video.paused?'▶ Play':'Ⅱ Pause';play.setAttribute('aria-label',video.paused?'Play research animation':'Pause research animation');};
+  const updatePosition=()=>{
+    const m=movies[selected], ratio=Number.isFinite(video.duration)&&video.duration>0?video.currentTime/video.duration:0;
+    const frame=Math.min(m.frames-1,Math.floor(ratio*m.frames));slider.value=Math.round(ratio*1000);
+    output.value=selected==='incidence'?[3,5,6,9,11,12][frame]+'° / 20 ms':selected==='vato'?(frame+1)+' / 30 ms':(frame+1)+' / '+m.frames;
+    slider.setAttribute('aria-valuetext',output.value);
+  };
+  const start=()=>{if(desired&&!document.hidden){const version=generation;video.play().catch(()=>{if(version===generation){desired=false;updatePlay();}});}};
+  const setMedia=()=>{generation++;video.pause();const m=movies[selected];video.poster=m.poster;video.src=m.src;video.setAttribute('aria-label',m.caption);$('#media-caption').textContent=m.caption;video.load();updatePosition();start();};
+  play.addEventListener('click',()=>{desired=video.paused;if(desired)start();else video.pause();});
+  slider.addEventListener('input',()=>{desired=false;video.pause();if(Number.isFinite(video.duration))video.currentTime=Number(slider.value)/1000*Math.max(0,video.duration-.001);updatePosition();});
+  ['play','pause','ended'].forEach(event=>video.addEventListener(event,updatePlay));
+  ['loadedmetadata','timeupdate','seeked'].forEach(event=>video.addEventListener(event,updatePosition));
+  $('#sweep-select')?.addEventListener('change',event=>{selected=event.target.value;setMedia();});
+  $('#media-expand').addEventListener('click',async()=>{
+    if(document.fullscreenElement)await document.exitFullscreen();
+    else if(screen.classList.contains('expanded'))screen.classList.remove('expanded');
+    else {try{await screen.requestFullscreen();}catch{screen.classList.add('expanded');}}
+    $('#media-expand').setAttribute('aria-label',document.fullscreenElement||screen.classList.contains('expanded')?'Close enlarged visualization':'Enlarge research visualization');
+  });
+  const visibility=()=>{if(document.hidden)video.pause();else start();};
+  const motionPreference=()=>{if(reducedMotion.matches){desired=false;video.pause();}};
+  document.addEventListener('visibilitychange',visibility);reducedMotion.addEventListener('change',motionPreference);
+  mediaCleanup=()=>{generation++;document.removeEventListener('visibilitychange',visibility);reducedMotion.removeEventListener('change',motionPreference);};
+  setMedia();updatePlay();
+}
+function route() {
+  const key=location.hash.slice(1)||'research';
+  $$('[data-route]').forEach(a=>a.classList.toggle('active',a.dataset.route===(key.startsWith('study-')?'research':key)));
+  if(key.startsWith('study-')&&projects[key.slice(6)]){renderStudy(key.slice(6));return;}
+  const template=$('#'+key+'-template');
+  if(template){
+    const content=template.content.cloneNode(true), heading=content.querySelector('h2');
+    if(heading){const previous=heading.id;heading.id='dialog-title';content.querySelector('[aria-labelledby="'+previous+'"]')?.setAttribute('aria-labelledby','dialog-title');}
+    const wrapper=document.createElement('div');wrapper.className='information-panel';wrapper.append(content);
+    openDialog(wrapper.outerHTML,key);return;
+  }
+  if(dialog.open)dialog.close();
+}
+$$('a[href^="#"]').forEach(a=>a.addEventListener('click',event=>{
+  if(a.hash===location.hash){event.preventDefault();route();}
+}));
+$('.dialog-close').addEventListener('click',closeWorkspace);
+dialog.addEventListener('cancel',event=>{event.preventDefault();if($('.research-screen.expanded'))$('.research-screen.expanded').classList.remove('expanded');else closeWorkspace();});
+dialog.addEventListener('close',()=>{stopMedia();currentStudy=null;dialogTrigger?.focus({preventScroll:true});syncMotion();});
+dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)closeWorkspace();}});
+window.addEventListener('hashchange',route);
+$('#motion-toggle').addEventListener('click',()=>{heroPaused=!heroPaused;syncMotion();});
+$('#layer-toggle').addEventListener('click',()=>{const shown=$('#layer-toggle').getAttribute('aria-pressed')!=='true';$('#layer-toggle').setAttribute('aria-pressed',String(shown));$('.hero-scene').classList.toggle('tracers-only',!shown);});
+reducedMotion.addEventListener('change',()=>{if(reducedMotion.matches)heroPaused=true;syncMotion();});
+document.addEventListener('visibilitychange',syncMotion);
+
+// Links are navigation cues, not measurements or physical connections between studies.
+function drawConnections() {
+  const root=$('.atlas').getBoundingClientRect(), svg=$('.field-connections');
+  svg.setAttribute('viewBox','0 0 '+root.width+' '+root.height);
+  $('#connections').innerHTML=$$('.research-node').map(node=>{
+    const r=node.getBoundingClientRect(),x=r.left-root.left+r.width/2,y=r.top-root.top+r.height/2;
+    const ax=root.width*Number(node.dataset.anchorX),ay=root.height*Number(node.dataset.anchorY);
+    return '<g data-connection="'+node.dataset.project+'"><path d="M '+x+' '+y+' Q '+ax+' '+y+' '+ax+' '+ay+'"/><circle cx="'+ax+'" cy="'+ay+'" r="4"/><circle class="anchor-ring" cx="'+ax+'" cy="'+ay+'" r="13"/></g>';
+  }).join('');
+}
+new ResizeObserver(drawConnections).observe($('.atlas'));
+$$('.research-node').forEach(node=>{
+  const highlight=active=>{$$('[data-connection]').forEach(g=>g.classList.toggle('highlight',active&&g.dataset.connection===node.dataset.project));};
+  node.addEventListener('pointerenter',()=>highlight(true));node.addEventListener('pointerleave',()=>highlight(false));
+  node.addEventListener('focus',()=>highlight(true));node.addEventListener('blur',()=>highlight(false));
+});
+$$('[data-filter]').forEach(button=>button.addEventListener('click',()=>{
+  const filter=button.dataset.filter;
+  $$('[data-filter]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
+  let count=0;$$('.research-node').forEach(node=>{const match=filter==='all'||node.dataset.category===filter;node.classList.toggle('filtered-out',!match);if(match)count++;});
+  $('#study-count').textContent='0'+count+(filter==='all'?' STUDIES':' MATCHES');
+}));
+syncMotion();route();

@@ -1,33 +1,35 @@
 # KCL FlowLab website
 
-Public website: **https://kclflowlab.github.io/**. Redesigned 13 October 2026 around
+Public website: **https://kclflowlab.github.io/**. Research-field experience updated 14 October 2026 around
 fluid physics, scientific machine learning and the people behind the work. The
 complete deployable site is in `site/`: static HTML, CSS and JavaScript, with locally
 hosted media and fonts, no framework, analytics, CDN dependency or backend.
 
 ## Design and content
 
-The header, footer and browser icon use the original black-and-white KCLFlowlab
-GitHub avatar, unchanged. The institutional KCL logo appears only beside the contact
-details. Both source assets retain provenance in the asset manifest.
+The homepage is a single, full-viewport **research field**, introduced by “Follow the
+vortex.” A real CFD wake and passive particle tracers form the environment. Four
+floating, clickable nodes use the studies' own cover images. Hover/focus highlights
+navigation lines; these are interface cues, not scientific measurements. Filters
+emphasize fluid-force research or AI operators. The field layer and motion can be
+controlled independently.
 
-The opening reads “See the flow. Find the force.” Space Grotesk provides a consistent
-geometric display voice, with Manrope for readable body copy and monospace only for
-research metadata. Body text is 15–18 px on desktop and 15–16 px on mobile; source
-captions remain secondary without shrinking into unreadable decoration. The hero
-keeps the real CFD field, with clear research and team entry points.
+Selecting a node opens a research workspace over the field. It contains the research
+question, authors, paper/code links, full scientific figures and controlled animations.
+A study switcher moves between projects; hash URLs support direct links and browser
+Back. On phones, media comes first. Only the workspace content scrolls during normal
+use; very short landscape viewports allow a scrollable field to keep controls reachable.
 
-A full-screen CFD field introduces the lab, followed by four research chapters ordered by first arXiv submission:
-RA-VFM (13 March), STCO (20 August), Deforming VFM (31 August) and VATO
-(1 September), all in 2026. This is a public dissemination timeline, not an inferred
-project start date. Matteo Liguori’s RA-VFM study is the first research chapter.
-Deep blue, warm ivory, copper highlights and generous typography establish a quiet
-visual rhythm around the scientific images. The People section introduces Juan Li,
-Xingxin Yang, Vedang Joshi, Matteo Liguori, Yichen Li and Zhan Zhang. Five selected publications from Juan Li’s KCL Pure record, an expandable four-preprint
-index and a contact section close the page. The KCL list runs from 2022 to 2026 and
-distinguishes published work from the AIAA Journal record marked accepted/in press.
-That institutional record and the RA-VFM preprint have different titles and author
-lists, so they are retained as separate records.
+Nodes and workspace tabs follow first arXiv submission: RA-VFM (13 March), STCO
+(20 August), Deforming VFM (31 August), VATO (1 September), all in 2026. Matteo's work
+comes first. These dates are not inferred project-start or acceptance dates.
+
+People, Outputs and Contact open their own workspace panels. The six introductions,
+three official portraits, five selected KCL records and four-preprint index are retained.
+The AIAA Journal in-press record and RA-VFM preprint remain distinct records. The header
+and browser icon use the unchanged black-and-white GitHub avatar. The institutional
+KCL mark appears beside contact details. Space Grotesk supplies the geometric display
+voice; Manrope supplies reading text. Both fonts and every research asset are self-hosted.
 
 | Work | Research media | Status |
 | --- | --- | --- |
@@ -39,15 +41,16 @@ lists, so they are retained as separate records.
 The hero is a **qualitative rendering of one archived phase-0 CFD snapshot**, using
 calculated cells and a fixed display range of −30 to +30 for vorticity. Moving particles
 are passive tracers advected through that frozen velocity field, not an unsteady
-simulation. This distinction is explained by “About this flow”. The Deforming VFM
-chapter and detail view retain the complete 64-phase source animation.
+simulation. This distinction is explained by “About this field”. The Deforming VFM
+workspace retains the complete 64-phase source animation.
 
 VATO clips are discrete direct-prediction sweeps. STCO frames represent independently
 queried leads. Captions and seek labels preserve these distinctions. The four MP4s
 retain the original GIF frame counts, timing and complete scientific panels, totaling
-2,957,847 bytes. Controls provide pause, seek and fullscreen. Offscreen media,
-background tabs and open dialogs suspend ambient playback; reduced-motion preferences
-disable automatic playback. Research dialogs contain full figures, authors and sources.
+2,957,847 bytes. Controls provide pause, seek and fullscreen. Closing a workspace,
+switching studies or entering the figures view stops hidden media. Background tabs pause
+playback; reduced-motion preferences disable autoplay. The background particle field
+pauses while a workspace is open.
 
 Three portraits and profiles come from official KCL pages. Matteo links to KCL Pure.
 Yichen and Zhan's introductions are limited to verified co-authorship because no
@@ -79,8 +82,10 @@ CHROMIUM_PATH=/absolute/path/to/chromium node tools/qa.cjs
 ```
 
 `PREVIEW_URL` defaults to the local URL above. Reports and PNG screenshots go to ignored
-`qa/`. Checks cover field animation, all four video sources, playback/seek, independent STCO and VATO players, four study dialogs, figure and portrait loading, fullscreen, chronological chapter order, five KCL records and four arXiv links, mobile menu,
-320–1024px layouts, reduced motion, no-JavaScript fallback and failed resources.
+`qa/`. Checks cover the single-viewport field, all four nodes and media sources,
+force/AI filters, field controls, study switching, direct links, browser Back, focus return,
+Escape, video seeking/fullscreen, source images, people and output panels, 320–1440px
+layouts, reduced motion, no-JavaScript links and failing resources.
 Real Safari/iOS hardware has not been tested.
 
 ## Deployment
@@ -92,7 +97,7 @@ repositories remain separate.
 
 ## Editing and provenance
 
-- Sections and people: `site/index.html`.
+- Field nodes and information-panel templates: `site/index.html`.
 - Motion, media controls, captions and detail text: `site/app.js`.
 - Responsive design: `site/styles.css`.
 - Research chronology, publication metadata, source URLs, exact media commits and hashes: `asset-manifest.json`.
