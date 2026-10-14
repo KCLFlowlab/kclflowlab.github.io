@@ -3,15 +3,17 @@
 ## 设计主线
 
 新版以“从流动中理解力，再用物理知识预测流动”为叙事线索。真实 CFD 场构成首屏，
-超大标题、铜色衬线斜体与细小数据标签形成尺度对比。正文使用深蓝黑、暖白背景交替，
-研究章节各有构图，避免整页重复封面卡片。字体 Manrope 与 Space Grotesk 本地托管。
+几何无衬线标题、青色强调与清晰的数据标签形成层次。正文使用深蓝黑、暖白背景交替，
+研究章节各有构图。标题统一使用 Space Grotesk，正文使用 Manrope，字体均本地托管。
+桌面正文 15–18px，手机正文 15–16px；姓名、论文标题、作者与来源分别建立稳定层级。
+页首、页脚和浏览器图标使用 GitHub 黑白头像原图，不做换色；机构标识仅保留在联系方式旁。
 
-1. **Uncover the forces of flow.**：全屏流场、被动示踪粒子与进入研究的入口。
-2. **A wake is a story of forces.**：简洁说明研究问题与课题组方向。
+1. **See the flow. Find the force.**：全屏流场、被动示踪粒子与进入研究的入口。
+2. **A wing lifts. A body propels. What makes it possible?**：简洁说明研究问题与课题组方向。
 3. **What keeps a bird aloft?**：Matteo 的 RA-VFM（2026-03-13）。
 4. **One flow. Different futures.**：STCO 独立章节与四条件动画（2026-08-20）。
 5. **Where does thrust begin?**：Deforming VFM 同步游动与力场动画（2026-08-31）。
-6. **Physics inside. Possibilities ahead.**：VATO 提前量／攻角扫描（2026-09-01）。
+6. **Learn the flow. Keep the physics.**：VATO 提前量／攻角扫描（2026-09-01）。
 7. **Different minds. Shared curiosity.**：负责人介绍与五位成员介绍。
 8. **Research outputs.**：五条 KCL 发表记录与可展开的四篇预印本列表。
 9. **Let’s make waves.**：研究合作联系与开放代码入口。

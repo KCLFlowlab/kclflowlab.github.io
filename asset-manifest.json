@@ -228,28 +228,6 @@
       "credit": "King’s College London",
       "bytes": 10096,
       "sha256": "f30114aef6b6eb92b99b9996059c0c2689682b79602e9a1668db2926502ecfd0"
-    },
-    {
-      "file": "site/assets/flowlab-red.svg",
-      "kind": "lab_mark",
-      "source": "site/assets/kclflowlab-logo.png",
-      "source_url": "https://avatars.githubusercontent.com/u/270611461?v=4",
-      "color_source": "https://www.kcl.ac.uk/SiteElements/2017/images/kcl-logo.svg",
-      "transformation": "SVG embeds the unchanged GitHub avatar and maps its luminance to white-ink opacity over KCL red #e2231a. Shape and framing are retained; this is a website color treatment, not the official institutional logo.",
-      "credit": "KCLFlowlab organization avatar; website red color treatment",
-      "bytes": 26927,
-      "sha256": "b38bdc6d328791b52bfb56220421290eb6c4e6d8b8db9f30e76af085e3f7e6e2"
-    },
-    {
-      "file": "site/assets/flowlab-red.png",
-      "kind": "touch_icon",
-      "source": "site/assets/kclflowlab-logo.png",
-      "source_url": "https://avatars.githubusercontent.com/u/270611461?v=4",
-      "color_source": "https://www.kcl.ac.uk/SiteElements/2017/images/kcl-logo.svg",
-      "transformation": "Chromium-rendered 319×319 PNG export of flowlab-red.svg.",
-      "credit": "KCLFlowlab organization avatar; website red color treatment",
-      "bytes": 20784,
-      "sha256": "4c5ec7f980560bdf71dc48f7bd2a1485dad8f81af34b21f5f96ee70d36822389"
     }
   ],
   "design_revision": "Immersive flow narrative and verified team profiles",

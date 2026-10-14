@@ -22,7 +22,7 @@ const executablePath = process.env.CHROMIUM_PATH || chromium.executablePath();
   try {
     const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } }); watch(page);
     assert.equal((await page.goto(url)).status(), 200);
-    assert.match(await page.title(), /Uncover the forces of flow/);
+    assert.match(await page.title(), /See the flow\. Find the force\./);
     await page.waitForFunction(() => document.fonts.check('16px Space') && document.fonts.check('16px Manrope'));
     await page.waitForTimeout(500);
     const canvasFrame = () => page.locator('#flow-canvas').evaluate(c => c.toDataURL());

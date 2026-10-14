@@ -7,12 +7,15 @@ hosted media and fonts, no framework, analytics, CDN dependency or backend.
 
 ## Design and content
 
-The header, footer and browser icon use one compact lab mark: the GitHub avatar’s
-vortex artwork rendered in white on King’s red (#e2231a). `flowlab-red.svg` embeds
-the unchanged source avatar and applies an SVG luminance-to-alpha treatment;
-`flowlab-red.png` is a browser-rendered export for touch icons. The institutional
-KCL logo appears only beside the contact details. Both original source assets are
-retained with provenance in the asset manifest.
+The header, footer and browser icon use the original black-and-white KCLFlowlab
+GitHub avatar, unchanged. The institutional KCL logo appears only beside the contact
+details. Both source assets retain provenance in the asset manifest.
+
+The opening reads “See the flow. Find the force.” Space Grotesk provides a consistent
+geometric display voice, with Manrope for readable body copy and monospace only for
+research metadata. Body text is 15–18 px on desktop and 15–16 px on mobile; source
+captions remain secondary without shrinking into unreadable decoration. The hero
+keeps the real CFD field, with clear research and team entry points.
 
 A full-screen CFD field introduces the lab, followed by four research chapters ordered by first arXiv submission:
 RA-VFM (13 March), STCO (20 August), Deforming VFM (31 August) and VATO

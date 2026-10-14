@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#071116">
-  <meta name="description" content="KCL FlowLab at King's College London. Uncovering the forces behind fluid motion, from swimming and flight to scientific machine learning. Meet the people behind the research.">
-  <meta property="og:title" content="KCL FlowLab — Uncover the forces of flow">
-  <meta property="og:description" content="Fluid physics. Scientific intelligence. Research and people at King's College London.">
+  <meta name="description" content="We connect fluid motion to the forces it creates, from flight and swimming to physics-aware AI. Explore the research and people of KCL FlowLab at King's College London.">
+  <meta property="og:title" content="KCL FlowLab — See the flow. Find the force.">
+  <meta property="og:description" content="From the lift of a wing to the thrust of a swimmer. Fluid mechanics and physics-aware AI at King's College London.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://kclflowlab.github.io/assets/wake-field.png">
-  <title>KCL FlowLab — Uncover the forces of flow</title>
-  <link rel="icon" href="assets/flowlab-red.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="assets/flowlab-red.png">
+  <title>KCL FlowLab — See the flow. Find the force.</title>
+  <link rel="icon" href="assets/kclflowlab-logo.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/kclflowlab-logo.png">
   <link rel="preload" href="assets/space-grotesk.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="styles.css">
   <script defer src="app.js"></script>
@@ -19,7 +19,7 @@
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
-    <a class="wordmark" href="#" aria-label="KCL FlowLab home"><img src="assets/flowlab-red.svg" alt="" width="46" height="46"><span>KCL FlowLab</span></a>
+    <a class="wordmark" href="#" aria-label="KCL FlowLab home"><img src="assets/kclflowlab-logo.png" alt="" width="46" height="46"><span>KCL FlowLab</span></a>
     <button class="menu-toggle" aria-expanded="false" aria-controls="navigation">Menu <span aria-hidden="true">＋</span></button>
     <nav id="navigation" aria-label="Main navigation"><a href="#research">Research</a><a href="#people">People</a><a href="#publications">Research outputs</a><a class="nav-contact" href="#contact">Let’s connect <span aria-hidden="true">↗</span></a></nav>
   </header>
@@ -27,12 +27,17 @@
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-scene" aria-hidden="true"><img src="assets/wake-field.png" alt="" width="1920" height="928"><canvas id="flow-canvas"></canvas></div>
       <div class="hero-shade" aria-hidden="true"></div>
-      <div class="hero-copy wrap"><p class="eyebrow"><span class="signal"></span> FLUID PHYSICS & SCIENTIFIC INTELLIGENCE</p><h1 id="hero-title">Uncover<br>the forces<br><span>of flow.</span></h1><p class="hero-intro">From the wake of a swimmer to the intelligence<br>that predicts it. We make fluid motion understood.</p><a class="round-link" href="#research"><span class="round-arrow" aria-hidden="true">↓</span><span>Enter the research</span></a></div>
+      <div class="hero-copy wrap">
+        <p class="eyebrow"><span class="signal"></span> KING’S COLLEGE LONDON / FLOWLAB</p>
+        <h1 id="hero-title">See the flow.<br><span>Find the force.</span></h1>
+        <p class="hero-intro">From the lift of a wing to the thrust of a swimmer, we connect fluid motion to the forces it creates—and build AI that learns from the physics.</p>
+        <div class="hero-actions"><a class="hero-primary" href="#research">Explore our work <span aria-hidden="true">↓</span></a><a class="hero-secondary" href="#people">Meet the lab <span aria-hidden="true">↗</span></a></div>
+      </div>
       <div class="hero-field-note"><span class="field-cross" aria-hidden="true">＋</span><div><span class="eyebrow">INSIDE A SWIMMER’S WAKE</span><p>Vorticity + velocity · Re 5,000</p><span class="field-scale"><i></i> −ω <b></b> +ω</span></div></div>
-      <div class="hero-bottom wrap"><span>DEPARTMENT OF ENGINEERING <i>/</i> LONDON, UK</span><div><button id="field-info" aria-label="About this flow visualization">About this flow <span aria-hidden="true">↗</span></button><button id="motion-toggle" aria-pressed="false" aria-label="Pause flow tracers"><span aria-hidden="true">Ⅱ</span> Pause motion</button></div></div>
+      <div class="hero-bottom wrap"><span>FLUID MECHANICS <i>×</i> PHYSICS-AWARE AI</span><div><button id="field-info" aria-label="About this flow visualization">About this flow <span aria-hidden="true">↗</span></button><button id="motion-toggle" aria-pressed="false" aria-label="Pause flow tracers"><span aria-hidden="true">Ⅱ</span> Pause motion</button></div></div>
     </section>
 
-    <section class="manifesto wrap" aria-labelledby="manifesto-title"><p class="eyebrow">THE QUESTIONS THAT MOVE US</p><div><h2 id="manifesto-title">A wake is more than<br>a beautiful pattern.<br><span>It is a story of forces.</span></h2><div class="manifesto-bottom"><p>We connect the structures we see in a flow to the forces they create. Then we turn that physical insight into models that can predict complex motion.</p><a class="text-link" href="#people">Meet the people asking why <span aria-hidden="true">↗</span></a></div></div></section>
+    <section class="manifesto wrap" aria-labelledby="manifesto-title"><p class="eyebrow">FROM FLOW TO UNDERSTANDING</p><div><h2 id="manifesto-title">A wing lifts.<br>A body propels.<br><span>What makes it possible?</span></h2><div class="manifesto-bottom"><p>Vortices leave a visible trace. The forces they create are harder to see. We map that connection, then use it to guide models of unsteady flow.</p><a class="text-link" href="#people">The people behind the questions <span aria-hidden="true">↗</span></a></div></div></section>
 
     <section class="flight-chapter light" id="research" data-study="ravfm" data-date="2026-03-13" aria-labelledby="flight-title"><div class="wrap"><div class="chapter-top"><span class="eyebrow">SELECTED RESEARCH · 13 MAR 2026</span><span class="eyebrow">01 <i>/</i> UNDERSTAND</span></div><div class="flight-layout"><figure><img src="assets/ravfm-geometry.png" alt="RA-VFM Figure 1: a gliding goshawk, its geometry and force definitions" loading="lazy"><figcaption>THE GEOMETRY OF FLIGHT <span>RA-VFM / 2026</span></figcaption></figure><div class="chapter-copy"><p class="kicker">MATTEO LIGUORI & COLLABORATORS</p><h2 id="flight-title">What keeps<br>a bird<br><em>aloft?</em></h2><p>Mapping lift and drag through turbulent flow. RA-VFM reveals the roles of vortex pressure and Reynolds stress in the forces of flight.</p><div class="study-name">RA-VFM <span>13 MAR 2026 / PREPRINT</span></div><button class="round-link" data-project="ravfm"><span class="round-arrow" aria-hidden="true">↗</span><span>Follow the forces</span></button></div></div></div></section>
 
@@ -53,13 +58,13 @@
     </section>
 
     <section class="intelligence-chapter light" id="vato" data-study="vato" data-date="2026-09-01" aria-labelledby="intelligence-title">
-      <div class="wrap"><div class="chapter-top"><span class="eyebrow">FORCE-AWARE LEARNING · 01 SEP 2026</span><span class="eyebrow">04 <i>/</i> PREDICT</span></div><div class="intelligence-heading"><h2 id="intelligence-title">Physics inside.<br><span>Possibilities ahead.</span></h2><p>Fast predictions need more than patterns.<br>Our neural operators learn with force physics<br>and the conditions that shape a flow.</p></div>
+      <div class="wrap"><div class="chapter-top"><span class="eyebrow">FORCE-AWARE LEARNING · 01 SEP 2026</span><span class="eyebrow">04 <i>/</i> PREDICT</span></div><div class="intelligence-heading"><h2 id="intelligence-title">Learn the flow.<br><span>Keep the physics.</span></h2><p>Our neural operators learn from flow data and vortex-force physics to predict separated aerofoil flows and aerodynamic loads.</p></div>
         <div class="operator-layout" id="operator-panel" aria-labelledby="operator-title"><div class="operator-copy"><p class="kicker" id="operator-label">VORTEX-FORCE-AWARE OPERATORS</p><h3 id="operator-title">Teach a model<br>what creates force.</h3><p id="operator-description">VATO uses vortex-force physics to guide transformer operators predicting separated aerofoil flows and aerodynamic loads.</p><button id="operator-details" class="text-link" data-project="vato">Inside the research <span aria-hidden="true">↗</span></button><p class="operator-status">MARSVATO · 01 SEP 2026 / PREPRINT</p></div><div class="operator-screen" id="research-screen"><div class="screen-bar"><span id="screen-title">Target ↔ VATO-A</span><div><label id="sweep-label"><span class="sr-only">Choose VATO sweep</span><select id="sweep-select"><option value="leadtime">Lead-time sweep</option><option value="incidence">Incidence sweep</option></select></label><button id="media-expand" aria-label="Enlarge research visualization">⤢</button></div></div><video id="research-video" muted loop playsinline controls preload="metadata" poster="assets/vato-leadtime-poster.png" aria-label="VATO-A pressure and vorticity predictions compared with target fields"><source src="assets/vato-leadtime.mp4" type="video/mp4"></video><div class="playback"><button id="video-play" aria-label="Play animation"><span class="play-symbol" aria-hidden="true">▶</span><span id="play-text">Play</span></button><label class="sr-only" for="media-position">Animation position</label><input id="media-position" type="range" min="0" max="1000" value="0"><output id="position-label" for="media-position">1 / 30 ms</output></div></div></div>
         <div class="operator-caption"><span>REAL RESEARCH OUTPUT</span><p id="media-caption">Direct predictions at 1–30 ms leads. A discrete lead-time sweep, not a continuous rollout.</p><a id="media-source" href="https://github.com/KCLFlowlab/MarsVATO#readme" target="_blank" rel="noopener noreferrer">View source ↗</a></div>
       </div>
     </section>
 
-    <section class="people-section wrap" id="people" aria-labelledby="people-title"><div class="people-heading"><div><p class="eyebrow">OUR PEOPLE</p><h2 id="people-title">Different minds.<br><span>Shared curiosity.</span></h2></div><p>The people connecting fluid mechanics,<br>computation and scientific machine learning<br>at King’s College London.</p></div>
+    <section class="people-section wrap" id="people" aria-labelledby="people-title"><div class="people-heading"><div><p class="eyebrow">OUR PEOPLE</p><h2 id="people-title">Different minds.<br><span>Shared curiosity.</span></h2></div><p>We bring fluid mechanics, computation and scientific machine learning together at King’s College London.</p></div>
       <article class="principal"><div class="principal-identity"><img src="assets/juan-li.png" alt="Dr Juan Li, from her official KCL profile" width="160" height="160" loading="lazy"><div><p class="kicker">FACULTY</p><h3>Dr Juan Li</h3><p>Lecturer in Engineering</p><a href="https://www.kcl.ac.uk/people/juan-li" target="_blank" rel="noopener noreferrer">KCL profile <span aria-hidden="true">↗</span></a></div></div><div class="principal-bio"><p>Exploring fluid mechanics, unsteady aerodynamics, vortex dynamics and wind energy.</p><p>Juan joined King’s in 2022 following research at Warwick and a PhD in Engineering Mechanics at Tsinghua University. Her work connects the physics of complex flows with computational modelling.</p><a class="text-link" href="mailto:juan.li@kcl.ac.uk">juan.li@kcl.ac.uk <span aria-hidden="true">↗</span></a></div></article>
       <div class="people-grid">
         <article class="person"><div class="person-portrait"><img src="assets/xingxin-yang.jpg" alt="Xingxin Yang, from his official KCL profile" width="540" height="540" loading="lazy"></div><div class="person-info"><p class="kicker">PHD RESEARCHER</p><h3>Xingxin Yang</h3><p>Combining machine learning and computational fluid dynamics for meta-wing design and aerodynamic optimisation.</p><a href="https://www.kcl.ac.uk/people/xingxin-yang" target="_blank" rel="noopener noreferrer">KCL profile ↗</a></div></article>
@@ -91,7 +96,7 @@
 
     <section class="contact-section" id="contact" aria-labelledby="contact-title"><div class="wrap"><p class="eyebrow">CURIOSITY IS A GOOD STARTING POINT.</p><a href="mailto:juan.li@kcl.ac.uk" class="contact-title"><h2 id="contact-title">Let’s make<br><span>waves.</span></h2><span aria-hidden="true">↗</span></a><div class="contact-details"><p class="institution"><a href="https://www.kcl.ac.uk/" target="_blank" rel="noopener noreferrer"><img src="assets/kcl-logo.svg" alt="King’s College London" width="70" height="53"></a><span>Department of Engineering<br>King’s College London · London, UK</span></p><a href="mailto:juan.li@kcl.ac.uk">juan.li@kcl.ac.uk</a><a href="https://github.com/KCLFlowlab" target="_blank" rel="noopener noreferrer">Explore our open research ↗</a></div></div></section>
   </main>
-  <footer class="site-footer wrap"><a class="footer-mark" href="#" aria-label="KCL FlowLab home"><img src="assets/flowlab-red.svg" alt="" width="30" height="30"><span>KCL FlowLab<span class="footer-dot">.</span></span></a><span>FLUID PHYSICS. SCIENTIFIC INTELLIGENCE.</span><div><button id="credits-open">Sources & credits</button><a href="#" aria-label="Back to top">Back to top ↑</a></div></footer>
+  <footer class="site-footer wrap"><a class="footer-mark" href="#" aria-label="KCL FlowLab home"><img src="assets/kclflowlab-logo.png" alt="" width="30" height="30"><span>KCL FlowLab<span class="footer-dot">.</span></span></a><span>FLUID PHYSICS. SCIENTIFIC INTELLIGENCE.</span><div><button id="credits-open">Sources & credits</button><a href="#" aria-label="Back to top">Back to top ↑</a></div></footer>
   <dialog id="project-dialog" aria-labelledby="dialog-title"><button class="dialog-close" aria-label="Close details">×</button><div id="dialog-content"></div></dialog>
 </body>
 </html>
