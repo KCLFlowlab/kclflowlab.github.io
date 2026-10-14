@@ -25,6 +25,9 @@ Deforming VFM（2026-08-31）、MarsVATO（2026-09-01）。统一标注预印本
 每项显示题目、作者、年份、期刊／会议和 KCL 链接；待刊状态单独标出，不声称完整目录。
 AIAA 记录与 RA-VFM 预印本的题名和作者不同，作为独立记录保留，不直接认定为同一版本。
 
+学生展示按用户指定的年级顺序：Yichen Li → Matteo Liguori → Vedang Joshi → Xingxin Yang → Zhan Zhang。
+Juan Li 保持在负责人位置；这里不推断或标注具体入学年份。
+
 ## 科学素材与动画
 
 | 工作 | 来源素材 | 展示方式 |
