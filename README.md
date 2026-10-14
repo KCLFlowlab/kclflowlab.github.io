@@ -9,6 +9,8 @@ hosted media and fonts, no framework, analytics, CDN dependency or backend.
 
 The header, footer and browser icon use the original KCLFlowlab GitHub organization
 avatar, downloaded unchanged on 14 October 2026 and recorded in the asset manifest.
+The official red King’s College London SVG appears alongside the lab mark in the
+header and beside the institutional contact details; its original colors are retained.
 
 A full-screen CFD field introduces the lab, followed by four research chapters ordered by first arXiv submission:
 RA-VFM (13 March), STCO (20 August), Deforming VFM (31 August) and VATO
