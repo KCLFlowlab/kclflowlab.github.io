@@ -1,10 +1,10 @@
-/* KCL FlowLab research field: real research, locally hosted media, no tracking. */
+/* KCL FlowLab research landscape: real research, locally hosted media, no tracking. */
 'use strict';
 const $ = (s, root = document) => root.querySelector(s);
 const $$ = (s, root = document) => [...root.querySelectorAll(s)];
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const dialog = $('#project-dialog');
-let heroPaused = reducedMotion.matches, heroVisible = true, resumeTracers = () => {};
+let heroPaused = reducedMotion.matches, resumeScene = () => {};
 document.body.classList.add('js-ready');
 const external = (url, label) => `<a href="${url}" target="_blank" rel="noopener noreferrer">${label} ↗</a>`;
 const figure = (src, alt, caption) => `<figure><img src="${src}" alt="${alt}" loading="lazy"><figcaption>${caption}</figcaption></figure>`;
@@ -39,64 +39,112 @@ const projects = {
   }
 };
 
-// Passive tracers: bilinear sampling of a frozen, author-supplied CFD velocity field.
-(async () => {
-  const canvas = $('#flow-canvas'), ctx = canvas.getContext('2d');
-  if (!ctx) return;
-  let field;
-  try {
-    const response = await fetch('assets/flow-field.json');
-    if (!response.ok) throw new Error('Flow field unavailable');
-    field = await response.json();
-  } catch { canvas.hidden = true; $('#motion-toggle').hidden = true; return; }
-  const [x0,x1,y0,y1] = field.imageBounds, [gx0,gx1,gy0,gy1] = field.bounds;
-  let width = 1, height = 1, raf = 0, previous = 0, seed = 73;
-  const random = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
-  const particles = Array.from({length: innerWidth < 760 ? 550 : 1200}, () => ({}));
-  const reset = p => { p.x = x0 + random()*(x1-x0); p.y = y0 + random()*(y1-y0); p.life = 50 + random()*180; };
-  particles.forEach(reset);
-  function resize() {
-    const r = canvas.getBoundingClientRect(), dpr = Math.min(devicePixelRatio || 1, 1.5);
-    width = r.width; height = r.height;
-    canvas.width = Math.round(width*dpr); canvas.height = Math.round(height*dpr);
-    ctx.setTransform(dpr,0,0,dpr,0,0);
-  }
-  function sample(x,y,values) {
-    const fx = Math.max(0,Math.min(field.nx-1.001,(x-gx0)/(gx1-gx0)*(field.nx-1)));
-    const fy = Math.max(0,Math.min(field.ny-1.001,(y-gy0)/(gy1-gy0)*(field.ny-1)));
-    const ix = Math.floor(fx), iy = Math.floor(fy), dx=fx-ix, dy=fy-iy, j=iy*field.nx+ix;
-    return values[j]*(1-dx)*(1-dy)+values[j+1]*dx*(1-dy)+values[j+field.nx]*(1-dx)*dy+values[j+field.nx+1]*dx*dy;
-  }
-  function draw(now) {
-    raf = 0;
-    if (heroPaused || !heroVisible || document.hidden || dialog.open) { previous = 0; return; }
-    if (previous && now - previous < 32) { raf = requestAnimationFrame(draw); return; }
-    const dt = previous ? Math.min((now-previous)/1000,.08) : .033; previous=now;
-    ctx.globalCompositeOperation='destination-out'; ctx.fillStyle='rgba(0,0,0,.16)';ctx.fillRect(0,0,width,height);
-    ctx.globalCompositeOperation='source-over';
-    for (const p of particles) {
-      const u=sample(p.x,p.y,field.u),v=sample(p.x,p.y,field.v),omega=sample(p.x,p.y,field.omega);
-      const ax=(p.x-x0)/(x1-x0)*width, ay=(1-(p.y-y0)/(y1-y0))*height;
-      p.x+=u*dt*.22;p.y+=v*dt*.22;p.life--;
-      if(p.x>x1||p.x<x0||p.y>y1||p.y<y0||p.life<0||Math.hypot(u,v)<.035){reset(p);continue;}
-      const b=Math.min(1,Math.abs(omega)/18);
-      ctx.strokeStyle=omega<0?'rgba(154,229,227,'+(.14+b*.62)+')':'rgba(239,184,132,'+(.14+b*.62)+')';
-      ctx.lineWidth=.55+b*.65;
-      ctx.beginPath();ctx.moveTo(ax,ay);ctx.lineTo((p.x-x0)/(x1-x0)*width,(1-(p.y-y0)/(y1-y0))*height);ctx.stroke();
+// Generative navigation artwork. Geometry and motion below are not CFD measurements.
+const scene = (() => {
+  const canvas=$('#flow-canvas'), ctx=canvas.getContext('2d');
+  if(!ctx){canvas.hidden=true;$('.orbit-tools').hidden=true;$('.orbit-hint').hidden=true;return {resume(){},focus(){},hover(){},zoom(){},reset(){}};}
+  document.body.classList.add('canvas-ready');
+  let width=1,height=1,dpr=1,raf=0,previous=0,elapsed=0,dirty=true;
+  let yaw=.56,pitch=.57,roll=-.23,zoom=1,hover=null,focus=null;
+  let target={yaw,pitch,roll,zoom}, drag=null, pinchDistance=0;
+  const pointers=new Map(), colors=['161,234,211','222,183,156','175,191,247'];
+  const order=['bio','physics','ai'], strands=[], N=144, total=innerWidth<701?32:48;
+  for(let j=0;j<total;j++){
+    const line=[];
+    for(let i=0;i<=N;i++){
+      const t=i/N*Math.PI*2, phi=j/total*Math.PI*2+t*3;
+      const radius=1.50+.12*Math.sin(t*3+.4), tube=.38+.075*Math.sin(t*2+1);
+      line.push([Math.cos(t)*(radius+tube*Math.cos(phi)),Math.sin(t)*(radius+tube*Math.cos(phi))*.91,.33*Math.sin(t*2)+tube*Math.sin(phi)]);
     }
-    raf=requestAnimationFrame(draw);
+    strands.push(line);
   }
-  resumeTracers=()=>{if(!raf&&!heroPaused&&heroVisible&&!document.hidden&&!dialog.open)raf=requestAnimationFrame(draw);};
-  new ResizeObserver(resize).observe(canvas);
-  resize();resumeTracers();
+  function request(){dirty=true;if(!raf&&!document.hidden&&!dialog.open)raf=requestAnimationFrame(draw);}
+  function resize(){const r=canvas.getBoundingClientRect();width=r.width;height=r.height;dpr=Math.min(devicePixelRatio||1,1.6);canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);request();}
+  function draw(now){
+    raf=0;if(document.hidden||dialog.open){previous=0;return;}
+    if(previous&&now-previous<30){raf=requestAnimationFrame(draw);return;}
+    const dt=previous?Math.min((now-previous)/1000,.08):.033;previous=now;
+    const ease=reducedMotion.matches?1:Math.min(1,dt*6);
+    let moving=false;
+    for(const key of ['yaw','pitch','roll','zoom']){
+      const value=({yaw,pitch,roll,zoom})[key], delta=target[key]-value;
+      if(Math.abs(delta)>.001)moving=true;
+      const next=Math.abs(delta)<.001?target[key]:value+delta*ease;
+      if(key==='yaw')yaw=next;if(key==='pitch')pitch=next;if(key==='roll')roll=next;if(key==='zoom')zoom=next;
+    }
+    if(!heroPaused)elapsed+=dt;
+    if(heroPaused&&!dirty&&!moving){previous=0;return;}dirty=false;
+    ctx.clearRect(0,0,width,height);
+    const mobile=width<=700;
+    const cx=width*(mobile?.53:.65),cy=height*(mobile?(focus?.43:.61):.5);
+    const scale=(mobile?Math.min(width*.35,height*.19):Math.min(width*.19,height*.27))*zoom;
+    const ry=yaw+Math.sin(elapsed*.12)*.06,rx=pitch,rz=roll;
+    const cosy=Math.cos(ry),siny=Math.sin(ry),cosx=Math.cos(rx),sinx=Math.sin(rx),cosz=Math.cos(rz),sinz=Math.sin(rz);
+    const project=p=>{
+      const ax=p[0]*cosy+p[2]*siny,az=-p[0]*siny+p[2]*cosy;
+      const by=p[1]*cosx-az*sinx,bz=p[1]*sinx+az*cosx;
+      const perspective=5.8/(5.8-bz);
+      return [cx+(ax*cosz-by*sinz)*scale*perspective,cy+(ax*sinz+by*cosz)*scale*perspective,bz,perspective];
+    };
+    // Gentle atmospheric light makes depth legible; it does not encode a physical field.
+    const glow=ctx.createRadialGradient(cx,cy,0,cx,cy,scale*2.4);
+    glow.addColorStop(0,'rgba(52,103,106,.10)');glow.addColorStop(.55,'rgba(20,61,68,.09)');glow.addColorStop(1,'rgba(5,11,16,0)');
+    ctx.fillStyle=glow;ctx.fillRect(0,0,width,height);
+    ctx.globalCompositeOperation='screen';
+    for(let j=0;j<strands.length;j++){
+      const line=strands[j], coords=line.map(project);
+      for(let group=0;group<3;group++){
+        const start=group*N/3,end=(group+1)*N/3, depth=coords[Math.floor((start+end)/2)][2];
+        const emphasized=(hover||focus)===order[group], quiet=(hover||focus)&&!emphasized;
+        const opacity=(.15+(depth+2)*.078)*(quiet?.28:emphasized?1.75:1);
+        ctx.strokeStyle='rgba('+colors[group]+','+Math.min(.8,opacity)+')';ctx.lineWidth=j%11===0?1.15:.65;
+        ctx.beginPath();ctx.moveTo(coords[start][0],coords[start][1]);
+        for(let i=start+1;i<=end;i++)ctx.lineTo(coords[i][0],coords[i][1]);ctx.stroke();
+      }
+        // Moving light travels along the parametric ribbons, with no fabricated readouts.
+      for(let k=0;k<9;k++){
+        const offset=(k/9*N+j*.37+elapsed*(3.8+j%5*.2))%N, i=Math.floor(offset), f=offset-i;
+        const a=coords[i],b=coords[i+1], group=Math.min(2,Math.floor(offset/N*3));
+        const quiet=(hover||focus)&&(hover||focus)!==order[group];
+        const alpha=(.3+(a[2]+2)*.12)*(quiet?.3:1);
+        ctx.fillStyle='rgba('+colors[group]+','+Math.min(.93,alpha)+')';ctx.beginPath();ctx.arc(a[0]+(b[0]-a[0])*f,a[1]+(b[1]-a[1])*f,(j%7===0?1.2:.65)*a[3],0,Math.PI*2);ctx.fill();
+      }
+    }
+    // A sparse orbit grid adds spatial orientation around the sculpture.
+    ctx.lineWidth=.55;ctx.strokeStyle='rgba(130,168,164,.12)';
+    for(let ring=0;ring<2;ring++){
+      ctx.beginPath();for(let i=0;i<=100;i++){const t=i/100*Math.PI*2,p=project([2.28*Math.cos(t),2.28*Math.sin(t),ring?.13:-.13]);if(i===0)ctx.moveTo(p[0],p[1]);else ctx.lineTo(p[0],p[1]);}ctx.stroke();
+    }
+    ctx.globalCompositeOperation='source-over';
+    canvas.dataset.yaw=yaw.toFixed(3);canvas.dataset.zoom=zoom.toFixed(3);canvas.dataset.direction=focus||'overview';
+    $('#zoom-level').value=zoom.toFixed(1)+'×';
+    $('#zoom-out').disabled=target.zoom<=.7;$('#zoom-in').disabled=target.zoom>=1.6;
+    if(!heroPaused||moving)raf=requestAnimationFrame(draw);else previous=0;
+  }
+  function changeZoom(amount){target.zoom=Math.max(.7,Math.min(1.6,target.zoom+amount));request();}
+  function reset(){target={yaw:.56,pitch:.57,roll:-.23,zoom:1};request();}
+  canvas.addEventListener('pointerdown',e=>{if(e.button!==0&&e.pointerType==='mouse')return;canvas.setPointerCapture(e.pointerId);pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});drag={x:e.clientX,y:e.clientY};canvas.classList.add('dragging');if(pointers.size===2){const p=[...pointers.values()];pinchDistance=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y);}});
+  canvas.addEventListener('pointermove',e=>{
+    if(!pointers.has(e.pointerId))return;
+    pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pointers.size===2){const p=[...pointers.values()], distance=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y);if(pinchDistance>0)changeZoom((distance-pinchDistance)/250);pinchDistance=distance;drag=null;}
+    else if(drag){target.yaw+=(e.clientX-drag.x)*.006;target.pitch=Math.max(-1.3,Math.min(1.3,target.pitch+(e.clientY-drag.y)*.005));drag={x:e.clientX,y:e.clientY};request();}
+  });
+  const release=e=>{pointers.delete(e.pointerId);pinchDistance=0;drag=pointers.size===1?[...pointers.values()][0]:null;if(!pointers.size)canvas.classList.remove('dragging');};
+  ['pointerup','pointercancel','lostpointercapture'].forEach(type=>canvas.addEventListener(type,release));
+  canvas.addEventListener('wheel',e=>{e.preventDefault();changeZoom(-Math.sign(e.deltaY)*.08);},{passive:false});
+  canvas.addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','+','=','-','0'].includes(e.key)){e.preventDefault();if(e.key==='ArrowLeft')target.yaw-=.17;if(e.key==='ArrowRight')target.yaw+=.17;if(e.key==='ArrowUp')target.pitch=Math.max(-1.3,target.pitch-.12);if(e.key==='ArrowDown')target.pitch=Math.min(1.3,target.pitch+.12);if(e.key==='+'||e.key==='=')changeZoom(.1);if(e.key==='-')changeZoom(-.1);if(e.key==='0')reset();request();}});
+  new ResizeObserver(resize).observe(canvas);resize();
+  return {resume:request,hover(key){hover=key;request();},focus(key){focus=key;const positions={bio:[.16,.38,-.4],physics:[-1.04,.74,.1],ai:[1.18,-.35,-.6]};const p=positions[key]||[.56,.57,-.23];target={yaw:p[0],pitch:p[1],roll:p[2],zoom:key?1.12:1};request();},zoom:changeZoom,reset};
 })();
+resumeScene=()=>scene.resume();
 
 $('#field-info').addEventListener('click',()=>openDialog(
-  '<p class="eyebrow">INSIDE THE VISUALIZATION</p><h2 id="dialog-title">A real field.<br>A closer look.</h2><p>The homepage uses a calculated-cell CFD snapshot from the Deforming VFM study: anguilliform swimming, St = 0.4, λ* = 1.5, Re = 5,000, at phase 0.00 T. The field is rendered with a dark diverging palette; cyan and copper distinguish opposite signs of vorticity.</p>'+figure('assets/wake-field.png','Archived CFD vorticity, body boundary and velocity streamlines at phase zero','Qualitative field view. Fixed displayed vorticity range: −30 to +30; values outside that range saturate.')+
-  '<div class="flow-note"><p>The moving particles are passive tracers in this frozen velocity field. They show local flow direction; they are not a time-resolved simulation of the swimmer. The complete 64-phase research animation is available in the Deforming VFM study.</p></div><div class="detail-links">'+external('https://github.com/KCLFlowlab/deforming-vfm','Source data & method')+'</div>'
+  '<p class="eyebrow">INSIDE THE VISUALIZATION</p><h2 id="dialog-title">Flow as a way<br>to explore.</h2><p>The homepage sculpture is a generative, three-dimensional navigation artwork. Its ribbons, colours and motion connect research themes; they do not represent measured data or a CFD simulation. Drag to rotate, scroll or pinch to zoom, and enter a direction to discover the related research.</p><p>Inside the studies, visualisations come from the original research. This archived image uses a calculated-cell CFD snapshot from the Deforming VFM study: anguilliform swimming, St = 0.4, λ* = 1.5, Re = 5,000, at phase 0.00 T. The field is rendered with a dark diverging palette; cyan and copper distinguish opposite signs of vorticity.</p>'+figure('assets/wake-field.png','Archived CFD vorticity, body boundary and velocity streamlines at phase zero','Qualitative field view. Fixed displayed vorticity range: −30 to +30; values outside that range saturate.')+
+  '<div class="flow-note"><p>The archived image is a single phase-0 snapshot, not a time-resolved simulation. The complete 64-phase research animation is available in the Deforming VFM study. The homepage sculpture is a separate generative artwork.</p></div><div class="detail-links">'+external('https://github.com/KCLFlowlab/deforming-vfm','Source data & method')+'</div>'
 ));
 $('#credits-open').addEventListener('click',()=>openDialog(
-  '<p class="eyebrow">SOURCES & CREDITS</p><h2 id="dialog-title">Built around real research.</h2><p>Research media are attributed to their authors. Full scientific figures retain their original layouts and color scales; GIFs are transcoded to MP4. The homepage is a separate qualitative rendering of an archived CFD snapshot with passive tracers.</p><ul>'+
+  '<p class="eyebrow">SOURCES & CREDITS</p><h2 id="dialog-title">Built around real research.</h2><p>Research media are attributed to their authors. Full scientific figures retain their original layouts and color scales; GIFs are transcoded to MP4. The homepage sculpture is a generative navigation artwork, not a scientific simulation. The archived CFD snapshot is available in About the visual; original scientific animations remain in each study.</p><ul>'+
   '<li><strong>Deforming VFM.</strong> Yang, Liguori, Joshi & Li. README animation, Figures 5 and 11, and the calculated-cell phase-0 snapshot. '+external('https://github.com/KCLFlowlab/deforming-vfm','Research source')+'</li>'+
   '<li><strong>MarsVATO.</strong> Yang, Zhang, Li & Li. README architecture and discrete lead-time/incidence sweeps. '+external('https://github.com/KCLFlowlab/MarsVATO','Research source')+'</li>'+
   '<li><strong>STCO.</strong> Current manuscript and README in FRO_Paper. The response animation uses independently queried leads. '+external('https://github.com/YoungxxStar/FRO_Paper','Research source')+'</li>'+
@@ -122,10 +170,10 @@ const movies = {
 };
 let currentStudy = null, dialogTrigger = null, mediaCleanup = () => {};
 function syncMotion() {
-  $('#motion-toggle').textContent = heroPaused ? 'Play motion' : 'Pause motion';
+  $('#motion-toggle').textContent = heroPaused ? 'Play' : 'Pause';
   $('#motion-toggle').setAttribute('aria-pressed', String(heroPaused));
-  $('#motion-toggle').setAttribute('aria-label', heroPaused ? 'Play flow tracers' : 'Pause flow tracers');
-  resumeTracers();
+  $('#motion-toggle').setAttribute('aria-label', heroPaused ? 'Play sculpture motion' : 'Pause sculpture motion');
+  resumeScene();
 }
 function stopMedia() {
   $$('video', dialog).forEach(video => video.pause());
@@ -145,7 +193,8 @@ function openDialog(html, kind = 'info') {
   syncMotion();
 }
 function closeWorkspace() {
-  if (location.hash !== '#research' && location.hash !== '') history.pushState(null,'','#research');
+  const destination=activeDomain?'#domain-'+activeDomain:'#research';
+  if (location.hash !== destination) history.pushState(null,'',destination);
   route();
 }
 function projectTabs(active) {
@@ -197,50 +246,85 @@ function renderGallery(view) {
 }
 function route() {
   const key=location.hash.slice(1)||'research';
-  $$('[data-route]').forEach(a=>a.classList.toggle('active',a.dataset.route===(key.startsWith('study-')?'research':key)));
+  $$('[data-route]').forEach(a=>a.classList.toggle('active',a.dataset.route===(key.startsWith('domain-')?'research':key.startsWith('study-')?'library':key)));
   if(key.startsWith('study-')&&projects[key.slice(6)]){renderStudy(key.slice(6));return;}
-  const template=$('#'+key+'-template');
+  const template=document.getElementById(key+'-template');
   if(template){
     const content=template.content.cloneNode(true), heading=content.querySelector('h2');
     if(heading){const previous=heading.id;heading.id='dialog-title';content.querySelector('[aria-labelledby="'+previous+'"]')?.setAttribute('aria-labelledby','dialog-title');}
+    if(key==='library')content.querySelector('.library-records').innerHTML=records.map(r=>recordLink(r,'library-record')).join('');
     const wrapper=document.createElement('div');wrapper.className='information-panel';wrapper.append(content);
     openDialog(wrapper.outerHTML,key);return;
   }
-  if(dialog.open)dialog.close();
+  if(dialog.open){stopMedia();dialog.close();}
+  showDirection(key.startsWith('domain-')&&directions[key.slice(7)]?key.slice(7):null);
 }
 $$('a[href^="#"]').forEach(a=>a.addEventListener('click',event=>{
   if(a.hash===location.hash){event.preventDefault();route();}
 }));
 $('.dialog-close').addEventListener('click',closeWorkspace);
 dialog.addEventListener('cancel',event=>{event.preventDefault();if($('.research-screen.expanded'))$('.research-screen.expanded').classList.remove('expanded');else closeWorkspace();});
-dialog.addEventListener('close',()=>{stopMedia();currentStudy=null;dialogTrigger?.focus({preventScroll:true});syncMotion();});
+dialog.addEventListener('close',()=>{if(dialog.open)return;stopMedia();currentStudy=null;dialogTrigger?.focus({preventScroll:true});syncMotion();});
 dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)closeWorkspace();}});
 window.addEventListener('hashchange',route);
 $('#motion-toggle').addEventListener('click',()=>{heroPaused=!heroPaused;syncMotion();});
-$('#layer-toggle').addEventListener('click',()=>{const shown=$('#layer-toggle').getAttribute('aria-pressed')!=='true';$('#layer-toggle').setAttribute('aria-pressed',String(shown));$('.hero-scene').classList.toggle('tracers-only',!shown);});
 reducedMotion.addEventListener('change',()=>{if(reducedMotion.matches)heroPaused=true;syncMotion();});
 document.addEventListener('visibilitychange',syncMotion);
 
-// Links are navigation cues, not measurements or physical connections between studies.
-function drawConnections() {
-  const root=$('.atlas').getBoundingClientRect(), svg=$('.field-connections');
-  svg.setAttribute('viewBox','0 0 '+root.width+' '+root.height);
-  $('#connections').innerHTML=$$('.research-node').map(node=>{
-    const r=node.getBoundingClientRect(),x=r.left-root.left+r.width/2,y=r.top-root.top+r.height/2;
-    const ax=root.width*Number(node.dataset.anchorX),ay=root.height*Number(node.dataset.anchorY);
-    return '<g data-connection="'+node.dataset.project+'"><path d="M '+x+' '+y+' Q '+ax+' '+y+' '+ax+' '+ay+'"/><circle cx="'+ax+'" cy="'+ay+'" r="4"/><circle class="anchor-ring" cx="'+ax+'" cy="'+ay+'" r="13"/></g>';
-  }).join('');
+// Directions connect featured methods, the longer publication record and sourced interests.
+const recordNodes=[...$('#publications-template').content.querySelectorAll('#kcl-outputs>a')];
+const records=recordNodes.map(a=>({url:a.href,title:$('.pub-title',a).textContent,year:$('.pub-type',a).firstChild.textContent.trim(),venue:$('.pub-venue',a).textContent,authors:$('.pub-authors',a).textContent}));
+const studyImages={ravfm:'assets/ravfm-geometry.png',stco:'assets/stco-conditions.png',deforming:'assets/deforming-poster.png',vato:'assets/vato-model.png'};
+const directions={
+ bio:{index:'01 / NATURE',title:'Bio-inspired motion & design',intro:'How do living systems move through fluids? We connect form, motion and flow to find new ways of thinking about engineering.',studies:['ravfm','deforming'],records:[4],topics:[
+  {id:'flight',name:'Flight',text:'Bird flight connects biological form with the physics of turbulent flow. Explore the aerodynamic forces acting on a gliding goshawk.',studies:['ravfm'],records:[4]},
+  {id:'swimming',name:'Swimming',text:'A swimmer changes both its shape and the surrounding flow. We investigate how these interactions produce propulsion.',studies:['deforming'],records:[]},
+  {id:'collective',name:'Collective motion',text:'How does motion change when many individuals interact? Swarming behaviour is a research interest in the group, alongside unsteady flow and vortex shedding.',studies:[],records:[],interest:true,link:'https://www.kcl.ac.uk/people/vedang-joshi',linkText:'Vedang Joshi / research profile'}]},
+ physics:{index:'02 / PHYSICS',title:'Complex flows & interactions',intro:'From vortices and turbulence to flexible wings: understanding how flow structures, moving bodies and forces interact.',studies:['ravfm','deforming','vato'],records:[1,2,4],topics:[
+  {id:'vortices',name:'Vortices & forces',text:'Linking the structure of a flow to the loads it generates, through vortex dynamics, force mapping and unsteady-flow analysis.',studies:['ravfm','deforming'],records:[2]},
+  {id:'turbulence',name:'Turbulence',text:'Reynolds-averaged descriptions connect turbulent flow, vortex-pressure contributions and Reynolds stresses to mean aerodynamic forces.',studies:['ravfm'],records:[4]},
+  {id:'aeroelasticity',name:'Aeroelasticity',text:'When wings respond to the surrounding flow, aerodynamic modelling becomes part of a coupled problem. This work compares separated-flow models for slender-wing aeroelasticity.',studies:[],records:[1]}]},
+ ai:{index:'03 / INTELLIGENCE',title:'Scientific AI & computation',intro:'Learning from physical systems, using physical knowledge, and building computational approaches to prediction and design.',studies:['stco','vato'],records:[0,3],topics:[
+  {id:'operators',name:'Neural operators',text:'Predicting changing physical systems with prescribed conditions and physical knowledge: conditional operators and force-aware transformer models.',studies:['stco','vato'],records:[]},
+  {id:'observations',name:'Incomplete data',text:'What can we infer when we can only observe part of a flow? Graph neural networks provide a way to reconstruct fluid dynamics from incomplete information.',studies:[],records:[0]},
+  {id:'design',name:'Engineering design',text:'Connecting computational modelling with engineering choices, from CFD channel optimisation to machine-learning-assisted meta-wing design.',studies:[],records:[3],link:'https://www.kcl.ac.uk/people/xingxin-yang',linkText:'Xingxin Yang / design research'}]}
+};
+let activeDomain=null,activeTopic=null;
+const recordLink=(r,kind='direction-record')=>'<a class="'+kind+'" href="'+r.url+'" target="_blank" rel="noopener noreferrer"><span>'+r.year+'</span><span>'+(kind==='library-record'?'<strong>'+r.title+'</strong><small>'+r.venue+'</small>':r.title)+'</span><span aria-hidden="true">↗</span></a>';
+function renderResults(topic){
+  const d=directions[activeDomain], item=topic?d.topics.find(t=>t.id===topic):d;
+  if(!item)return;activeTopic=topic;
+  $$('.direction-topics button').forEach(b=>b.setAttribute('aria-pressed',String((b.dataset.topic||null)===topic)));
+  $('#direction-results').innerHTML=(topic?'<h3>'+item.name+'</h3><p class="topic-description">'+item.text+'</p>':'')+
+    (item.interest?'<p class="interest-note">RESEARCH INTEREST</p>':'')+
+    (item.studies.length?'<p class="eyebrow">SELECTED STUDIES</p>'+item.studies.map(key=>'<a class="direction-study" href="#study-'+key+'"><img src="'+studyImages[key]+'" alt="'+studyMeta[key].name+' original research figure"><span><strong>'+studyMeta[key].name+'</strong><small>'+studyMeta[key].question+'</small></span><span aria-hidden="true">↗</span></a>').join(''):'')+
+    (item.records.length?'<p class="eyebrow">FROM THE PUBLICATION RECORD</p>'+item.records.map(i=>recordLink(records[i])).join(''):'')+
+    (item.link?'<div class="detail-links">'+external(item.link,item.linkText)+'</div>':'')+
+    '<a class="direction-end" href="#library">Explore the wider research <span aria-hidden="true">↗</span></a>';
 }
-new ResizeObserver(drawConnections).observe($('.atlas'));
-$$('.research-node').forEach(node=>{
-  const highlight=active=>{$$('[data-connection]').forEach(g=>g.classList.toggle('highlight',active&&g.dataset.connection===node.dataset.project));};
-  node.addEventListener('pointerenter',()=>highlight(true));node.addEventListener('pointerleave',()=>highlight(false));
-  node.addEventListener('focus',()=>highlight(true));node.addEventListener('blur',()=>highlight(false));
+function showDirection(key){
+  if(activeDomain===key)return;
+  activeDomain=key;activeTopic=null;const root=$('.observatory'), panel=$('#direction-panel');
+  root.classList.toggle('has-direction',!!key);root.dataset.direction=key||'overview';
+  $$('.domain-portal').forEach(a=>{if(a.dataset.domain===key)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current');});
+  scene.focus(key);
+  if(!key){panel.hidden=true;panel.innerHTML='';$('#landscape-status').textContent='Overview. Explore three connected research directions.';return;}
+  const d=directions[key];panel.hidden=false;
+  panel.innerHTML='<div class="direction-top"><p class="eyebrow">'+d.index+'</p><a class="direction-back" href="#research">← Overview</a></div><h2 id="direction-title" tabindex="-1">'+d.title+'</h2><p>'+d.intro+'</p><div class="direction-topics" role="group" aria-label="Explore questions"><button data-topic="" aria-pressed="true">Overview</button>'+d.topics.map(t=>'<button data-topic="'+t.id+'" aria-pressed="false">'+t.name+'</button>').join('')+'</div><div id="direction-results" class="direction-results" aria-live="polite"></div>';
+  $$('.direction-topics button').forEach(b=>b.addEventListener('click',()=>renderResults(b.dataset.topic||null)));
+  renderResults(null);panel.scrollTop=0;$('#direction-title').focus({preventScroll:true});$('#landscape-status').textContent=d.title+'. Choose a question or explore the research below.';
+}
+$$('.domain-portal').forEach(a=>{
+  a.addEventListener('pointerenter',()=>scene.hover(a.dataset.domain));a.addEventListener('pointerleave',()=>scene.hover(null));
+  a.addEventListener('focus',()=>scene.hover(a.dataset.domain));a.addEventListener('blur',()=>scene.hover(null));
 });
-$$('[data-filter]').forEach(button=>button.addEventListener('click',()=>{
-  const filter=button.dataset.filter;
-  $$('[data-filter]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
-  let count=0;$$('.research-node').forEach(node=>{const match=filter==='all'||node.dataset.category.split(' ').includes(filter);node.classList.toggle('filtered-out',!match);if(match)count++;});
-  $('#study-count').textContent='0'+count+(filter==='all'?' STUDIES':' MATCHES');
-}));
+$('#zoom-in').addEventListener('click',()=>scene.zoom(.15));$('#zoom-out').addEventListener('click',()=>scene.zoom(-.15));$('#reset-view').addEventListener('click',()=>scene.reset());
+const archiveTitles=['Flow completion with graph neural networks','Separated-flow models for flexible wings','Vortex shedding and induced forces','CFD for fuel-cell channel design','Unsteady forces in turbulence-modelled flows'];
+let archiveIndex=0;
+function showArchive(){const r=records[archiveIndex];$('#archive-title').textContent=archiveTitles[archiveIndex];$('#archive-year').textContent=r.year;$('#archive-link').href=r.url;$('#archive-link').target='_blank';$('#archive-link').rel='noopener noreferrer';$('#archive-link').setAttribute('aria-label',r.year+' · '+r.title);}
+$('#archive-next').addEventListener('click',()=>{archiveIndex=(archiveIndex+1)%records.length;showArchive();});
+setInterval(()=>{if(!heroPaused&&!document.hidden&&!dialog.open){archiveIndex=(archiveIndex+1)%records.length;showArchive();}},9000);
+showArchive();
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!dialog.open&&activeDomain){location.hash='research';$('#domain-'+activeDomain)?.focus({preventScroll:true});}});
+
 syncMotion();route();
