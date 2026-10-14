@@ -1,18 +1,26 @@
 # KCL FlowLab website
 
 Public website: **https://kclflowlab.github.io/**. Research-field experience updated 14 October 2026 around
-fluid physics, scientific machine learning and the people behind the work. The
+bio-inspired engineering, fluid physics, scientific AI and the people behind the work. The
 complete deployable site is in `site/`: static HTML, CSS and JavaScript, with locally
 hosted media and fonts, no framework, analytics, CDN dependency or backend.
 
 ## Design and content
 
-The homepage is a single, full-viewport **research field**, introduced by “Follow the
-vortex.” A real CFD wake and passive particle tracers form the environment. Four
+The homepage is a single, full-viewport **research field**, introduced by “Inspired by
+nature.” A real CFD wake and passive particle tracers form the environment. Four
 floating, clickable nodes use the studies' own cover images. Hover/focus highlights
 navigation lines; these are interface cues, not scientific measurements. Filters
-emphasize fluid-force research or AI operators. The field layer and motion can be
+emphasize overlapping bio-inspired, flow-physics and scientific-AI directions. The field layer and motion can be
 controlled independently.
+
+The lab-level narrative connects learning from nature, understanding complex flows,
+developing predictive tools and informing engineering design. A dedicated Vision panel
+introduces three complementary directions and links them to the featured studies.
+This is an editorial research vision, informed by the lab's requested direction and
+official KCL profiles, rather than an institutional slogan or a claim that the listed
+long-term engineering ambitions have already been realised. Vortex-force mapping
+remains a specific method within this broader programme.
 
 Selecting a node opens a research workspace over the field. It contains the research
 question, authors, paper/code links, full scientific figures and controlled animations.
@@ -24,7 +32,7 @@ Nodes and workspace tabs follow first arXiv submission: RA-VFM (13 March), STCO
 (20 August), Deforming VFM (31 August), VATO (1 September), all in 2026. Matteo's work
 comes first. These dates are not inferred project-start or acceptance dates.
 
-People, Outputs and Contact open their own workspace panels. The six introductions,
+Vision, People, Outputs and Contact open their own workspace panels. The six introductions,
 three official portraits, five selected KCL records and four-preprint index are retained.
 The AIAA Journal in-press record and RA-VFM preprint remain distinct records. The header
 and browser icon use the unchanged black-and-white GitHub avatar. The institutional
@@ -83,8 +91,8 @@ CHROMIUM_PATH=/absolute/path/to/chromium node tools/qa.cjs
 
 `PREVIEW_URL` defaults to the local URL above. Reports and PNG screenshots go to ignored
 `qa/`. Checks cover the single-viewport field, all four nodes and media sources,
-force/AI filters, field controls, study switching, direct links, browser Back, focus return,
-Escape, video seeking/fullscreen, source images, people and output panels, 320–1440px
+overlapping research filters, Vision-to-study links, field controls, study switching, direct links, browser Back, focus return,
+Escape, video seeking/fullscreen, source images, people and output panels, cohort ordering, 320–1440px
 layouts, reduced motion, no-JavaScript links and failing resources.
 Real Safari/iOS hardware has not been tested.
 

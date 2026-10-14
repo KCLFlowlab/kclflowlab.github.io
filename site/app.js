@@ -12,28 +12,28 @@ const projects = {
   deforming: {
     label: 'DEFORMING VFM / PREPRINT · 2026', title: 'Deforming Vortex Force Mapping for Undulating Swimmers',
     authors: 'Xingxin Yang · Matteo Liguori · Vedang Joshi · Juan Li',
-    text: 'A deforming swimmer produces force through both body motion and the surrounding flow. Deforming VFM separates reactive added-mass loading from signed vortex-pressure contributions and maps them onto a reference configuration. Eighty prescribed two-dimensional swimming cases compare anguilliform and carangiform kinematics at Re = 5,000.',
+    text: 'Swimming links changing body shape, surrounding flow and propulsion. We study this interaction to understand the physics behind bio-inspired motion. Deforming VFM separates reactive added-mass loading from signed vortex-pressure contributions and maps them onto a reference configuration. Eighty prescribed two-dimensional swimming cases compare anguilliform and carangiform kinematics at Re = 5,000.',
     links: external('https://arxiv.org/abs/2609.00461', 'Read preprint') + external('https://github.com/KCLFlowlab/deforming-vfm', 'Code & animations'),
     figures: figure('assets/force-map.png', 'Reference-configuration force maps for two swimming modes', 'Paper Figure 11 · Original color scales and annotations retained.') + '<details><summary>View phase-resolved fields</summary>' + figure('assets/flow-regimes.png', 'Phase-resolved vorticity and force-contribution fields', 'Paper Figure 5 · Four phase snapshots.') + '</details>'
   },
   vato: {
     label: 'MARSVATO / PREPRINT · 2026', title: 'VATO: A Vortex-Force-Aware Transformer Operator for Unsteady Separated Aerofoil Flows',
     authors: 'Xingxin Yang · Zhan Zhang · Yichen Li · Juan Li',
-    text: 'VATO links flow prediction to the local structures that generate aerodynamic forces. VATO-S adds training-time supervision of the VFM force-contribution field. VATO-A also uses force contribution and sensitivity to guide residual cross-attention. The benchmark spans 54 trajectories across nine double-edged plate aerofoil geometries.',
+    text: 'Scientific AI can connect data-driven prediction with physical understanding. VATO makes this connection through the flow structures that generate aerodynamic forces. VATO-S adds training-time supervision of the VFM force-contribution field. VATO-A also uses force contribution and sensitivity to guide residual cross-attention. The benchmark spans 54 trajectories across nine double-edged plate aerofoil geometries.',
     links: external('https://arxiv.org/abs/2609.00507', 'Read preprint') + external('https://github.com/KCLFlowlab/MarsVATO', 'Code & animations'),
     figures: figure('assets/vato-model.png', 'VATO architecture, training and vortex-aware residual cross-attention', 'Repository README cover · VATO model architecture. The homepage animations show discrete prediction-lead and incidence sweeps.')
   },
   stco: {
     label: 'STCO / PREPRINT · 2026', title: 'STCO: Conditional Neural Operators for Time-Dependent PDEs',
     authors: 'Xingxin Yang · Zhan Zhang · Juan Li',
-    text: 'A future flow depends on what is prescribed as well as what has been observed. The Spatiotemporal Conditional Operator supplies target-time motion, inflow and forcing fields to different neural-operator backbones. Flow-Aware Graph Leaf sampling and Dual-Site Feature-wise Linear Modulation form a common condition interface, evaluated across twelve matched backbones.',
+    text: 'Predicting a changing physical system requires knowing how it is driven, as well as what has been observed. The Spatiotemporal Conditional Operator supplies target-time motion, inflow and forcing fields to different neural-operator backbones. Flow-Aware Graph Leaf sampling and Dual-Site Feature-wise Linear Modulation form a common condition interface, evaluated across twelve matched backbones.',
     links: external('https://arxiv.org/abs/2608.20477', 'Read preprint') + external('https://github.com/YoungxxStar/FRO_Paper', 'Project & animations'),
     figures: figure('assets/stco-conditions.png', 'Prescribed-condition operator learning: observations, conditions and future responses', 'Repository README cover · Observed history and prescribed physical conditions define the future response.') + '<details><summary>View prediction comparisons and performance</summary>' + figure('assets/stco-spatial.png', 'STCO resolved velocity and pressure comparisons under prescribed physical conditions', 'Spatial comparisons from the current manuscript.') + figure('assets/stco-performance.png', 'STCO cross-backbone accuracy, condition dependence and inference cost', 'Accuracy, lead-time dependence, condition sensitivity and inference cost.') + '</details>'
   },
   ravfm: {
     label: 'RA-VFM / PREPRINT · 2026', title: 'The Reynolds-Averaged Vortex Force Map Method',
     authors: 'Matteo Liguori · Zhan Zhang · Francesco Ciriello · Juan Li',
-    text: 'RA-VFM extends vortex-force mapping to Reynolds-averaged flows. Its decomposition distinguishes vortex-pressure and Reynolds-stress contributions to mean aerodynamic forces. A gliding goshawk and a matched aerofoil show where lift and drag originate in turbulent flow.',
+    text: 'Bird flight offers a natural setting for studying how shape and flow interact. RA-VFM extends vortex-force mapping to Reynolds-averaged flows. Its decomposition distinguishes vortex-pressure and Reynolds-stress contributions to mean aerodynamic forces. A gliding goshawk and a matched aerofoil show where lift and drag originate in turbulent flow.',
     links: external('https://arxiv.org/abs/2603.13078', 'Read preprint') + external('https://github.com/KCLFlowlab/RAVFM', 'Code'),
     figures: figure('assets/ravfm-geometry.png', 'Gliding goshawk geometry and force definitions', 'Paper Figure 1 · Liguori, Zhang, Ciriello & Li · CC BY-NC-ND 4.0; unaltered image.') + '<details><summary>View lift-contribution map</summary>' + figure('assets/ravfm-bird.png', 'Vortex-pressure and Reynolds-stress lift-contribution isosurfaces', 'Paper Figure 5 isosurface image · CC BY-NC-ND 4.0; unaltered image.') + '</details>'
   }
@@ -109,10 +109,10 @@ $('#credits-open').addEventListener('click',()=>openDialog(
 
 const studyOrder = ['ravfm','stco','deforming','vato'];
 const studyMeta = {
-  ravfm: {name:'RA-VFM',date:'13 MAR 2026',category:'FORCES OF FLIGHT',question:'What keeps a bird aloft?'},
-  stco: {name:'STCO',date:'20 AUG 2026',category:'CONDITIONAL INTELLIGENCE',question:'One flow. Different futures.'},
-  deforming: {name:'Deforming VFM',date:'31 AUG 2026',category:'FORCES OF MOTION',question:'Where does thrust begin?'},
-  vato: {name:'MarsVATO',date:'01 SEP 2026',category:'FORCE-AWARE INTELLIGENCE',question:'Teach AI what creates force.'}
+  ravfm: {name:'RA-VFM',date:'13 MAR 2026',category:'BIO-INSPIRED FLIGHT / FLOW PHYSICS',question:'What can we learn from bird flight?'},
+  stco: {name:'STCO',date:'20 AUG 2026',category:'SCIENTIFIC AI / CHANGING SYSTEMS',question:'How do conditions shape a flow?'},
+  deforming: {name:'Deforming VFM',date:'31 AUG 2026',category:'BIO-INSPIRED MOTION / FLOW PHYSICS',question:'How does a swimmer move?'},
+  vato: {name:'MarsVATO',date:'01 SEP 2026',category:'SCIENTIFIC AI / PHYSICAL KNOWLEDGE',question:'Can AI learn the physics?'}
 };
 const movies = {
   deforming:{src:'assets/deforming-force-mapping.mp4',poster:'assets/deforming-poster.png',frames:64,caption:'64 original phases of a swimming cycle. Body motion, forces and flow fields are synchronized.'},
@@ -240,7 +240,7 @@ $$('.research-node').forEach(node=>{
 $$('[data-filter]').forEach(button=>button.addEventListener('click',()=>{
   const filter=button.dataset.filter;
   $$('[data-filter]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
-  let count=0;$$('.research-node').forEach(node=>{const match=filter==='all'||node.dataset.category===filter;node.classList.toggle('filtered-out',!match);if(match)count++;});
+  let count=0;$$('.research-node').forEach(node=>{const match=filter==='all'||node.dataset.category.split(' ').includes(filter);node.classList.toggle('filtered-out',!match);if(match)count++;});
   $('#study-count').textContent='0'+count+(filter==='all'?' STUDIES':' MATCHES');
 }));
 syncMotion();route();
