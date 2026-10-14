@@ -7,7 +7,10 @@ with no framework, analytics, CDN dependency or backend.
 
 ## Experience
 
-“Nature in motion. Ideas in flow.” introduces an immersive **research landscape**.
+The concise two-line heading “Bio-inspired engineering.” introduces the **research
+landscape**. A single paragraph connects fluid physics and scientific AI with natural
+motion and engineering design. The compact typographic hierarchy leaves room for the
+sculpture, with a small institutional label and an “Our approach” link to the vision.
 A generative three-dimensional ribbon sculpture provides the spatial setting, with
 three entrances: bio-inspired motion and design, complex flows and interactions,
 and scientific AI and computation. Visitors drag to orbit, scroll or pinch to zoom,
