@@ -19,7 +19,9 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Check JavaScript
-        run: node --check site/app.js
+        run: |
+          node --check site/app.js
+          node --check site/sculpture.js
       - name: Check local assets and links
         run: python3 tools/check_site.py
       - uses: actions/configure-pages@v5

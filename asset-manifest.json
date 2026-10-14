@@ -401,5 +401,12 @@
     "kind": "interactive_swimming_illustration",
     "implementation": "Procedural shaded 3D fish mesh with prescribed body undulation, fins and a forked tail, rendered in site/app.js using Canvas 2D perspective projection. Direct mouse/touch/keyboard manipulation changes its path and local wake. A bounded softened point-vortex/particle model adds alternating shedding, downstream advection, decaying circulation and local entrainment. The geometry and wake are illustrative, not CFD, measured data or validated scientific predictions. No new raster or external model assets.",
     "scientific_media": "Original study figures and animations are unchanged. Archived phase-0 CFD image remains in About the visual and as a canvas fallback."
+  },
+  "alternate_visual": {
+    "name": "Flow form",
+    "page": "site/sculpture.html",
+    "source_commit": "c05e74191ca2d527d8fa83234be3e21778c70e5e",
+    "implementation": "Historical parametric ribbon renderer and layout restored unchanged as site/sculpture.js and site/sculpture.css. The restored HTML adds its own entry points, a distinguishing title and a shared Swimmer / Flow form navigation. A shared stylesheet also shortens focused mobile direction tabs to clear the controls. This is generative navigation artwork, not CFD or measured data.",
+    "scientific_media": "Both experiences reuse the same original figures, animations, fonts and portraits in site/assets/."
   }
 }

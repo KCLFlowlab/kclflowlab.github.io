@@ -130,14 +130,14 @@ body:not(.js-ready) .domain-portals,body:not(.js-ready) .orbit-tools,body:not(.j
 
 /* On small screens, keep the water open and collect research entrances below it. */
 @media(max-width:700px){
- body:not(.has-direction) .domain-portals{position:absolute;inset:auto 20px 174px;display:flex;gap:12px}
- body:not(.has-direction) .domain-portal{position:relative;inset:auto;flex:1;width:auto;min-width:0;padding:10px 0 0 10px;border-top:1px solid #80b7a53b}
- body:not(.has-direction) .portal-orbit{left:0;top:14px;width:4px;height:4px;box-shadow:0 0 10px var(--portal-color)}
- body:not(.has-direction) .portal-orbit::before,body:not(.has-direction) .portal-orbit::after{display:none}
- body:not(.has-direction) .portal-index{font-size:5.5px;margin-bottom:8px;letter-spacing:.025em}
- body:not(.has-direction) .domain-portal strong{font-size:15px;line-height:1.25;letter-spacing:-.035em}
- body:not(.has-direction) .portal-enter{font-size:6.5px;margin-top:12px;gap:8px}
+ .observatory:not(.has-direction) .domain-portals{position:absolute;inset:auto 20px 174px;display:flex;gap:12px}
+ .observatory:not(.has-direction) .domain-portal{position:relative;inset:auto;flex:1;width:auto;min-width:0;padding:10px 0 0 10px;border-top:1px solid #80b7a53b}
+ .observatory:not(.has-direction) .portal-orbit{left:0;top:14px;width:4px;height:4px;box-shadow:0 0 10px var(--portal-color)}
+ .observatory:not(.has-direction) .portal-orbit::before,.observatory:not(.has-direction) .portal-orbit::after{display:none}
+ .observatory:not(.has-direction) .portal-index{font-size:5.5px;margin-bottom:8px;letter-spacing:.025em}
+ .observatory:not(.has-direction) .domain-portal strong{font-size:15px;line-height:1.25;letter-spacing:-.035em}
+ .observatory:not(.has-direction) .portal-enter{font-size:6.5px;margin-top:12px;gap:8px}
 }
-@media(max-width:700px) and (max-height:800px){body:not(.has-direction) .domain-portals{bottom:158px}}
-@media(max-width:700px) and (max-height:710px){body:not(.has-direction) .domain-portals{bottom:148px}.landscape-caption{top:300px}}
-@media(max-width:360px){body:not(.has-direction) .domain-portals{left:18px;right:18px;gap:9px}body:not(.has-direction) .domain-portal strong{font-size:13px}body:not(.has-direction) .portal-index{font-size:5px}body:not(.has-direction) .portal-enter{font-size:6px}}
+@media(max-width:700px) and (max-height:800px){.observatory:not(.has-direction) .domain-portals{bottom:158px}}
+@media(max-width:700px) and (max-height:710px){.observatory:not(.has-direction) .domain-portals{bottom:148px}.landscape-caption{top:300px}}
+@media(max-width:360px){.observatory:not(.has-direction) .domain-portals{left:18px;right:18px;gap:9px}.observatory:not(.has-direction) .domain-portal strong{font-size:13px}.observatory:not(.has-direction) .portal-index{font-size:5px}.observatory:not(.has-direction) .portal-enter{font-size:6px}}

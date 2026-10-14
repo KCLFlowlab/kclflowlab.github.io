@@ -3,4 +3,5 @@ qa/
 __pycache__/
 .DS_Store
 preview.html
+preview-sculpture.html
 kclflowlab-website.zip

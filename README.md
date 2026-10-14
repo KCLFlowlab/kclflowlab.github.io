@@ -5,6 +5,21 @@ bio-inspired engineering, fluid physics and scientific AI. The deployable site i
 `site/`: static HTML, CSS and JavaScript, locally hosted fonts and research media,
 with no framework, analytics, CDN dependency or backend.
 
+## Two visual experiences
+
+- **Swimmer** (default): https://kclflowlab.github.io/ — draggable 3D fish and an interactive wake.
+- **Flow form**: https://kclflowlab.github.io/sculpture.html — the earlier rotating ribbon sculpture.
+
+The “Swimmer / Flow form” links on both pages switch between the two experiences.
+Both are standalone, bookmarkable pages; browser Back returns to the previous version.
+The alternate HTML, JavaScript and CSS were restored from commit `c05e741` (the version
+immediately before the swimmer). Its renderer and layout are preserved; only the page
+title, asset entry points and shared version switch were added. The shared stylesheet
+also keeps small-screen direction tabs short enough to clear the controls. Research assets are
+shared from `site/assets/`, without duplicating the images or videos. This is an
+intentional comparison snapshot: future research-content corrections should be applied
+to both HTML/app pairs while the two visual designs remain available.
+
 ## Experience
 
 The concise two-line heading “Bio-inspired engineering.” introduces the **research
@@ -100,6 +115,7 @@ ranges. Stop it with Ctrl+C. Generate the self-contained offline preview and sou
 ```bash
 python3 tools/package.py
 node --check site/app.js
+node --check site/sculpture.js
 python3 tools/check_site.py
 ```
 
@@ -109,6 +125,7 @@ For Chromium interaction QA, with the server running:
 npm ci --prefix tools/browser
 CHROMIUM_PATH=/absolute/path/to/chromium node tools/qa.cjs
 CHROMIUM_PATH=/absolute/path/to/chromium node tools/qa-swimmer.cjs
+CHROMIUM_PATH=/absolute/path/to/chromium node tools/qa-versions.cjs
 ```
 
 `PREVIEW_URL` defaults to the local server. Reports and PNGs go to ignored `qa/`.
@@ -117,7 +134,8 @@ render rate, rotation, zoom, touch pinch, keyboard controls, motion preferences,
 direction/topic navigation, closing and restoring focus, browser Back, the research
 index and archive, all research videos and figures, team order, source credits,
 320–1440px layouts and the JavaScript-free fallback. Real Safari/iOS hardware has not
-been tested. The offline `preview.html` embeds every asset and needs no network fetches.
+been tested. The offline `preview.html` and `preview-sculpture.html` each embed every asset and
+need no network fetches. Keep them together to use their reciprocal version links.
 
 ## Deployment and editing
 
@@ -128,6 +146,8 @@ repositories.
 
 - Page structure, portals, templates and bibliography: `site/index.html`.
 - Fish/wake renderer, direction/topic associations, routing and media: `site/app.js`.
+- Preserved flow-form experience: `site/sculpture.html`, `site/sculpture.js`, `site/sculpture.css`.
+- Shared version-switch layout: `site/experiences.css`.
 - Typography, responsive layout and transitions: `site/styles.css`.
 - Provenance and exact research records: `asset-manifest.json`.
 - Chinese design rationale: `SITE_PLAN.md`.

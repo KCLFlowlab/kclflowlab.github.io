@@ -14,9 +14,10 @@
   <link rel="apple-touch-icon" href="assets/kclflowlab-logo.png">
   <link rel="preload" href="assets/space-grotesk.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="experiences.css">
   <script defer src="app.js"></script>
 </head>
-<body>
+<body data-experience="swimmer">
   <a class="skip-link" href="#research">Skip to research</a>
   <header class="site-header">
     <a class="wordmark" href="#research" aria-label="KCL FlowLab research landscape"><img src="assets/kclflowlab-logo.png" alt="" width="42" height="42"><span>KCL FlowLab</span></a>
@@ -34,6 +35,7 @@
       <a class="vision-entry" href="#vision"><span>Our approach</span><span class="intro-arrow" aria-hidden="true">↗</span></a></div>
     </div>
     <div class="landscape-caption"><span class="signal"></span> AN OPEN RESEARCH LANDSCAPE<span>Move the swimmer. Shape the wake.</span></div>
+    <nav class="experience-switcher" aria-label="Choose visual experience"><a href="./" data-experience-link="swimmer" aria-current="page"><span class="experience-mark" aria-hidden="true"></span>Swimmer</a><a href="sculpture.html" data-experience-link="sculpture"><span class="experience-mark" aria-hidden="true"></span>Flow form</a></nav>
     <nav class="domain-portals" aria-label="Explore research directions">
       <a id="domain-bio" class="domain-portal portal-bio" href="#domain-bio" data-domain="bio"><i class="portal-orbit" aria-hidden="true"></i><span class="portal-index">01 / NATURE</span><strong><span class="portal-full">Bio-inspired<br>motion &amp; design</span><span class="portal-short">Bio-inspired<br>motion</span></strong><span class="portal-topics">Flight · Swimming · Collective motion</span><span class="portal-enter">Enter direction <b aria-hidden="true">↗</b></span></a>
       <a id="domain-physics" class="domain-portal portal-physics" href="#domain-physics" data-domain="physics"><i class="portal-orbit" aria-hidden="true"></i><span class="portal-index">02 / PHYSICS</span><strong><span class="portal-full">Complex flows<br>&amp; interactions</span><span class="portal-short">Complex<br>flows</span></strong><span class="portal-topics">Vortices · Turbulence · Aeroelasticity</span><span class="portal-enter">Enter direction <b aria-hidden="true">↗</b></span></a>
