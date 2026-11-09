@@ -5,3 +5,6 @@ __pycache__/
 preview.html
 preview-sculpture.html
 kclflowlab-website.zip
+
+# FlowLens is an independent local Git repository.
+/FlowLens/
