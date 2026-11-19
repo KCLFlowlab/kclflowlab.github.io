@@ -19,8 +19,11 @@ It uses `experiences.css`; the Swimmer page does not. Research assets are shared
 ## Experience
 
 The page opens on open water with no text: a fish swims in from the left. After about
-2.6 seconds (or the first click, tap or key) a quiet header, an interaction hint and a
-scroll cue fade in. Pointer movement guides the fish; a click or tap makes it dart; the
+2.6 seconds (or the first click, tap or key) a quiet header, icon hints (pointer, click,
+arrow keys; a finger on touch screens), icon controls (pause, about) and a scroll arrow fade
+in; the hint fades out a few seconds after first use. Design rule: say nothing if it is
+understood, otherwise prefer an icon, then an abbreviation, then concise text. Scientific
+wording (captions, titles, records, provenance) stays exact. Pointer movement guides the fish; a click or tap makes it dart; the
 arrow keys or W/A/S/D steer it on screen and Shift gives a burst. Arrow keys steer only
 while the water fills most of the view and nothing else has focus, so they scroll the page
 everywhere else. With no input the fish wanders. Pause and reduced motion stop autonomous

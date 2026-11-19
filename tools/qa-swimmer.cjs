@@ -20,7 +20,7 @@ const url=process.env.PREVIEW_URL||'http://127.0.0.1:8769/';
   assert.ok(await opacity('.site-header')<.2&&await opacity('.hero-hint')<.2&&await opacity('.scroll-cue')<.2,'No interface text during the opening');
   await page.screenshot({path:path.join(root,'qa/swimmer-opening.png')});
   await page.waitForFunction(()=>document.body.classList.contains('hero-ready'),null,{timeout:6000});await page.waitForTimeout(1600);
-  assert.ok(await opacity('.site-header')>.9&&await opacity('.hero-hint')>.9,'Interface appears after the opening');
+  assert.ok(await opacity('.site-header')>.9&&await opacity('.hero-hint')>.5&&await opacity('.hero-tools')>.9,'Interface appears after the opening');
   note('Opening shows only the swimmer (WebGL); header, hint and scroll cue fade in after it has entered');
 
   // The fish follows the pointer.

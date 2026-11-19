@@ -13,28 +13,28 @@ const projects = {
     label: 'DEFORMING VFM / PREPRINT · 2026', title: 'Deforming Vortex Force Mapping for Undulating Swimmers',
     authors: 'Xingxin Yang · Matteo Liguori · Vedang Joshi · Juan Li',
     text: 'Swimming links changing body shape, surrounding flow and propulsion. We study this interaction to understand the physics behind bio-inspired motion. Deforming VFM separates reactive added-mass loading from signed vortex-pressure contributions and maps them onto a reference configuration. Eighty prescribed two-dimensional swimming cases compare anguilliform and carangiform kinematics at Re = 5,000.',
-    links: external('https://arxiv.org/abs/2609.00461', 'Read preprint') + external('https://github.com/KCLFlowlab/deforming-vfm', 'Code & animations'),
+    links: external('https://arxiv.org/abs/2609.00461', 'arXiv') + external('https://github.com/KCLFlowlab/deforming-vfm', 'Code'),
     figures: figure('assets/force-map.png', 'Reference-configuration force maps for two swimming modes', 'Paper Figure 11 · Original color scales and annotations retained.') + '<details><summary>View phase-resolved fields</summary>' + figure('assets/flow-regimes.png', 'Phase-resolved vorticity and force-contribution fields', 'Paper Figure 5 · Four phase snapshots.') + '</details>'
   },
   vato: {
     label: 'MARSVATO / PREPRINT · 2026', title: 'VATO: A Vortex-Force-Aware Transformer Operator for Unsteady Separated Aerofoil Flows',
     authors: 'Xingxin Yang · Zhan Zhang · Yichen Li · Juan Li',
     text: 'Scientific AI can connect data-driven prediction with physical understanding. VATO makes this connection through the flow structures that generate aerodynamic forces. VATO-S adds training-time supervision of the VFM force-contribution field. VATO-A also uses force contribution and sensitivity to guide residual cross-attention. The benchmark spans 54 trajectories across nine double-edged plate aerofoil geometries.',
-    links: external('https://arxiv.org/abs/2609.00507', 'Read preprint') + external('https://github.com/KCLFlowlab/MarsVATO', 'Code & animations'),
+    links: external('https://arxiv.org/abs/2609.00507', 'arXiv') + external('https://github.com/KCLFlowlab/MarsVATO', 'Code'),
     figures: figure('assets/vato-model.png', 'VATO architecture, training and vortex-aware residual cross-attention', 'Repository README cover · VATO model architecture. The homepage animations show discrete prediction-lead and incidence sweeps.')
   },
   stco: {
     label: 'STCO / PREPRINT · 2026', title: 'STCO: Conditional Neural Operators for Time-Dependent PDEs',
     authors: 'Xingxin Yang · Zhan Zhang · Juan Li',
     text: 'Predicting a changing physical system requires knowing how it is driven, as well as what has been observed. The Spatiotemporal Conditional Operator supplies target-time motion, inflow and forcing fields to different neural-operator backbones. Flow-Aware Graph Leaf sampling and Dual-Site Feature-wise Linear Modulation form a common condition interface, evaluated across twelve matched backbones.',
-    links: external('https://arxiv.org/abs/2608.20477', 'Read preprint') + external('https://github.com/YoungxxStar/FRO_Paper', 'Project & animations'),
+    links: external('https://arxiv.org/abs/2608.20477', 'arXiv') + external('https://github.com/YoungxxStar/FRO_Paper', 'Code'),
     figures: figure('assets/stco-conditions.png', 'Prescribed-condition operator learning: observations, conditions and future responses', 'Repository README cover · Observed history and prescribed physical conditions define the future response.') + '<details><summary>View prediction comparisons and performance</summary>' + figure('assets/stco-spatial.png', 'STCO resolved velocity and pressure comparisons under prescribed physical conditions', 'Spatial comparisons from the current manuscript.') + figure('assets/stco-performance.png', 'STCO cross-backbone accuracy, condition dependence and inference cost', 'Accuracy, lead-time dependence, condition sensitivity and inference cost.') + '</details>'
   },
   ravfm: {
     label: 'RA-VFM / PREPRINT · 2026', title: 'The Reynolds-Averaged Vortex Force Map Method',
     authors: 'Matteo Liguori · Zhan Zhang · Francesco Ciriello · Juan Li',
     text: 'Bird flight offers a natural setting for studying how shape and flow interact. RA-VFM extends vortex-force mapping to Reynolds-averaged flows. Its decomposition distinguishes vortex-pressure and Reynolds-stress contributions to mean aerodynamic forces. A gliding goshawk and a matched aerofoil show where lift and drag originate in turbulent flow.',
-    links: external('https://arxiv.org/abs/2603.13078', 'Read preprint') + external('https://github.com/KCLFlowlab/RAVFM', 'Code'),
+    links: external('https://arxiv.org/abs/2603.13078', 'arXiv') + external('https://github.com/KCLFlowlab/RAVFM', 'Code'),
     figures: figure('assets/ravfm-geometry.png', 'Gliding goshawk geometry and force definitions', 'Paper Figure 1 · Liguori, Zhang, Ciriello & Li · CC BY-NC-ND 4.0; unaltered image.') + '<details><summary>View lift-contribution map</summary>' + figure('assets/ravfm-bird.png', 'Vortex-pressure and Reynolds-stress lift-contribution isosurfaces', 'Paper Figure 5 isosurface image · CC BY-NC-ND 4.0; unaltered image.') + '</details>'
   }
 };
@@ -87,12 +87,19 @@ try {
 } catch (error) { console.warn(error); swimmer = null; }
 if (!swimmer) { document.body.classList.add('no-webgl'); heroReady(); }
 setTimeout(heroReady, 4500);
+// Once the visitor has tried the controls, the hint steps back entirely.
+let engagedTimer = 0;
+const engaged = () => { if (!engagedTimer) engagedTimer = setTimeout(() => document.body.classList.add('hero-engaged'), 5000); };
+canvas.addEventListener('pointerdown', engaged);
+addEventListener('keydown', e => { if (/^Arrow|^[wasdWASD]$/.test(e.key) && heroRatio() > 0.6) engaged(); });
+canvas.addEventListener('pointermove', () => { if (heroShown) engaged(); });
 addEventListener('scroll', heroReady, {once: true, passive: true});
 new IntersectionObserver(([entry]) => swimmer?.setVisible(entry.isIntersecting)).observe(hero);
 const motionToggle = $('#motion-toggle');
 function syncMotion() {
   const paused = !swimmer || swimmer.paused || reducedMotion.matches;
-  motionToggle.textContent = paused ? 'Play' : 'Pause';
+  motionToggle.classList.toggle('is-paused', paused);
+  motionToggle.dataset.tip = paused ? 'Play' : 'Pause';
   motionToggle.setAttribute('aria-pressed', String(paused));
   motionToggle.setAttribute('aria-label', paused ? 'Play the swimmer' : 'Pause the swimmer');
 }
@@ -125,11 +132,6 @@ $$('.reveal').forEach(el => reveal.observe(el));
 // ---------- Research directions: three tabs, nine questions, studies and records ----------
 const records = $$('#kcl-outputs > a').map(a => ({url: a.href, title: $('.pub-title', a).textContent, year: $('.pub-type', a).firstChild.textContent.trim(), venue: $('.pub-venue', a).textContent}));
 const studyImages = {ravfm: 'assets/ravfm-geometry.png', stco: 'assets/stco-conditions.png', deforming: 'assets/deforming-poster.png', vato: 'assets/vato-model.png'};
-const directionText = {
-  bio: 'Flight, swimming and collective motion raise a common question: how do form, movement and the surrounding fluid work together? We study these interactions as a foundation for bio-inspired engineering.',
-  physics: 'Unsteady aerodynamics, vortex dynamics and turbulence connect motion with the loads and flow structures it creates. We develop methods to understand those connections in biological and engineered configurations.',
-  ai: 'How can learning methods use physical knowledge as well as data? We develop neural operators for changing physical systems and investigate how machine learning can support aerodynamic modelling and design.'
-};
 let activeDomain = 'bio', activeTopic = null;
 // The address reflects the open direction, and closing a study returns to it.
 function rememberDirection(key) { history.replaceState(null, '', '#domain-' + key); lastPageHash = 'domain-' + key; }
@@ -140,8 +142,8 @@ function renderResults(topic) {
   $$('.direction-topics button').forEach(b => b.setAttribute('aria-pressed', String((b.dataset.topic || null) === topic)));
   $('#direction-results').innerHTML = (topic ? '<h4>' + item.name + '</h4><p class="topic-description">' + item.text + '</p>' : '') +
     (item.interest ? '<p class="interest-note">Research interest</p>' : '') +
-    (item.studies.length ? '<p class="results-label">Selected studies</p>' + item.studies.map(key => '<a class="direction-study" href="#study-' + key + '"><img src="' + studyImages[key] + '" alt="' + studyMeta[key].name + ' original research figure"><span><strong>' + studyMeta[key].name + '</strong><small>' + studyMeta[key].question + '</small></span><span aria-hidden="true">↗</span></a>').join('') : '') +
-    (item.records.length ? '<p class="results-label">From the publication record</p>' + item.records.map(i => recordLink(records[i])).join('') : '') +
+    (item.studies.length ? item.studies.map(key => '<a class="direction-study" href="#study-' + key + '"><img src="' + studyImages[key] + '" alt="' + studyMeta[key].name + ' original research figure"><span><strong>' + studyMeta[key].name + '</strong><small>' + studyMeta[key].question + '</small></span><span aria-hidden="true">↗</span></a>').join('') : '') +
+    (item.records.length ? '<div class="results-group">' + item.records.map(i => recordLink(records[i])).join('') + '</div>' : '') +
     (item.link ? '<div class="detail-links">' + external(item.link, item.linkText) + '</div>' : '');
 }
 function selectDirection(key, focusTab = false) {
@@ -150,8 +152,8 @@ function selectDirection(key, focusTab = false) {
   $$('.direction-tabs [role=tab]').forEach(tab => { const on = tab.dataset.domain === key; tab.setAttribute('aria-selected', String(on)); tab.tabIndex = on ? 0 : -1; if (on && focusTab) tab.focus(); });
   const d = directions[key], panel = $('#direction-panel');
   panel.dataset.direction = key; panel.setAttribute('aria-labelledby', 'domain-' + key);
-  panel.innerHTML = '<div class="direction-copy"><p class="eyebrow">' + d.index + '</p><h3 id="direction-title">' + d.title + '</h3><p class="direction-intro">' + d.intro + '</p><p>' + directionText[key] + '</p></div>' +
-    '<div class="direction-explore"><div class="direction-topics" role="group" aria-label="Explore questions"><button data-topic="" aria-pressed="true">Overview</button>' + d.topics.map(t => '<button data-topic="' + t.id + '" aria-pressed="false">' + t.name + '</button>').join('') + '</div><div id="direction-results" class="direction-results" aria-live="polite"></div></div>';
+  panel.innerHTML = '<div class="direction-copy"><h3 id="direction-title">' + d.title + '</h3><p class="direction-intro">' + d.intro + '</p></div>' +
+    '<div class="direction-explore"><div class="direction-topics" role="group" aria-label="Explore questions"><button data-topic="" aria-pressed="true">All</button>' + d.topics.map(t => '<button data-topic="' + t.id + '" aria-pressed="false">' + t.name + '</button>').join('') + '</div><div id="direction-results" class="direction-results" aria-live="polite"></div></div>';
   $$('.direction-topics button').forEach(b => b.addEventListener('click', () => renderResults(b.dataset.topic || null)));
   renderResults(null);
 }
@@ -190,7 +192,7 @@ function projectTabs(active) {
 function renderStudy(key) {
   currentStudy = key;
   const p = projects[key], meta = studyMeta[key], animated = !!movies[key];
-  openDialog(projectTabs(key) + '<div class="study-layout"><section class="study-copy"><p class="eyebrow">' + meta.category + '</p><h2 id="dialog-title">' + meta.question + '</h2><p class="study-description">' + p.text + '</p><p class="study-authors">' + p.authors + '</p><div class="detail-links">' + p.links + '</div><div class="paper-record"><p class="paper-meta">Paper · first preprint ' + meta.date + '</p><p class="paper-title">' + p.title + '</p></div></section><section class="study-visual" aria-label="Research media"><div class="gallery-tabs" role="group" aria-label="Research media view">' + (animated ? '<button data-view="animation" aria-pressed="true">Animation</button>' : '') + '<button data-view="figures" aria-pressed="' + (!animated) + '">Paper figures</button><span class="gallery-kind">' + meta.name + ' / 2026</span></div><div id="study-gallery"></div></section></div>', 'study', 'Research');
+  openDialog(projectTabs(key) + '<div class="study-layout"><section class="study-copy"><p class="eyebrow">' + meta.category + '</p><h2 id="dialog-title">' + meta.question + '</h2><p class="study-description">' + p.text + '</p><p class="study-authors">' + p.authors + '</p><div class="detail-links">' + p.links + '</div><div class="paper-record"><p class="paper-meta">arXiv · ' + meta.date + '</p><p class="paper-title">' + p.title + '</p></div></section><section class="study-visual" aria-label="Research media"><div class="gallery-tabs" role="group" aria-label="Research media view">' + (animated ? '<button data-view="animation" aria-pressed="true">Video</button>' : '') + '<button data-view="figures" aria-pressed="' + (!animated) + '">Figures</button></div><div id="study-gallery"></div></section></div>', 'study', 'Research');
   $$('.gallery-tabs button').forEach(button => button.addEventListener('click', () => renderGallery(button.dataset.view)));
   renderGallery(animated ? 'animation' : 'figures');
 }
@@ -203,10 +205,10 @@ function renderGallery(view) {
     gallery.innerHTML='<div class="figure-gallery">'+projects[key].figures+'</div>';
     return;
   }
-  gallery.innerHTML='<div class="research-screen" id="research-screen"><div class="screen-bar"><span>'+studyMeta[key].name+' / RESEARCH MEDIA</span><div>'+(key==='vato'?'<label><span class="sr-only">Choose VATO sweep</span><select id="sweep-select"><option value="vato">Lead-time sweep</option><option value="incidence">Incidence sweep</option></select></label>':'')+'<button id="media-expand" aria-label="Enlarge research visualization">⤢</button></div></div><video id="research-video" muted loop playsinline preload="metadata"></video><div class="playback"><button id="video-play" aria-label="Play research animation">Play</button><label class="sr-only" for="media-position">Animation position</label><input id="media-position" type="range" min="0" max="1000" value="0"><output id="position-label" for="media-position"></output></div></div><p class="media-caption" id="media-caption"></p><p class="media-hint">Original research media · Full scientific panels retained</p>';
+  gallery.innerHTML='<div class="research-screen" id="research-screen"><div class="screen-bar"><span>'+studyMeta[key].name+'</span><div>'+(key==='vato'?'<label><span class="sr-only">Choose VATO sweep</span><select id="sweep-select"><option value="vato">Lead-time sweep</option><option value="incidence">Incidence sweep</option></select></label>':'')+'<button id="media-expand" aria-label="Enlarge research visualization">⤢</button></div></div><video id="research-video" muted loop playsinline preload="metadata"></video><div class="playback"><button id="video-play" aria-label="Play research animation">Play</button><label class="sr-only" for="media-position">Animation position</label><input id="media-position" type="range" min="0" max="1000" value="0"><output id="position-label" for="media-position"></output></div></div><p class="media-caption" id="media-caption"></p>';
   const video=$('#research-video'), slider=$('#media-position'), output=$('#position-label'), play=$('#video-play'), screen=$('#research-screen');
   let selected=key, desired=!reducedMotion.matches, generation=0;
-  const updatePlay=()=>{play.textContent=video.paused?'▶ Play':'Ⅱ Pause';play.setAttribute('aria-label',video.paused?'Play research animation':'Pause research animation');};
+  const updatePlay=()=>{play.textContent=video.paused?'▶':'❚❚';play.setAttribute('aria-label',video.paused?'Play research animation':'Pause research animation');};
   const updatePosition=()=>{
     const m=movies[selected], ratio=Number.isFinite(video.duration)&&video.duration>0?video.currentTime/video.duration:0;
     const frame=Math.min(m.frames-1,Math.floor(ratio*m.frames));slider.value=Math.round(ratio*1000);
