@@ -19,10 +19,10 @@ const url=process.env.PREVIEW_URL||'http://127.0.0.1:8769/';
   const page=await browser.newPage({viewport:{width:1440,height:900}});watch(page);
   assert.equal((await page.goto(url)).status(),200);await page.evaluate(()=>document.fonts.ready);
   assert.match(await page.title(),/Bio-inspired engineering/);
-  assert.deepEqual(await page.locator('.site-nav a').allTextContents(),['Research','Studies','Publications','People','Contact']);
-  assert.deepEqual(await page.locator('main > section').evaluateAll(s=>s.map(e=>e.id)),['intro','vision','research','studies','publications','people','contact']);
+  assert.deepEqual(await page.locator('.site-nav a').allTextContents(),['Research','Publications','Team','Contact']);
+  assert.deepEqual(await page.locator('main > section').evaluateAll(s=>s.map(e=>e.id)),['intro','vision','research','publications','team','contact']);
   assert.equal(await page.locator('.wordmark .lab-mark').getAttribute('src'),'assets/kclflowlab-logo.png');assert.equal(await page.locator('.wordmark .kcl-mark').getAttribute('src'),'assets/kcl-logo.svg');
-  note('One scrolling page: swimmer, introduction, vision, research directions, studies, publications, people, contact');
+  note('One scrolling page: swimmer, introduction, vision, research (studies + directions), publications, team, contact');
 
   await page.locator('.pillar[data-domain-link="physics"]').click();await page.waitForFunction(()=>document.querySelector('#domain-physics').getAttribute('aria-selected')==='true');
   assert.equal(new URL(page.url()).hash,'#domain-physics');
@@ -63,7 +63,7 @@ const url=process.env.PREVIEW_URL||'http://127.0.0.1:8769/';
 
   assert.equal(await page.locator('#kcl-outputs>a').count(),5);assert.match(await page.locator('#kcl-outputs').innerText(),/Accepted \/ in press/);
   await page.locator('.preprint-archive summary').click();assert.equal(await page.locator('#preprint-outputs>a').count(),4);
-  assert.equal(await page.locator('.principal,.person').count(),6);assert.equal(await page.locator('#people img').count(),3);
+  assert.equal(await page.locator('.principal,.person').count(),6);assert.equal(await page.locator('#team img').count(),3);
   assert.deepEqual(await page.locator('.person h3').allTextContents(),['Yichen Li','Matteo Liguori','Vedang Joshi','Xingxin Yang','Zhan Zhang']);
   assert.equal(await page.locator('#contact a[href="mailto:juan.li@kcl.ac.uk"]').count(),2);
   await page.locator('#field-info-footer').click();assert.match(await page.locator('#dialog-content').innerText(),/not a CFD simulation/);
@@ -78,7 +78,7 @@ const url=process.env.PREVIEW_URL||'http://127.0.0.1:8769/';
 
   const mobile=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:'reduce'});watch(mobile);
   await mobile.goto(url);await mobile.evaluate(()=>document.fonts.ready);
-  await mobile.locator('.menu-toggle').click();await mobile.locator('.site-nav a[href="#people"]').click();await mobile.waitForFunction(()=>Math.abs(document.querySelector('#people').getBoundingClientRect().top)<80);
+  await mobile.locator('.menu-toggle').click();await mobile.locator('.site-nav a[href="#team"]').click();await mobile.waitForFunction(()=>Math.abs(document.querySelector('#team').getBoundingClientRect().top)<80);
   assert.equal(await mobile.locator('.menu-toggle').getAttribute('aria-expanded'),'false');
   for(const [width,height]of[[320,667],[390,844],[768,1024],[1024,768],[1366,768],[1440,900]]){
    await mobile.setViewportSize({width,height});await mobile.waitForTimeout(150);

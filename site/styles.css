@@ -341,3 +341,8 @@ dialog[data-kind=info] figcaption{font-size:14px;color:var(--muted);margin-top:1
 .mark-divider{width:1px;height:28px;background:currentColor;opacity:.22;margin:0 4px}
 .wordmark .lab-mark{width:30px;height:30px;border-radius:5px}
 @media(max-width:760px){.wordmark{gap:9px}.wordmark .kcl-mark{height:30px}.mark-divider{height:22px;margin:0 2px}.wordmark .lab-mark{width:26px;height:26px}}
+/* Research = four studies, then the direction explorer; backgrounds alternate down the page. */
+.research .explore{margin-top:clamp(72px,9vw,128px)}
+.publications{background:var(--paper-2)}
+.people{background:var(--paper)}
+.direction-copy .direction-intro{font:500 clamp(24px,2.4vw,34px)/1.25 var(--display);letter-spacing:-.025em;color:var(--ink);margin:0}

@@ -31,9 +31,9 @@ motion; direct input still animates the fish briefly. Rendering stops when the h
 screen, in background tabs and behind dialogs.
 
 Scrolling leads to one calm, typographic page: introduction and three direction entrances;
-the research vision; research directions (three tabs, nine topic branches linking studies,
-KCL records and explicitly labelled research interests); four selected studies; the
-publication record with the four preprints; people; contact. The header stays transparent
+the research vision; **Research** (the four selected studies, then a direction explorer:
+three tabs, nine topic branches linking studies, KCL records and explicitly labelled research
+interests); publications with the four preprints; **Team**; contact. The header stays transparent
 over the water and becomes solid over the page; on phones it collapses into a menu. A study
 opens a workspace with the question, authors, paper/code links, the full paper title and
 first-preprint date, original figures and controlled animations. Study links open in place,

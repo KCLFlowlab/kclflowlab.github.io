@@ -152,7 +152,7 @@ function selectDirection(key, focusTab = false) {
   $$('.direction-tabs [role=tab]').forEach(tab => { const on = tab.dataset.domain === key; tab.setAttribute('aria-selected', String(on)); tab.tabIndex = on ? 0 : -1; if (on && focusTab) tab.focus(); });
   const d = directions[key], panel = $('#direction-panel');
   panel.dataset.direction = key; panel.setAttribute('aria-labelledby', 'domain-' + key);
-  panel.innerHTML = '<div class="direction-copy"><h3 id="direction-title">' + d.title + '</h3><p class="direction-intro">' + d.intro + '</p></div>' +
+  panel.innerHTML = '<div class="direction-copy"><p class="direction-intro">' + d.intro + '</p></div>' +
     '<div class="direction-explore"><div class="direction-topics" role="group" aria-label="Explore questions"><button data-topic="" aria-pressed="true">All</button>' + d.topics.map(t => '<button data-topic="' + t.id + '" aria-pressed="false">' + t.name + '</button>').join('') + '</div><div id="direction-results" class="direction-results" aria-live="polite"></div></div>';
   $$('.direction-topics button').forEach(b => b.addEventListener('click', () => renderResults(b.dataset.topic || null)));
   renderResults(null);
@@ -265,7 +265,7 @@ function route(scroll = true) {
   if (dialog.open && dialog.dataset.kind === 'study') { stopMedia(); dialog.close(); }
   if (key.startsWith('domain-') && directions[key.slice(7)]) {
     if (activeDomain !== key.slice(7)) selectDirection(key.slice(7));
-    if (scroll) $('#research').scrollIntoView({behavior: reducedMotion.matches ? 'auto' : 'smooth'});
+    if (scroll) $('.explore').scrollIntoView({behavior: reducedMotion.matches ? 'auto' : 'smooth'});
   }
 }
 $$('[data-domain-link]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); history.pushState(null, '', a.hash); route(); }));
