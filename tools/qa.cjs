@@ -21,7 +21,7 @@ const url=process.env.PREVIEW_URL||'http://127.0.0.1:8769/';
   assert.match(await page.title(),/Bio-inspired engineering/);
   assert.deepEqual(await page.locator('.site-nav a').allTextContents(),['Research','Studies','Publications','People','Contact']);
   assert.deepEqual(await page.locator('main > section').evaluateAll(s=>s.map(e=>e.id)),['intro','vision','research','studies','publications','people','contact']);
-  assert.equal(await page.locator('.wordmark img').getAttribute('src'),'assets/kclflowlab-logo.png');
+  assert.equal(await page.locator('.wordmark .lab-mark').getAttribute('src'),'assets/kclflowlab-logo.png');assert.equal(await page.locator('.wordmark .kcl-mark').getAttribute('src'),'assets/kcl-logo.svg');
   note('One scrolling page: swimmer, introduction, vision, research directions, studies, publications, people, contact');
 
   await page.locator('.pillar[data-domain-link="physics"]').click();await page.waitForFunction(()=>document.querySelector('#domain-physics').getAttribute('aria-selected')==='true');

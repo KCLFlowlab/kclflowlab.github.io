@@ -46,6 +46,8 @@ or acceptance dates. Juan Li leads the team presentation; students follow the us
 cohort order: Yichen Li, Matteo Liguori, Vedang Joshi, Xingxin Yang, Zhan Zhang. Three
 portraits come from official KCL profiles; other members keep initials. No exact student
 years or unsupported biographies are inferred. Space Grotesk and Manrope are self-hosted.
+The header lockup pairs the unaltered official KCL SVG with the unchanged black-and-white
+KCLFlowlab GitHub avatar and the name "FlowLab", as in the October identity (`f2774dd`).
 
 ## Science and provenance
 

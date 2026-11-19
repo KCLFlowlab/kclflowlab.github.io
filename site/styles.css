@@ -335,3 +335,9 @@ dialog[data-kind=info] figcaption{font-size:14px;color:var(--muted);margin-top:1
 .pillar-index,.direction-tabs [role=tab] span{letter-spacing:.06em}
 .site-credit{margin-left:14px;padding-left:14px;border-left:1px solid #ffffff1f;font-size:12px;color:#9fbab380}
 .site-credit a{transition:color .2s}.site-credit a:hover{color:var(--water-muted)}
+/* Header lockup: official KCL mark | FlowLab mark + name (as in the October identity). */
+.wordmark{gap:12px}
+.wordmark .kcl-mark{width:auto;height:36px;border-radius:0}
+.mark-divider{width:1px;height:28px;background:currentColor;opacity:.22;margin:0 4px}
+.wordmark .lab-mark{width:30px;height:30px;border-radius:5px}
+@media(max-width:760px){.wordmark{gap:9px}.wordmark .kcl-mark{height:30px}.mark-divider{height:22px;margin:0 2px}.wordmark .lab-mark{width:26px;height:26px}}
