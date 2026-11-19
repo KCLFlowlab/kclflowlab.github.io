@@ -333,3 +333,5 @@ dialog[data-kind=info] figcaption{font-size:14px;color:var(--muted);margin-top:1
 .section-head.with-aside{display:flex}
 .section-head .text-link{font-size:15px}
 .pillar-index,.direction-tabs [role=tab] span{letter-spacing:.06em}
+.site-credit{margin-left:14px;padding-left:14px;border-left:1px solid #ffffff1f;font-size:12px;color:#9fbab380}
+.site-credit a{transition:color .2s}.site-credit a:hover{color:var(--water-muted)}
