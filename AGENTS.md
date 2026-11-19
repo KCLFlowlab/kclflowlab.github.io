@@ -40,6 +40,26 @@ CHROMIUM_PATH=/path/to/chromium node tools/qa-versions.cjs # version switch; scu
 
 `PREVIEW_URL` overrides the local URL, for example to run the same QA against the live site.
 
+## Design principle: as little text as possible (user-confirmed 2026-11-19)
+
+The owner dislikes on-screen text. Decide every word in this order:
+
+1. **Say nothing** if the visitor understands without it (the fish follows the cursor; a section heading already names the section).
+2. **Use a graphic** (icon, shape, position, colour, motion) if it can carry the meaning.
+3. **Abbreviate** if a short form is well known (arXiv, KCL, CFD, PhD, `2026.03`, `01`).
+4. **Be concise** otherwise: one word for labels, one sentence at most for an introduction.
+
+How this applies in practice:
+
+- **Show, don't tell.** Interaction should be discoverable by its response. Hints appear only when needed, stay quiet (low opacity), and leave once the visitor has used them.
+- **Details on demand.** Put secondary information behind hover tips, topic chips or the study workspace, not on the page by default.
+- **One icon family.** Thin line icons (1.3–1.5 px stroke, round caps, `currentColor`, 18–24 px). Low opacity at rest, full opacity on hover and focus. Universal icons (close, play/pause, arrows) get no visible label. Any other icon may get a hover tip of one or two words.
+- **Headings carry sections.** No eyebrow + heading + lead stacks, no explanatory asides, no generic calls to action ("Read more", "Explore…", "Click here"). External links use a short noun plus ↗ (`arXiv ↗`, `Code ↗`, `KCL ↗`).
+- **Hierarchy through space, scale and colour.** Use generous whitespace, large display type and one accent colour per research direction. Do not add labels, badges, counters or decorative text.
+- **Restraint.** One primary focus per view; in the hero, nothing competes with the fish. Motion must mean something and respect reduced motion.
+- **Never trimmed.** Scientific captions and their qualifiers (e.g. "not a continuous rollout"), paper titles, authors, venues and status, the "research interest" label, licences, provenance and the illustration disclaimer in About stay exact. Accessibility text (`aria-label`, `alt`, `sr-only`) is not on-screen text and stays complete.
+- **Before adding any text, ask:** would a visitor miss it? Could an icon, position or colour say it? Is there a shorter form?
+
 ## Invariants that are easy to break
 
 - **Two experiences.** Apply research-content corrections to both HTML pages. `qa-versions.cjs` asserts that `sculpture.js`/`sculpture.css` match `c05e741:site/app.js`/`styles.css` byte for byte. Any intended change to the Flow form renderer or data must update that check and the README together.
