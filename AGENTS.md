@@ -62,6 +62,8 @@ How this applies in practice:
 
 ## Invariants that are easy to break
 
+- **Team login is static and encrypted.** Never commit anything from `private/` or plaintext team data; only `site/members/vault.json` (ciphertext) is published. Regenerate it with `tools/team_admin.py`, not by hand. Do not add server calls, storage of credentials, or sensitive material to the team area. Never write team passwords into files or commit messages; pass them to `qa-team.cjs` through the environment.
+
 - **Two experiences.** Apply research-content corrections to both HTML pages. `qa-versions.cjs` asserts that `sculpture.js`/`sculpture.css` match `c05e741:site/app.js`/`styles.css` byte for byte. Any intended change to the Flow form renderer or data must update that check and the README together.
 - **Asset integrity.** `check_site.py` fails when an asset's size or hash differs from `asset-manifest.json`. When adding or replacing an asset, record its source, transformation, credit, bytes and SHA-256. Never crop, re-time or relabel scientific figures or videos. Keep RA-VFM figures unaltered (CC BY-NC-ND 4.0, contain sizing), the full 64-phase Deforming VFM cycle, and the original frame counts and labels in the MP4s.
 - **Science versus illustration.** The swimmer and wake are a procedural illustration (prescribed body wave, softened point vortices, no pressure solve), not CFD or a measured result. Do not add invented scientific readings or quantitative colour scales. The archived CFD snapshot (phase 0, `Afish_St0p40_Lam1p50_Re5000`, vorticity −30 to +30) stays in "About the visual" and as the no-WebGL/no-JS fallback.

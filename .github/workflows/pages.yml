@@ -22,6 +22,7 @@ jobs:
         run: |
           node --check site/app.js
           node --check site/swimmer.js
+          node --check site/team.js
           node --check site/sculpture.js
       - name: Check local assets and links
         run: python3 tools/check_site.py

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#03121a">
+  <meta name="robots" content="noindex">
+  <title>Team login — KCL FlowLab</title>
+  <link rel="icon" href="assets/kclflowlab-logo.png" type="image/png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="login-page">
+  <!-- Team login: decrypts members/vault.json locally (see tools/team_admin.py). Passwords are never sent or stored. -->
+  <main class="login-shell">
+    <a class="wordmark login-mark" href="./" aria-label="King’s College London FlowLab, home"><img class="kcl-mark" src="assets/kcl-logo.svg" alt="" width="46" height="35"><i class="mark-divider" aria-hidden="true"></i><img class="lab-mark" src="assets/kclflowlab-logo.png" alt="" width="30" height="30"><span>FlowLab</span></a>
+    <form class="login-card" id="login-form" novalidate>
+      <h1 class="sr-only">Team login</h1>
+      <label><span class="sr-only">Username</span><input name="username" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="Username" required></label>
+      <label><span class="sr-only">Password</span><input name="password" type="password" autocomplete="current-password" placeholder="Password" required></label>
+      <button type="submit" aria-label="Sign in"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></button>
+      <p class="login-status" id="login-status" role="status"></p>
+    </form>
+    <section id="team-panel" class="team-panel" aria-live="polite" hidden></section>
+    <a class="login-back" href="./" aria-label="Back to the homepage"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H6M11 6l-6 6 6 6"/></svg></a>
+  </main>
+  <script src="team.js"></script>
+</body>
+</html>
