@@ -6,7 +6,7 @@ const {execFileSync}=require('node:child_process');
 const root=path.resolve(__dirname,'..');
 const base=process.env.PREVIEW_URL||'http://127.0.0.1:8769/';
 (async()=>{
- const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||chromium.executablePath(),headless:true,args:['--no-sandbox']});
+ const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||chromium.executablePath(),headless:true,args:['--no-sandbox','--enable-unsafe-swiftshader','--use-angle=swiftshader']});
  const checks=[],errors=[],failed=[];
  const watch=p=>{p.on('pageerror',e=>errors.push(e.message));p.on('response',r=>{if(r.status()>=400&&new URL(r.url()).origin===new URL(base).origin)failed.push(r.url())})};
  try{
@@ -32,7 +32,14 @@ const base=process.env.PREVIEW_URL||'http://127.0.0.1:8769/';
   await page.locator('[data-experience-link="swimmer"]').click();await page.waitForFunction(()=>document.body.dataset.experience==='swimmer');
   checks.push('Native links switch both ways; browser Back/Forward works; the restored artwork rotates, zooms, animates, pauses and resets.');
   const mobile=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:'reduce'});watch(mobile);
-  for(const [file,key]of[['','swimmer'],['sculpture.html','sculpture']]){
+  // The redesigned swimmer page keeps its version switch in the footer; the archived page keeps its in-scene switch.
+  await mobile.goto(base);assert.equal(await mobile.locator('.site-footer .experience-switcher [aria-current]').innerText(),'Swimmer');
+  await mobile.goto(new URL('#study-deforming',base).href);await mobile.waitForSelector('#research-video');await mobile.waitForFunction(()=>document.querySelector('#research-video').readyState>=2);
+  assert.equal(await mobile.locator('#research-video').evaluate(v=>v.paused),true);
+  await mobile.locator('#video-play').click();await mobile.waitForFunction(()=>document.querySelector('#research-video').currentTime>.05&&!document.querySelector('#research-video').paused);
+  {const video=await mobile.locator('#research-video').elementHandle();await mobile.locator('.dialog-close').click();assert.equal(await video.evaluate(v=>v.paused),true);}
+  assert.deepEqual(await mobile.locator('.person h3').allTextContents(),['Yichen Li','Matteo Liguori','Vedang Joshi','Xingxin Yang','Zhan Zhang']);
+  for(const [file,key]of[['sculpture.html','sculpture']]){
    await mobile.goto(new URL(file,base).href);await mobile.evaluate(()=>document.fonts.ready);
    for(const [width,height]of[[320,667],[390,750],[390,844],[768,844],[1024,768],[1366,768],[1440,900]]){
     await mobile.setViewportSize({width,height});await mobile.evaluate(()=>location.hash='research');await mobile.waitForTimeout(100);

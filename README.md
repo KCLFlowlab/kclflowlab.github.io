@@ -1,102 +1,73 @@
 # KCL FlowLab website
 
-Public website: **https://kclflowlab.github.io/**. Updated 14 October 2026 around
+Public website: **https://kclflowlab.github.io/**. Redesigned 19 November 2026 around
 bio-inspired engineering, fluid physics and scientific AI. The deployable site is in
 `site/`: static HTML, CSS and JavaScript, locally hosted fonts and research media,
 with no framework, analytics, CDN dependency or backend.
 
 ## Two visual experiences
 
-- **Swimmer** (default): https://kclflowlab.github.io/ — draggable 3D fish and an interactive wake.
+- **Swimmer** (default): https://kclflowlab.github.io/ — an interactive WebGL fish, then the research page.
 - **Flow form**: https://kclflowlab.github.io/sculpture.html — the earlier rotating ribbon sculpture.
 
-The “Swimmer / Flow form” links on both pages switch between the two experiences.
-Both are standalone, bookmarkable pages; browser Back returns to the previous version.
-The alternate HTML, JavaScript and CSS were restored from commit `c05e741` (the version
-immediately before the swimmer). Its renderer and layout are preserved; only the page
-title, asset entry points and shared version switch were added. The shared stylesheet
-also keeps small-screen direction tabs short enough to clear the controls. Research assets are
-shared from `site/assets/`, without duplicating the images or videos. This is an
-intentional comparison snapshot: future research-content corrections should be applied
-to both HTML/app pairs while the two visual designs remain available.
+The footer of the Swimmer page and the in-scene switch of the Flow form page link the two.
+The Flow form HTML, JavaScript and CSS were restored from commit `c05e741`; `sculpture.js`
+and `sculpture.css` must stay byte-identical to that commit (checked by `qa-versions.cjs`).
+It uses `experiences.css`; the Swimmer page does not. Research assets are shared from
+`site/assets/`. Research-content corrections apply to both HTML pages.
 
 ## Experience
 
-The concise two-line heading “Bio-inspired engineering.” introduces the **research
-landscape**. A single paragraph connects fluid physics and scientific AI with natural
-motion and engineering design. The compact typographic hierarchy leaves room for the
-swimmer, with a small institutional label and an “Our approach” link to the vision.
-A shaded three-dimensional fish swims through open water with a flexible body, paired
-fins and an oscillating forked tail. Alternating shed vortices bend short particle
-trails into a fading wake. Hover highlights the fish; dragging it changes its position,
-heading and tailbeat, sheds additional vortices and entrains nearby particles. After
-release, the wake continues to evolve and the fish gradually returns towards its home.
+The page opens on open water with no text: a fish swims in from the left. After about
+2.6 seconds (or the first click, tap or key) a quiet header, an interaction hint and a
+scroll cue fade in. Pointer movement guides the fish; a click or tap makes it dart; the
+arrow keys or W/A/S/D steer it on screen and Shift gives a burst. Arrow keys steer only
+while the water fills most of the view and nothing else has focus, so they scroll the page
+everywhere else. With no input the fish wanders. Pause and reduced motion stop autonomous
+motion; direct input still animates the fish briefly. Rendering stops when the hero is off
+screen, in background tabs and behind dialogs.
 
-Three entrances lead to bio-inspired motion and design, complex flows and interactions,
-and scientific AI and computation. On phones they sit below the swimmer. Dragging open
-water orbits the camera; wheel/pinch and buttons zoom. Arrow keys orbit, Shift + arrows
-move the fish, and 0 resets. Selecting a direction reframes the scene. Pause and reduced
-motion freeze both the swimmer and the wake, while direct manipulation remains possible.
+Scrolling leads to one calm, typographic page: introduction and three direction entrances;
+the research vision; research directions (three tabs, nine topic branches linking studies,
+KCL records and explicitly labelled research interests); four selected studies; the
+publication record with the four preprints; people; contact. The header stays transparent
+over the water and becomes solid over the page; on phones it collapses into a menu. A study
+opens a workspace with the question, authors, paper/code links, the full paper title and
+first-preprint date, original figures and controlled animations. Study links open in place,
+and closing returns focus to the link used. `#study-…` and `#domain-…` links are deep links.
+All text is in the HTML, so the page reads fully without JavaScript.
 
-A direction opens an in-scene panel, rather than another modal. Nine topic branches
-connect biological motion, flow physics, predictive learning and design to the actual
-research. Topics link to selected studies, earlier publication records or explicitly
-labelled research interests. The collective-motion branch links to Vedang's official
-profile; it is not presented as an additional completed project. A publication preview
-on the homepage also surfaces the longer research record, with manual cycling and
-an automatic nine-second change only while motion is enabled and the page is visible.
-
-The research index combines four **selected** studies with five KCL publication
-records from 2022–2026. The homepage does not label four studies as the whole lab.
-Featured studies and the workspace switcher follow first arXiv submission:
-RA-VFM (13 March), STCO (20 August), Deforming VFM (31 August), VATO (1 September),
-all in 2026. These are not inferred project-start or acceptance dates.
-
-Selecting a study opens the research workspace with the question, authors, paper/code
-links, original scientific figures and controlled animations. Closing returns to the
-previous direction and selected topic. Hash URLs support direct study/direction links
-and browser Back. The normal homepage fills one viewport; only content panels scroll.
-Very short windows permit necessary page scrolling. Phones prioritise research media.
-
-Vision, People, publication details and Contact remain separate workspace panels. A section
-menu in the workspace bar moves between panels without returning to the field; the bar's label
-and current item name the open panel (studies belong to Research). Each study shows its full
-paper title and first-preprint date beside the authors. “About the visual” is reachable at every
-width (footer on wide screens, an “i” control on tablets and phones) and links to Sources. The
-archive preview shows its position and does not auto-advance while hovered or focused.
-Phone and tablet text keeps an 8 px minimum for labels and 11–12 px for running text.
-Juan Li leads the team presentation; students follow the user-specified cohort order:
-Yichen Li, Matteo Liguori, Vedang Joshi, Xingxin Yang, Zhan Zhang. Three portraits
-come from official KCL profiles; other members retain typographic initials. No exact
-student years or unsupported biographies are inferred. The unchanged black-and-white
-GitHub avatar identifies the lab; the KCL institutional mark stays in Contact.
-Space Grotesk and Manrope are self-hosted.
+Featured studies follow first arXiv submission: RA-VFM (13 March), STCO (20 August),
+Deforming VFM (31 August), VATO (1 September), all in 2026. These are not project-start
+or acceptance dates. Juan Li leads the team presentation; students follow the user-specified
+cohort order: Yichen Li, Matteo Liguori, Vedang Joshi, Xingxin Yang, Zhan Zhang. Three
+portraits come from official KCL profiles; other members keep initials. No exact student
+years or unsupported biographies are inferred. Space Grotesk and Manrope are self-hosted.
 
 ## Science and provenance
 
-The homepage is an **interactive swimming illustration**, not CFD, a measured field
-or a research result. The fish is a procedural, shaded 3D mesh projected with Canvas 2D.
-Prescribed lateral body waves drive the tail. The wake uses softened point-vortex
-induction in local swimming planes, decaying circulation, downstream advection and
-near-body entrainment. It has no pressure solve, no validated boundary conditions and
-no quantitative scientific meaning. Cyan/violet distinguish alternating shed vortices;
-they are illustrative colours, not a measured colour scale. “About the visual” explains
-this model alongside the separately attributed scientific material.
+The opening scene is an **interactive swimming illustration**, not CFD, a measured field
+or a research result. `site/swimmer.js` renders it with raw WebGL (no external library):
+a procedural fish with smooth normals, multisampled anti-aliasing, countershaded colouring,
+five translucent fin groups and a painted eye. The body follows its own path (a
+follow-the-leader centreline with a bending limit) and carries a prescribed carangiform
+travelling wave whose amplitude grows towards the tail. At each tail-beat reversal it sheds
+a desingularised 2D point vortex, signed as in a reverse von Kármán (thrust) street; the
+vortices advect one another, spread and fade. Dye from the trailing edge and drifting
+particles are carried by that field. There is no pressure solve and no validated boundary
+condition; colours are illustrative. "About the visual" explains this.
 
-The integration uses bounded steps and velocities, at most 30 vortices and 390 particles
-(240 on phones), with short bounded histories. Rendering targets 30 fps, avoids external
-3D libraries and respects pause, reduced motion and page visibility.
-The archived CFD snapshot remains there and as a static fallback; it uses calculated
-cells, phase 0 of `Afish_St0p40_Lam1p50_Re5000`, and a qualitative vorticity display
-range of −30 to +30. The original velocity display grid remains archived with the site.
+Bounds: at most 40 vortices, 1,400 dye particles (700 on phones) and 260 ambient particles
+(150 on phones); device pixel ratio capped at 2. The archived CFD snapshot is the
+JavaScript-free/WebGL-free fallback and appears in "About the visual": calculated cells,
+phase 0 of `Afish_St0p40_Lam1p50_Re5000`, qualitative vorticity range −30 to +30.
 
 Scientific media in the study workspaces are unchanged. The Deforming VFM animation
 retains its complete 64-phase cycle. VATO clips are discrete direct-prediction lead
 and incidence sweeps; STCO frames are independently queried leads. Captions and seek
 labels preserve these meanings. The four MP4s retain original frame counts, timing,
-labels and complete scientific panels, totaling 2,957,847 bytes. Controls provide
-pause, seek and fullscreen. Closing or switching studies, selecting figures or hiding
-the page stops hidden media. The swimmer and wake pause behind dialogs and in background tabs.
+labels and complete scientific panels. Controls provide pause, seek and fullscreen.
+Closing or switching studies, selecting figures or hiding the page stops hidden media.
 
 The five selected KCL records and four-preprint bibliography retain exact titles,
 authors, sources and publication status. The AIAA Journal in-press record and RA-VFM
@@ -116,32 +87,26 @@ python3 tools/serve.py
 ```
 
 Open `http://127.0.0.1:8769/` on the same device. The loopback server supports MP4 byte
-ranges. Stop it with Ctrl+C. Generate the self-contained offline preview and source zip:
+ranges. Stop it with Ctrl+C. Generate the self-contained offline previews and source zip:
 
 ```bash
 python3 tools/package.py
-node --check site/app.js
-node --check site/sculpture.js
+node --check site/app.js && node --check site/swimmer.js && node --check site/sculpture.js
 python3 tools/check_site.py
 ```
 
-For Chromium interaction QA, with the server running:
+Chromium QA, with the server running (the scripts enable SwiftShader WebGL for headless runs):
 
 ```bash
 npm ci --prefix tools/browser
-CHROMIUM_PATH=/absolute/path/to/chromium node tools/qa.cjs
-CHROMIUM_PATH=/absolute/path/to/chromium node tools/qa-swimmer.cjs
-CHROMIUM_PATH=/absolute/path/to/chromium node tools/qa-versions.cjs
+CHROMIUM_PATH=/absolute/path/to/chromium node tools/qa.cjs          # page, directions, studies, media, layouts, no-JS
+CHROMIUM_PATH=/absolute/path/to/chromium node tools/qa-swimmer.cjs  # opening, pointer/keyboard steering, bounds, pause
+CHROMIUM_PATH=/absolute/path/to/chromium node tools/qa-versions.cjs # Flow form unchanged; switching both ways
 ```
 
-`PREVIEW_URL` defaults to the local server. Reports and PNGs go to ignored `qa/`.
-Checks cover fish hit testing, mouse/touch dragging, wake persistence, bounded buffers,
-render rate, rotation, zoom, touch pinch, keyboard controls, motion preferences,
-direction/topic navigation, closing and restoring focus, browser Back, the research
-index and archive, all research videos and figures, team order, source credits,
-320–1440px layouts and the JavaScript-free fallback. Real Safari/iOS hardware has not
-been tested. The offline `preview.html` and `preview-sculpture.html` each embed every asset and
-need no network fetches. Keep them together to use their reciprocal version links.
+`PREVIEW_URL` defaults to the local server. Reports and PNGs go to ignored `qa/`. Real
+Safari/iOS hardware has not been tested. Keep `preview.html` and `preview-sculpture.html`
+together to use their reciprocal version links.
 
 ## Deployment and editing
 
@@ -150,11 +115,11 @@ asset integrity and deploys only `site/` on pushes to `main`. QA outputs, tools 
 offline preview are not deployed. This website repository is separate from the research
 repositories.
 
-- Page structure, portals, templates and bibliography: `site/index.html`.
-- Fish/wake renderer, direction/topic associations, routing and media: `site/app.js`.
-- Preserved flow-form experience: `site/sculpture.html`, `site/sculpture.js`, `site/sculpture.css`.
-- Shared version-switch layout: `site/experiences.css`.
-- Typography, responsive layout and transitions: `site/styles.css`.
+- Page content, sections and bibliography: `site/index.html`.
+- WebGL swimmer, wake and input handling: `site/swimmer.js`.
+- Hero states, header, directions/topics, study workspace, routing and media: `site/app.js`.
+- Typography, layout and responsive rules for the Swimmer page: `site/styles.css`.
+- Preserved flow-form experience: `site/sculpture.html`, `site/sculpture.js`, `site/sculpture.css`, `site/experiences.css`.
 - Provenance and exact research records: `asset-manifest.json`.
 - Chinese design rationale: `SITE_PLAN.md`.
 
