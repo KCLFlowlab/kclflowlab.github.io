@@ -37,7 +37,8 @@ button{cursor:pointer;background:none;border:0;padding:0}
 .site-nav a:hover,.site-nav a[aria-current]{opacity:1}
 .site-nav a[aria-current]::after{content:'';position:absolute;left:0;right:0;bottom:-6px;height:1.5px;background:currentColor}
 .menu-toggle{display:none;font-size:15px;padding:8px 2px}
-.js-ready:not(.hero-ready) .site-header{opacity:0;transform:translateY(-8px);pointer-events:none}
+/* Hidden from the first frame (html.js is set in <head>); if scripts never arrive, the interface appears after 6 s. */
+.js body:not(.hero-ready) .site-header{opacity:0;transform:translateY(-8px);pointer-events:none;animation:interface-late 0s 6s forwards}
 
 /* Hero: the swimmer alone, then a quiet hint and a way down. */
 .hero{position:relative;height:100vh;height:100svh;min-height:540px;background:var(--deep);overflow:hidden;color:var(--water-ink)}
@@ -70,7 +71,8 @@ button{cursor:pointer;background:none;border:0;padding:0}
 @keyframes cue{0%{transform:scaleY(0);opacity:1}60%{transform:scaleY(1);opacity:1}100%{transform:scaleY(1);opacity:0}}
 .hero-engaged .hero-hint{opacity:0}
 .hero-hint,.hero-tools,.scroll-cue{transition:opacity 1.4s var(--ease) .15s}
-.js-ready:not(.hero-ready) .hero-hint,.js-ready:not(.hero-ready) .hero-tools,.js-ready:not(.hero-ready) .scroll-cue{opacity:0;pointer-events:none}
+.js body:not(.hero-ready) .hero-hint,.js body:not(.hero-ready) .hero-tools,.js body:not(.hero-ready) .scroll-cue{opacity:0;pointer-events:none;animation:interface-late 0s 6s forwards}
+@keyframes interface-late{to{opacity:1;transform:none;pointer-events:auto}}
 
 /* Sections */
 .section{padding-block:var(--section)}
