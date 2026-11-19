@@ -85,6 +85,31 @@ hashes. RA-VFM figures are unaltered arXiv images under CC BY-NC-ND 4.0 and use 
 sizing without cropping. Other scientific media remain author-supplied project material;
 the website does not relicense them. Fonts retain their SIL Open Font License files.
 
+## Team login (static, encrypted)
+
+A quiet person icon in the header opens `login.html`. GitHub Pages has no server, so the team
+area is fixed data prepared locally and published as ciphertext: `site/members/vault.json`
+holds the team content and the group-meeting schedule encrypted with a random AES-256-GCM key,
+wrapped once per member with a key derived from username + password (PBKDF2-SHA256, 600,000
+iterations). Usernames appear only as salted hashes; there are no plaintext passwords or
+password hashes. `site/team.js` decrypts in the browser; nothing is sent or stored, and the
+decrypted view lives only in memory. Signed in, members see **Schedule** (the fortnightly
+group-meeting rota, with the next meeting first) and **Notes**.
+
+Administration is local with `tools/team_admin.py` (prompts for passwords):
+
+```bash
+python3 tools/team_admin.py add NAME [--admin]   # passwd NAME, role NAME admin|member, remove NAME, list
+python3 tools/team_admin.py publish              # after editing private/schedule.xlsx or private/team-content.json
+```
+
+`private/` (registry encrypted with the admin password, `schedule.xlsx`, `team-content.json`) is
+git-ignored; keep a backup. Commit the regenerated `vault.json` and publish. Removing a member
+rotates the content key. Anyone with valid credentials reads the whole vault, and short
+passwords can be guessed offline, so the team area must stay non-sensitive. The schedule sheet
+has columns Date, Time, Presenter, Topic, Note; the current one is an illustrative example.
+`TEAM_USER=… TEAM_PASSWORD=… node tools/qa-team.cjs` checks the login end to end.
+
 ## Preview and checks
 
 ```bash
