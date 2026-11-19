@@ -90,11 +90,18 @@ const executablePath=process.env.CHROMIUM_PATH||chromium.executablePath();
   await page.locator('.header-contact').click();await page.waitForSelector('.contact-details');assert.equal(await page.locator('.contact-details a[href="mailto:juan.li@kcl.ac.uk"]').count(),1);await close(page);
   await page.locator('#credits-open').click();assert.match(await page.locator('#dialog-content').innerText(),/CC BY-NC-ND 4.0/);await close(page);
   note('Vision, six people in the requested order, publication statuses, contact details, media licences and source credits retained');
+  await route(page,'vision');await page.waitForSelector('.vision-directions');await page.locator('.workspace-nav [data-section="people"]').click();await page.waitForSelector('.principal');
+  assert.equal(await page.locator('dialog').evaluate(d=>d.open),true);assert.equal(await page.locator('#workspace-label').innerText(),'PEOPLE');assert.equal(await page.locator('.workspace-nav [aria-current]').innerText(),'People');
+  await page.locator('.workspace-nav [data-section="library"]').click();await page.waitForSelector('.library-studies');assert.equal(await page.locator('#workspace-label').innerText(),'RESEARCH');await close(page);
+  await page.locator('#field-info').click();await page.locator('[data-open-credits]').click();assert.match(await page.locator('#dialog-content').innerText(),/CC BY-NC-ND 4.0/);await close(page);
+  assert.match(await page.locator('#archive-count').innerText(),/^0[1-5] \/ 05$/);
+  note('Workspace panels switch in place with a consistent label and current section; Sources are reachable from About the visual; the archive preview shows its position');
   await page.locator('#reset-view').click();await page.mouse.move(50,90);await page.waitForTimeout(600);await screenshot(page,'landscape-desktop');
   await page.locator('#domain-bio').click();await page.waitForTimeout(600);await screenshot(page,'direction-desktop');
 
   const mobile=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:'reduce'});watch(mobile);
   await mobile.goto(url);await mobile.evaluate(()=>document.fonts.ready);assert.equal(await mobile.locator('#motion-toggle').getAttribute('aria-pressed'),'true');
+  assert.equal(await mobile.locator('#field-info-compact').isVisible(),true);await mobile.locator('#field-info-compact').click();await mobile.locator('[data-open-credits]').click();assert.match(await mobile.locator('#dialog-content').innerText(),/CC BY-NC-ND 4.0/);await close(mobile);
   for(const [width,height]of[[320,667],[390,750],[390,844],[768,844],[1024,768],[1366,768],[1440,900]]){
    await mobile.setViewportSize({width,height});await route(mobile,'research');await mobile.waitForTimeout(100);
    const layout=await mobile.evaluate(()=>{

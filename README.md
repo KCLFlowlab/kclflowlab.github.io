@@ -58,7 +58,13 @@ previous direction and selected topic. Hash URLs support direct study/direction 
 and browser Back. The normal homepage fills one viewport; only content panels scroll.
 Very short windows permit necessary page scrolling. Phones prioritise research media.
 
-Vision, People, publication details and Contact remain separate workspace panels.
+Vision, People, publication details and Contact remain separate workspace panels. A section
+menu in the workspace bar moves between panels without returning to the field; the bar's label
+and current item name the open panel (studies belong to Research). Each study shows its full
+paper title and first-preprint date beside the authors. “About the visual” is reachable at every
+width (footer on wide screens, an “i” control on tablets and phones) and links to Sources. The
+archive preview shows its position and does not auto-advance while hovered or focused.
+Phone and tablet text keeps an 8 px minimum for labels and 11–12 px for running text.
 Juan Li leads the team presentation; students follow the user-specified cohort order:
 Yichen Li, Matteo Liguori, Vedang Joshi, Xingxin Yang, Zhan Zhang. Three portraits
 come from official KCL profiles; other members retain typographic initials. No exact

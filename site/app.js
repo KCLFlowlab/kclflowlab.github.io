@@ -316,11 +316,12 @@ const scene = (() => {
 })();
 resumeScene=()=>scene.resume();
 
-$('#field-info').addEventListener('click',()=>openDialog(
+function openAbout(){openDialog(
   '<p class="eyebrow">INSIDE THE VISUALIZATION</p><h2 id="dialog-title">Flow as a way<br>to explore.</h2><p>The homepage is an interactive, three-dimensional swimming illustration. A flexible fish sheds alternating vortices that carry and curl nearby particles. Drag the fish to change its path and disturb the wake; drag the open water to orbit. Scroll or pinch to zoom. With the scene focused, Shift + arrow keys move the fish, arrow keys rotate, and 0 resets the view. The softened vortex model conveys motion and flow intuitively; it is not a CFD simulation or measured research data.</p><p>Inside the studies, visualisations come from the original research. This archived image uses a calculated-cell CFD snapshot from the Deforming VFM study: anguilliform swimming, St = 0.4, λ* = 1.5, Re = 5,000, at phase 0.00 T. The field is rendered with a dark diverging palette; cyan and copper distinguish opposite signs of vorticity.</p>'+figure('assets/wake-field.png','Archived CFD vorticity, body boundary and velocity streamlines at phase zero','Qualitative field view. Fixed displayed vorticity range: −30 to +30; values outside that range saturate.')+
-  '<div class="flow-note"><p>The archived image is a single phase-0 snapshot, not a time-resolved simulation. The complete 64-phase research animation is available in the Deforming VFM study. The interactive fish and wake are a separate illustrative model.</p></div><div class="detail-links">'+external('https://github.com/KCLFlowlab/deforming-vfm','Source data & method')+'</div>'
-));
-$('#credits-open').addEventListener('click',()=>openDialog(
+  '<div class="flow-note"><p>The archived image is a single phase-0 snapshot, not a time-resolved simulation. The complete 64-phase research animation is available in the Deforming VFM study. The interactive fish and wake are a separate illustrative model.</p></div><div class="detail-links">'+external('https://github.com/KCLFlowlab/deforming-vfm','Source data & method')+'<button type="button" data-open-credits>Sources &amp; credits</button></div>'
+);}
+$('#field-info').addEventListener('click',openAbout);$('#field-info-compact').addEventListener('click',openAbout);
+function openCredits(){openDialog(
   '<p class="eyebrow">SOURCES & CREDITS</p><h2 id="dialog-title">Built around real research.</h2><p>Research media are attributed to their authors. Full scientific figures retain their original layouts and color scales; GIFs are transcoded to MP4. The homepage fish and wake are an interactive illustration using prescribed body motion and a simplified vortex-particle model, not a scientific simulation. The archived CFD snapshot is available in About the visual; original scientific animations remain in each study.</p><ul>'+
   '<li><strong>Deforming VFM.</strong> Yang, Liguori, Joshi & Li. README animation, Figures 5 and 11, and the calculated-cell phase-0 snapshot. '+external('https://github.com/KCLFlowlab/deforming-vfm','Research source')+'</li>'+
   '<li><strong>MarsVATO.</strong> Yang, Zhang, Li & Li. README architecture and discrete lead-time/incidence sweeps. '+external('https://github.com/KCLFlowlab/MarsVATO','Research source')+'</li>'+
@@ -330,7 +331,9 @@ $('#credits-open').addEventListener('click',()=>openDialog(
   '<li><strong>Research outputs.</strong> Titles, authors, venues and publication status follow the linked '+external('https://kclpure.kcl.ac.uk/portal/en/persons/juan.li/','King’s Research Portal')+' records. Featured studies follow first arXiv submission dates. The AIAA Journal in-press record and RA-VFM preprint are listed as separate records.</li>'+
   '<li><strong>Lab identity.</strong> The site logo and browser icon use the '+external('https://github.com/KCLFlowlab','KCLFlowlab GitHub organization avatar')+' in its original black-and-white form, without recoloring. The institutional logo beside the contact details is the original SVG from the '+external('https://www.kcl.ac.uk/','official KCL website')+'.</li>'+
   '<li><strong>Typography.</strong> Manrope and Space Grotesk, self-hosted under the SIL Open Font License. '+external('https://github.com/google/fonts','Font source')+'</li></ul>'
-));
+);}
+$('#credits-open').addEventListener('click',openCredits);
+dialog.addEventListener('click',event=>{if(event.target.closest('[data-open-credits]'))openCredits();});
 
 const studyOrder = ['ravfm','stco','deforming','vato'];
 const studyMeta = {
@@ -346,6 +349,7 @@ const movies = {
   incidence:{src:'assets/vato-incidence.mp4',poster:'assets/vato-incidence-poster.png',frames:6,caption:'Six incidence conditions: 3°, 5°, 6°, 9°, 11° and 12°, each at a fixed 20 ms prediction lead.'}
 };
 let currentStudy = null, dialogTrigger = null, mediaCleanup = () => {};
+const workspaceLabels = {study:'RESEARCH', library:'RESEARCH', publications:'PUBLICATIONS', vision:'VISION', people:'PEOPLE', contact:'CONTACT', info:'ABOUT'};
 function syncMotion() {
   $('#motion-toggle').textContent = heroPaused ? 'Play' : 'Pause';
   $('#motion-toggle').setAttribute('aria-pressed', String(heroPaused));
@@ -361,7 +365,9 @@ function openDialog(html, kind = 'info') {
   stopMedia();
   if (!dialog.open) dialogTrigger = document.activeElement;
   dialog.dataset.kind = kind;
-  $('#workspace-label').textContent = kind === 'study' ? 'RESEARCH' : kind.toUpperCase();
+  $('#workspace-label').textContent = workspaceLabels[kind] || kind.toUpperCase();
+  const section = kind === 'study' ? 'library' : kind;
+  $$('[data-section]').forEach(a => { if (a.dataset.section === section) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   $('#dialog-content').innerHTML = html;
   if (!dialog.open) dialog.showModal();
   $('#dialog-content').scrollTop = 0;
@@ -380,7 +386,7 @@ function projectTabs(active) {
 function renderStudy(key) {
   currentStudy = key;
   const p=projects[key], meta=studyMeta[key], animated=!!movies[key];
-  openDialog(projectTabs(key)+'<div class="study-layout"><section class="study-copy"><p class="eyebrow">'+meta.category+'</p><h2 id="dialog-title">'+meta.question+'</h2><p class="study-description">'+p.text+'</p><p class="study-authors">'+p.authors+'</p><div class="detail-links">'+p.links+'</div><details class="paper-record"><summary>Paper details</summary><p>'+p.title+'</p><p>First preprint · '+meta.date+'</p></details></section><section class="study-visual" aria-label="Research media"><div class="gallery-tabs" role="group" aria-label="Research media view">'+(animated?'<button data-view="animation" aria-pressed="true">Animation</button>':'')+'<button data-view="figures" aria-pressed="'+(!animated)+'">Paper figures</button><span class="gallery-kind">'+meta.name+' / 2026</span></div><div id="study-gallery"></div></section></div>', 'study');
+  openDialog(projectTabs(key)+'<div class="study-layout"><section class="study-copy"><p class="eyebrow">'+meta.category+'</p><h2 id="dialog-title">'+meta.question+'</h2><p class="study-description">'+p.text+'</p><p class="study-authors">'+p.authors+'</p><div class="detail-links">'+p.links+'</div><div class="paper-record"><p class="paper-meta">PAPER · FIRST PREPRINT '+meta.date+'</p><p class="paper-title">'+p.title+'</p></div></section><section class="study-visual" aria-label="Research media"><div class="gallery-tabs" role="group" aria-label="Research media view">'+(animated?'<button data-view="animation" aria-pressed="true">Animation</button>':'')+'<button data-view="figures" aria-pressed="'+(!animated)+'">Paper figures</button><span class="gallery-kind">'+meta.name+' / 2026</span></div><div id="study-gallery"></div></section></div>', 'study');
   $$('.gallery-tabs button').forEach(button=>button.addEventListener('click',()=>renderGallery(button.dataset.view)));
   renderGallery(animated?'animation':'figures');
 }
@@ -498,10 +504,15 @@ $$('.domain-portal').forEach(a=>{
 $('#zoom-in').addEventListener('click',()=>scene.zoom(.15));$('#zoom-out').addEventListener('click',()=>scene.zoom(-.15));$('#reset-view').addEventListener('click',()=>scene.reset());
 const archiveTitles=['Flow completion with graph neural networks','Separated-flow models for flexible wings','Vortex shedding and induced forces','CFD for fuel-cell channel design','Unsteady forces in turbulence-modelled flows'];
 let archiveIndex=0;
-function showArchive(){const r=records[archiveIndex];$('#archive-title').textContent=archiveTitles[archiveIndex];$('#archive-year').textContent=r.year;$('#archive-link').href=r.url;$('#archive-link').target='_blank';$('#archive-link').rel='noopener noreferrer';$('#archive-link').setAttribute('aria-label',r.year+' · '+r.title);}
-$('#archive-next').addEventListener('click',()=>{archiveIndex=(archiveIndex+1)%records.length;showArchive();});
-setInterval(()=>{if(!heroPaused&&!document.hidden&&!dialog.open){archiveIndex=(archiveIndex+1)%records.length;showArchive();}},9000);
+function showArchive(){const r=records[archiveIndex];$('#archive-count').textContent=String(archiveIndex+1).padStart(2,'0')+' / '+String(records.length).padStart(2,'0');$('#archive-title').textContent=archiveTitles[archiveIndex];$('#archive-year').textContent=r.year;$('#archive-link').href=r.url;$('#archive-link').target='_blank';$('#archive-link').rel='noopener noreferrer';$('#archive-link').setAttribute('aria-label',r.year+' · '+r.title);}
+const archive=$('.archive-preview');let archiveTimer=0;
+const archiveHeld=()=>archive.matches(':hover')||archive.contains(document.activeElement);
+const scheduleArchive=()=>{clearInterval(archiveTimer);archiveTimer=setInterval(()=>{if(!heroPaused&&!document.hidden&&!dialog.open&&!archiveHeld()){archiveIndex=(archiveIndex+1)%records.length;showArchive();}},9000);};
+$('#archive-next').addEventListener('click',()=>{archiveIndex=(archiveIndex+1)%records.length;showArchive();scheduleArchive();});
+scheduleArchive();
 showArchive();
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!dialog.open&&activeDomain){location.hash='research';$('#domain-'+activeDomain)?.focus({preventScroll:true});}});
 
 syncMotion();route();
+// A deep link such as #domain-ai also makes the browser focus the matching portal after load; keep focus in the opened panel.
+window.addEventListener('load',()=>requestAnimationFrame(()=>{if(activeDomain&&document.activeElement?.classList.contains('domain-portal'))$('#direction-title')?.focus({preventScroll:true});}));
